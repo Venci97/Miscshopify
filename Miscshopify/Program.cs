@@ -1,7 +1,17 @@
+using Miscshopify.Core.Constants;
+using Miscshopify.ModelBinders;
+using System.Xml;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddMvcOptions(options =>
+    {
+        options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
+        options.ModelBinderProviders.Insert(1, new DateTimeModelBinderProvider(FormatingConstants.NormalDateFormat));
+        options.ModelBinderProviders.Insert(2, new DoubleModelBinderProvider());
+    });
 
 var app = builder.Build();
 
