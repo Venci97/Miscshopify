@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Miscshopify.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Miscshopify.Infrastructure.Data;
 namespace Miscshopify.Infrastructure.Migrations
 {
     [DbContext(typeof(MiscshopifyContext))]
-    partial class MiscshopifyContextModelSnapshot : ModelSnapshot
+    [Migration("20221120223537_CategorySubcategoryProduct")]
+    partial class CategorySubcategoryProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
