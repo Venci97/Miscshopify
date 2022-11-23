@@ -5,9 +5,11 @@ VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miscshopify", "Miscshopify\Miscshopify.csproj", "{EAFE5C38-68AE-4BF6-AA3E-F053D31844BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miscshopify.Core", "Miscshopify.Core\Miscshopify.Core.csproj", "{00FB2FB6-ED95-45F5-B592-50E78AE67C24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miscshopify.Core", "Miscshopify.Core\Miscshopify.Core.csproj", "{00FB2FB6-ED95-45F5-B592-50E78AE67C24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miscshopify.Infrastructure", "Miscshopify.Infrastructure\Miscshopify.Infrastructure.csproj", "{DFDA4197-D1CB-4794-B723-D99D2A9CD3F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miscshopify.Infrastructure", "Miscshopify.Infrastructure\Miscshopify.Infrastructure.csproj", "{DFDA4197-D1CB-4794-B723-D99D2A9CD3F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miscshopify.Api", "Miscshopify.Api\Miscshopify.Api.csproj", "{6D468CF0-4813-4BF1-9323-E011352B05AC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{DFDA4197-D1CB-4794-B723-D99D2A9CD3F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFDA4197-D1CB-4794-B723-D99D2A9CD3F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFDA4197-D1CB-4794-B723-D99D2A9CD3F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D468CF0-4813-4BF1-9323-E011352B05AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D468CF0-4813-4BF1-9323-E011352B05AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D468CF0-4813-4BF1-9323-E011352B05AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D468CF0-4813-4BF1-9323-E011352B05AC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

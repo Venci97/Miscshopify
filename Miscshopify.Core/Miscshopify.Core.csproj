@@ -10,4 +10,8 @@
     <ProjectReference Include="..\Miscshopify.Infrastructure\Miscshopify.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>
