@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Miscshopify.Core.Contracts;
+using Miscshopify.Core.Models;
 
 namespace Miscshopify.Core.Services
 {
-    internal class OrderService
+    public class OrderService : IOrderService
     {
+        public Task PlaceOrder(CustomerOrder order)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

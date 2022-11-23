@@ -1,6 +1,6 @@
-﻿namespace Miscshopify.Extensions
+﻿namespace Microsoft.Extensions.DependencyInjection
 {
-    public class ServiceCollectionExtension
+    public static class ServiceCollectionExtensions
     {
     }
 }

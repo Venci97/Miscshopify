@@ -3,6 +3,7 @@ using Miscshopify.ModelBinders;
 using System.Xml;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Miscshopify.Core;
 using Miscshopify.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
