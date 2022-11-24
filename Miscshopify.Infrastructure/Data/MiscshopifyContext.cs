@@ -5,7 +5,7 @@ using Miscshopify.Infrastructure.Data.Models;
 
 namespace Miscshopify.Infrastructure.Data;
 
-public class MiscshopifyContext : IdentityDbContext<IdentityUser>
+public class MiscshopifyContext : IdentityDbContext<ApplicationUser>
 {
     public MiscshopifyContext(DbContextOptions<MiscshopifyContext> options)
         : base(options)

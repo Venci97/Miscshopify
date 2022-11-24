@@ -4,10 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Miscshopify.Core.Constants
+namespace Miscshopify.Common.Constants
 {
-    public class FormatingConstants
+    public class GlobalConstants
     {
+        // Data Formating
         public const string NormalDateFormat = "dd.mm.yyyy";
+
+        //Regex
+        public const string PhoneNumberRegex = @"^\d{10}$";
     }
 }

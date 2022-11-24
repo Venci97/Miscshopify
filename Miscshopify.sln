@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miscshopify.Core", "Miscsho
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miscshopify.Infrastructure", "Miscshopify.Infrastructure\Miscshopify.Infrastructure.csproj", "{DFDA4197-D1CB-4794-B723-D99D2A9CD3F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miscshopify.Common", "Miscshopify.Common\Miscshopify.Common.csproj", "{BE95C258-CE24-4AA4-B01C-D0155F569175}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{DFDA4197-D1CB-4794-B723-D99D2A9CD3F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFDA4197-D1CB-4794-B723-D99D2A9CD3F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFDA4197-D1CB-4794-B723-D99D2A9CD3F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE95C258-CE24-4AA4-B01C-D0155F569175}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE95C258-CE24-4AA4-B01C-D0155F569175}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE95C258-CE24-4AA4-B01C-D0155F569175}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE95C258-CE24-4AA4-B01C-D0155F569175}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

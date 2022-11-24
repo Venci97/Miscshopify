@@ -1,10 +1,11 @@
-using Miscshopify.Core.Constants;
+using Miscshopify.Common.Constants;
 using Miscshopify.ModelBinders;
 using System.Xml;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Miscshopify.Core;
 using Miscshopify.Infrastructure.Data;
+using Miscshopify.Infrastructure.Data.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("MiscshopifyContextConnection") ?? throw new InvalidOperationException("Connection string 'MiscshopifyContextConnection' not found.");
@@ -12,7 +13,13 @@ var connectionString = builder.Configuration.GetConnectionString("MiscshopifyCon
 builder.Services.AddDbContext<MiscshopifyContext>(options =>
     options.UseSqlServer(connectionString));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => 
+    {
+        options.SignIn.RequireConfirmedAccount = true;
+        options.Password.RequireDigit = true;
+        options.Password.RequiredLength = 6;  
+        options.Password.RequireUppercase = true;
+    })
     .AddEntityFrameworkStores<MiscshopifyContext>();
 
 // Add services to the container.
@@ -20,7 +27,7 @@ builder.Services.AddControllersWithViews()
     .AddMvcOptions(options =>
     {
         options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
-        options.ModelBinderProviders.Insert(1, new DateTimeModelBinderProvider(FormatingConstants.NormalDateFormat));
+        options.ModelBinderProviders.Insert(1, new DateTimeModelBinderProvider(GlobalConstants.NormalDateFormat));
         options.ModelBinderProviders.Insert(2, new DoubleModelBinderProvider());
     });
 
