@@ -21,4 +21,6 @@
     <ProjectReference Include="..\Miscshopify.Core\Miscshopify.Core.csproj" />
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties wwwroot_4css_4alt_4adminlte_1components_1css_1map__JsonSchema="" /></VisualStudio></ProjectExtensions>
+
 </Project>

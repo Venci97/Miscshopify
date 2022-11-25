@@ -6,7 +6,7 @@ namespace Miscshopify.Infrastructure.Data.Models
     public class Product
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; } = new Guid();
 
         [Required]
         [StringLength(100)]

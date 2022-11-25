@@ -11,7 +11,7 @@ namespace Miscshopify.Infrastructure.Data.Models
     public class Subcategory
     {
         [Key]
-        public int ProductId { get; set; }
+        public Guid Id { get; set; } = new Guid();
 
         [Required]
         [StringLength(100)]

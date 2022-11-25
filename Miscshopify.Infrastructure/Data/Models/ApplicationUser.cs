@@ -8,7 +8,7 @@ namespace Miscshopify.Infrastructure.Data.Models
     public class ApplicationUser : IdentityUser
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; } = new Guid();
 
         [Required]
         [StringLength(20)]
