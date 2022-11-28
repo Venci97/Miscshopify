@@ -12,8 +12,8 @@ using Miscshopify.Infrastructure.Data;
 namespace Miscshopify.Infrastructure.Migrations
 {
     [DbContext(typeof(MiscshopifyContext))]
-    [Migration("20221124163154_ApplicationUser")]
-    partial class ApplicationUser
+    [Migration("20221125160706_CombinateAllMigration")]
+    partial class CombinateAllMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -217,6 +217,7 @@ namespace Miscshopify.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
@@ -247,11 +248,9 @@ namespace Miscshopify.Infrastructure.Migrations
 
             modelBuilder.Entity("Miscshopify.Infrastructure.Data.Models.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .HasMaxLength(500)
@@ -269,11 +268,9 @@ namespace Miscshopify.Infrastructure.Migrations
 
             modelBuilder.Entity("Miscshopify.Infrastructure.Data.Models.Product", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -291,8 +288,8 @@ namespace Miscshopify.Infrastructure.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("SubcategoryId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("SubcategoryId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -303,14 +300,12 @@ namespace Miscshopify.Infrastructure.Migrations
 
             modelBuilder.Entity("Miscshopify.Infrastructure.Data.Models.Subcategory", b =>
                 {
-                    b.Property<int>("ProductId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"), 1L, 1);
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -323,7 +318,7 @@ namespace Miscshopify.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("ProductId");
+                    b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 

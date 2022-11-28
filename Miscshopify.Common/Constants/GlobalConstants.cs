@@ -6,12 +6,21 @@ using System.Threading.Tasks;
 
 namespace Miscshopify.Common.Constants
 {
-    public class GlobalConstants
+    public static class GlobalConstants
     {
-        // Data Formating
-        public const string NormalDateFormat = "dd.mm.yyyy";
+        public static class DataFormating
+        {
+            public const string NormalDateFormat = "dd.mm.yyyy";
+        }
 
-        //Regex
-        public const string PhoneNumberRegex = @"^\d{10}$";
+        public static class Regex
+        {
+            public const string PhoneNumberRegex = @"^\d{10}$";
+        }
+
+        public static class UserRoles
+        {
+            public const string Administrator = "Administrator";
+        }
     }
 }

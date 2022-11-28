@@ -3,9 +3,11 @@ using Miscshopify.ModelBinders;
 using System.Xml;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Miscshopify.Core;
+using Miscshopify.Core.Contracts;
 using Miscshopify.Infrastructure.Data;
 using Miscshopify.Infrastructure.Data.Models;
+using Miscshopify.Core.Services;
+using Miscshopify.Infrastructure.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("MiscshopifyContextConnection") ?? throw new InvalidOperationException("Connection string 'MiscshopifyContextConnection' not found.");
@@ -13,13 +15,14 @@ var connectionString = builder.Configuration.GetConnectionString("MiscshopifyCon
 builder.Services.AddDbContext<MiscshopifyContext>(options =>
     options.UseSqlServer(connectionString));
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => 
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     {
         options.SignIn.RequireConfirmedAccount = true;
         options.Password.RequireDigit = true;
-        options.Password.RequiredLength = 6;  
+        options.Password.RequiredLength = 6;
         options.Password.RequireUppercase = true;
     })
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<MiscshopifyContext>();
 
 // Add services to the container.
@@ -27,9 +30,12 @@ builder.Services.AddControllersWithViews()
     .AddMvcOptions(options =>
     {
         options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
-        options.ModelBinderProviders.Insert(1, new DateTimeModelBinderProvider(GlobalConstants.NormalDateFormat));
+        options.ModelBinderProviders.Insert(1, new DateTimeModelBinderProvider(GlobalConstants.DataFormating.NormalDateFormat));
         options.ModelBinderProviders.Insert(2, new DoubleModelBinderProvider());
     });
+
+builder.Services.AddScoped<IAppDbRepository, AppDbRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
@@ -49,6 +55,9 @@ app.UseAuthentication();;
 
 app.UseAuthorization();
 app.MapRazorPages();
+app.MapControllerRoute(
+    name: "Area",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

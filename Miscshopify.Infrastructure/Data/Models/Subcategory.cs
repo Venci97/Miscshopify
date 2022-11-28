@@ -22,7 +22,7 @@ namespace Miscshopify.Infrastructure.Data.Models
 
         public bool IsActive { get; set; } = true;
 
-        public int CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
 
         [ForeignKey(nameof(CategoryId))]
         public Category Category { get; set; }

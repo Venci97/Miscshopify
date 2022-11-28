@@ -7,9 +7,6 @@ namespace Miscshopify.Infrastructure.Data.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        [Key]
-        public Guid Id { get; set; } = new Guid();
-
         [Required]
         [StringLength(20)]
         public string FirstName { get; set; }
@@ -22,8 +19,8 @@ namespace Miscshopify.Infrastructure.Data.Models
 
         [Required]
         [Phone]
-        [RegularExpression(GlobalConstants.PhoneNumberRegex)]
-        public string PhoneNumber { get; set; }
+        [RegularExpression(GlobalConstants.Regex.PhoneNumberRegex)]
+        public override string PhoneNumber { get; set; }
 
         public DateTime CreationDane { get; set; }
 

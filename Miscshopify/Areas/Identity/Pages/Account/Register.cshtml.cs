@@ -111,7 +111,7 @@ namespace Miscshopify.Areas.Identity.Pages.Account
 
             [Required]
             [Phone]
-            [RegularExpression(GlobalConstants.PhoneNumberRegex)]
+            [RegularExpression(GlobalConstants.Regex.PhoneNumberRegex)]
             [Display(Name = "Phone Number")]
             public string PhoneNumber { get; set; }
         }
