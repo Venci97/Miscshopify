@@ -26,7 +26,9 @@ namespace Miscshopify.Core.Services
                 {
                     Email = u.Email,
                     Id = u.Id,
-                    Name = $"{u.FirstName} {u.LastName}"
+                    Name = $"{u.FirstName} {u.LastName}",
+                    PhoneNumber = u.PhoneNumber,
+                    CreationDate = u.CreationDate
                 })
                 .ToListAsync();
         }

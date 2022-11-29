@@ -22,7 +22,7 @@ namespace Miscshopify.Infrastructure.Data.Models
         [RegularExpression(GlobalConstants.Regex.PhoneNumberRegex)]
         public override string PhoneNumber { get; set; }
 
-        public DateTime CreationDane { get; set; }
+		public DateTime CreationDate { get; set; } = DateTime.Now;
 
         public bool IsActive { get; set; } = true;
 
