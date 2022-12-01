@@ -1,0 +1,151 @@
+﻿@using Miscshopify.Core.Models;
+@using Miscshopify.Infrastructure.Data.Models.Enums;
+@model UserEditViewModel
+@{
+}
+
+<div class="content-body">
+    <!-- users edit start -->
+    <section class="users-edit">
+        <div class="card">
+            <div class="card-content">
+                <div class="card-body">
+                    <ul class="nav nav-tabs mb-2" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center active" id="account-tab" data-toggle="tab" href="#account" aria-controls="account" role="tab" aria-selected="true">
+                                <i class="ft-user mr-25"></i><span class="d-none d-sm-block">Account</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center" id="information-tab" data-toggle="tab" href="#information" aria-controls="information" role="tab" aria-selected="false">
+                                <i class="ft-info mr-25"></i><span class="d-none d-sm-block">Information</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
+                            <!-- users edit media object start -->
+                            <div class="media mb-2">
+                                <a class="mr-2" href="#">
+                                    <img src="../../../app-assets/images/portrait/small/avatar-s-26.png" alt="users avatar" class="users-avatar-shadow rounded-circle" height="64" width="64">
+                                </a>
+                                <div class="media-body">
+                                    <h4 class="media-heading">Avatar</h4>
+                                    <div class="col-12 px-0 d-flex">
+                                        <a href="#" class="btn btn-sm btn-primary mr-25">Change</a>
+                                        <a href="#" class="btn btn-sm btn-secondary">Reset</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- users edit media object ends -->
+                            <!-- users edit account form start -->
+                            <form id="edit" method="post">
+                                <div class="row">
+                                    <div class="col-12 col-sm-6">
+                                        <input type="hidden" name="Id" value="@Model.Id" />
+                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                        <div class="form-floating">
+                                            <label asp-for="FirstName" class="form-label"></label>
+                                            <input asp-for="FirstName" class="form-control" aria-required="true" />
+                                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-floating">
+                                            <label asp-for="LastName" class="form-label"></label>
+                                            <input asp-for="LastName" class="form-control" aria-required="true" />
+                                            <span asp-validation-for="LastName" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-floating">
+                                            <label asp-for="Email" class="form-label"></label>
+                                            <input asp-for="Email" class="form-control" aria-required="true" />
+                                            <span asp-validation-for="Email" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-floating">
+                                            <label asp-for="PhoneNumber" class="form-label"></label>
+                                            <input asp-for="PhoneNumber" class="form-control" aria-required="true" />
+                                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="controls">
+                                                <select asp-for="Gender" asp-items="Html.GetEnumSelectList<GenderEnum>()" class="btn btn-info"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label>Status</label>
+                                            <select asp-for="IsActive" class="form-control">
+                                                <option value="true">Active</option>
+                                                <option value="false">Delete</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
+                                        <button type="submit" class="btn btn-primary glow mb-1 mb-sm-0 mr-0 mr-sm-1">
+                                            Save
+                                            changes
+                                        </button>
+                                        <button type="reset" class="btn btn-light">Cancel</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- users edit account form ends -->
+                        </div>
+                        <div class="tab-pane" id="information" aria-labelledby="information-tab" role="tabpanel">
+                            <!-- users edit Info form start -->
+                            <form id="edit" method="post">
+                                <div class="row">
+                                    <div class="col-12 col-sm-6">
+                                        <h5 class="mb-1"><i class="ft-link mr-25"></i>Social Links</h5>
+                                        <div class="form-group">
+                                            <label>Twitter</label>
+                                            <input class="form-control" type="text" value="https://www.twitter.com/">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Facebook</label>
+                                            <input class="form-control" type="text" value="https://www.facebook.com/">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Google+</label>
+                                            <input class="form-control" type="text">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>LinkedIn</label>
+                                            <input class="form-control" type="text">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Instagram</label>
+                                            <input class="form-control" type="text" value="https://www.instagram.com/">
+                                        </div>
+                                    </div>
+                                    @*<div class="col-12 col-sm-6 mt-1 mt-sm-0">
+                                        <h5 class="mb-1"><i class="ft-user mr-25"></i>Personal Info</h5>
+                                        <div class="form-group">
+                                            <div class="controls position-relative">
+                                                <label>Birth date</label>
+                                                <input type="text" class="form-control birthdate-picker picker__input" required="" placeholder="Birth date" data-validation-required-message="This birthdate field is required" readonly="" id="P667132950" aria-haspopup="true" aria-readonly="false" aria-owns="P667132950_root"><div class="picker" id="P667132950_root" aria-hidden="true"><div class="picker__holder" tabindex="-1"><div class="picker__frame"><div class="picker__wrap"><div class="picker__box"><div class="picker__header"><div class="picker__month">November</div><div class="picker__year">2022</div><div class="picker__nav--prev" data-nav="-1" tabindex="0" role="button" aria-controls="P667132950_table" title="Previous month"> </div><div class="picker__nav--next" data-nav="1" tabindex="0" role="button" aria-controls="P667132950_table" title="Next month"> </div></div><table class="picker__table" id="P667132950_table" role="grid" aria-controls="P667132950" aria-readonly="true"><thead><tr><th class="picker__weekday" scope="col" title="Sunday">Sun</th><th class="picker__weekday" scope="col" title="Monday">Mon</th><th class="picker__weekday" scope="col" title="Tuesday">Tue</th><th class="picker__weekday" scope="col" title="Wednesday">Wed</th><th class="picker__weekday" scope="col" title="Thursday">Thu</th><th class="picker__weekday" scope="col" title="Friday">Fri</th><th class="picker__weekday" scope="col" title="Saturday">Sat</th></tr></thead><tbody><tr><td><div class="picker__day picker__day--outfocus" data-pick="1667077200000" id="P667132950_1667077200000" tabindex="0" role="gridcell" aria-label="October, 30, 2022">30</div></td><td><div class="picker__day picker__day--outfocus" data-pick="1667167200000" id="P667132950_1667167200000" tabindex="0" role="gridcell" aria-label="October, 31, 2022">31</div></td><td><div class="picker__day picker__day--infocus" data-pick="1667253600000" id="P667132950_1667253600000" tabindex="0" role="gridcell" aria-label="November, 1, 2022">1</div></td><td><div class="picker__day picker__day--infocus" data-pick="1667340000000" id="P667132950_1667340000000" tabindex="0" role="gridcell" aria-label="November, 2, 2022">2</div></td><td><div class="picker__day picker__day--infocus" data-pick="1667426400000" id="P667132950_1667426400000" tabindex="0" role="gridcell" aria-label="November, 3, 2022">3</div></td><td><div class="picker__day picker__day--infocus" data-pick="1667512800000" id="P667132950_1667512800000" tabindex="0" role="gridcell" aria-label="November, 4, 2022">4</div></td><td><div class="picker__day picker__day--infocus" data-pick="1667599200000" id="P667132950_1667599200000" tabindex="0" role="gridcell" aria-label="November, 5, 2022">5</div></td></tr><tr><td><div class="picker__day picker__day--infocus" data-pick="1667685600000" id="P667132950_1667685600000" tabindex="0" role="gridcell" aria-label="November, 6, 2022">6</div></td><td><div class="picker__day picker__day--infocus" data-pick="1667772000000" id="P667132950_1667772000000" tabindex="0" role="gridcell" aria-label="November, 7, 2022">7</div></td><td><div class="picker__day picker__day--infocus" data-pick="1667858400000" id="P667132950_1667858400000" tabindex="0" role="gridcell" aria-label="November, 8, 2022">8</div></td><td><div class="picker__day picker__day--infocus" data-pick="1667944800000" id="P667132950_1667944800000" tabindex="0" role="gridcell" aria-label="November, 9, 2022">9</div></td><td><div class="picker__day picker__day--infocus" data-pick="1668031200000" id="P667132950_1668031200000" tabindex="0" role="gridcell" aria-label="November, 10, 2022">10</div></td><td><div class="picker__day picker__day--infocus" data-pick="1668117600000" id="P667132950_1668117600000" tabindex="0" role="gridcell" aria-label="November, 11, 2022">11</div></td><td><div class="picker__day picker__day--infocus" data-pick="1668204000000" id="P667132950_1668204000000" tabindex="0" role="gridcell" aria-label="November, 12, 2022">12</div></td></tr><tr><td><div class="picker__day picker__day--infocus" data-pick="1668290400000" id="P667132950_1668290400000" tabindex="0" role="gridcell" aria-label="November, 13, 2022">13</div></td><td><div class="picker__day picker__day--infocus" data-pick="1668376800000" id="P667132950_1668376800000" tabindex="0" role="gridcell" aria-label="November, 14, 2022">14</div></td><td><div class="picker__day picker__day--infocus" data-pick="1668463200000" id="P667132950_1668463200000" tabindex="0" role="gridcell" aria-label="November, 15, 2022">15</div></td><td><div class="picker__day picker__day--infocus" data-pick="1668549600000" id="P667132950_1668549600000" tabindex="0" role="gridcell" aria-label="November, 16, 2022">16</div></td><td><div class="picker__day picker__day--infocus" data-pick="1668636000000" id="P667132950_1668636000000" tabindex="0" role="gridcell" aria-label="November, 17, 2022">17</div></td><td><div class="picker__day picker__day--infocus" data-pick="1668722400000" id="P667132950_1668722400000" tabindex="0" role="gridcell" aria-label="November, 18, 2022">18</div></td><td><div class="picker__day picker__day--infocus" data-pick="1668808800000" id="P667132950_1668808800000" tabindex="0" role="gridcell" aria-label="November, 19, 2022">19</div></td></tr><tr><td><div class="picker__day picker__day--infocus" data-pick="1668895200000" id="P667132950_1668895200000" tabindex="0" role="gridcell" aria-label="November, 20, 2022">20</div></td><td><div class="picker__day picker__day--infocus" data-pick="1668981600000" id="P667132950_1668981600000" tabindex="0" role="gridcell" aria-label="November, 21, 2022">21</div></td><td><div class="picker__day picker__day--infocus" data-pick="1669068000000" id="P667132950_1669068000000" tabindex="0" role="gridcell" aria-label="November, 22, 2022">22</div></td><td><div class="picker__day picker__day--infocus" data-pick="1669154400000" id="P667132950_1669154400000" tabindex="0" role="gridcell" aria-label="November, 23, 2022">23</div></td><td><div class="picker__day picker__day--infocus" data-pick="1669240800000" id="P667132950_1669240800000" tabindex="0" role="gridcell" aria-label="November, 24, 2022">24</div></td><td><div class="picker__day picker__day--infocus" data-pick="1669327200000" id="P667132950_1669327200000" tabindex="0" role="gridcell" aria-label="November, 25, 2022">25</div></td><td><div class="picker__day picker__day--infocus" data-pick="1669413600000" id="P667132950_1669413600000" tabindex="0" role="gridcell" aria-label="November, 26, 2022">26</div></td></tr><tr><td><div class="picker__day picker__day--infocus" data-pick="1669500000000" id="P667132950_1669500000000" tabindex="0" role="gridcell" aria-label="November, 27, 2022">27</div></td><td><div class="picker__day picker__day--infocus" data-pick="1669586400000" id="P667132950_1669586400000" tabindex="0" role="gridcell" aria-label="November, 28, 2022">28</div></td><td><div class="picker__day picker__day--infocus" data-pick="1669672800000" id="P667132950_1669672800000" tabindex="0" role="gridcell" aria-label="November, 29, 2022">29</div></td><td><div class="picker__day picker__day--infocus picker__day--today picker__day--highlighted" data-pick="1669759200000" id="P667132950_1669759200000" tabindex="0" role="gridcell" aria-label="November, 30, 2022" aria-activedescendant="1669759200000">30</div></td><td><div class="picker__day picker__day--outfocus" data-pick="1669845600000" id="P667132950_1669845600000" tabindex="0" role="gridcell" aria-label="December, 1, 2022">1</div></td><td><div class="picker__day picker__day--outfocus" data-pick="1669932000000" id="P667132950_1669932000000" tabindex="0" role="gridcell" aria-label="December, 2, 2022">2</div></td><td><div class="picker__day picker__day--outfocus" data-pick="1670018400000" id="P667132950_1670018400000" tabindex="0" role="gridcell" aria-label="December, 3, 2022">3</div></td></tr><tr><td><div class="picker__day picker__day--outfocus" data-pick="1670104800000" id="P667132950_1670104800000" tabindex="0" role="gridcell" aria-label="December, 4, 2022">4</div></td><td><div class="picker__day picker__day--outfocus" data-pick="1670191200000" id="P667132950_1670191200000" tabindex="0" role="gridcell" aria-label="December, 5, 2022">5</div></td><td><div class="picker__day picker__day--outfocus" data-pick="1670277600000" id="P667132950_1670277600000" tabindex="0" role="gridcell" aria-label="December, 6, 2022">6</div></td><td><div class="picker__day picker__day--outfocus" data-pick="1670364000000" id="P667132950_1670364000000" tabindex="0" role="gridcell" aria-label="December, 7, 2022">7</div></td><td><div class="picker__day picker__day--outfocus" data-pick="1670450400000" id="P667132950_1670450400000" tabindex="0" role="gridcell" aria-label="December, 8, 2022">8</div></td><td><div class="picker__day picker__day--outfocus" data-pick="1670536800000" id="P667132950_1670536800000" tabindex="0" role="gridcell" aria-label="December, 9, 2022">9</div></td><td><div class="picker__day picker__day--outfocus" data-pick="1670623200000" id="P667132950_1670623200000" tabindex="0" role="gridcell" aria-label="December, 10, 2022">10</div></td></tr></tbody></table><div class="picker__footer"><button class="picker__button--today" type="button" data-pick="1669759200000" disabled="" aria-controls="P667132950">Today</button><button class="picker__button--clear" type="button" data-clear="1" disabled="" aria-controls="P667132950">Clear</button><button class="picker__button--close" type="button" data-close="true" disabled="" aria-controls="P667132950">Close</button></div></div></div></div></div></div>
+                                                <div class="help-block"></div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="controls">
+                                                <label>Address</label>
+                                                <input type="text" class="form-control" placeholder="Address" data-validation-required-message="This Address field is required">
+                                                <div class="help-block"></div>
+                                            </div>
+                                        </div>
+                                    </div>*@
+                                </div>
+                            </form>
+                            <!-- users edit Info form ends -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- users edit ends -->
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptspartial" />
+}

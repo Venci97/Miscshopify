@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Miscshopify.Common.Constants;
 using Miscshopify.Infrastructure.Data.Models;
+using Miscshopify.Infrastructure.Data.Models.Enums;
 
 namespace Miscshopify.Areas.Identity.Pages.Account
 {
@@ -114,6 +115,9 @@ namespace Miscshopify.Areas.Identity.Pages.Account
             [RegularExpression(GlobalConstants.Regex.PhoneNumberRegex)]
             [Display(Name = "Phone Number")]
             public string PhoneNumber { get; set; }
+
+            [Required]
+            public GenderEnum Gender { get; set; }
         }
 
 
@@ -133,6 +137,7 @@ namespace Miscshopify.Areas.Identity.Pages.Account
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
                 user.PhoneNumber = Input.PhoneNumber;
+                user.Gender = Input.Gender;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

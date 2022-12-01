@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Miscshopify.Infrastructure.Data.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,10 @@ namespace Miscshopify.Core.Models
 
         public string PhoneNumber { get; set; }
 
+        public GenderEnum Gender { get; set; }
+
         public DateTime CreationDate { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }

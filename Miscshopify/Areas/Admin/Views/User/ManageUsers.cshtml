@@ -24,7 +24,9 @@
 						    		<th>Name</th>
 									<th>Email</th>
 									<th>Phone Number</th>
+									<th>Gender</th>
 									<th>Creation Date</th>
+									<th>Account Status</th>
 									<th>Actions</th>
 									<th>&nbsp;</th>
 								</tr>
@@ -36,7 +38,9 @@
 										<td>@user.Name</td>
 										<td>@user.Email</td>
 										<td>@user.PhoneNumber</td>
+										<td>@user.Gender</td>
 										<td>@user.CreationDate</td>
+										<td>@user.IsActive</td>
 										<td>
 											<a asp-area="Admin" asp-action="Edit" asp-controller="User" asp-route-id="@user.Id" class="btn btn-block btn-outline-info btn-xs">
 												Edit

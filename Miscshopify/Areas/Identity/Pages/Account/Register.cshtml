@@ -1,4 +1,5 @@
 ﻿@page
+@using Miscshopify.Infrastructure.Data.Models.Enums;
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
@@ -63,13 +64,13 @@
 						<span asp-validation-for="Input.Email" class="focus-input100" data-symbol="&#xf206;"></span>
 					</div>
 
-					<div class="wrap-input100 validate-input" data-validate="Password is required">
+					<div class="wrap-input100 validate-input m-b-23" data-validate="Password is required">
 						<label asp-for="Input.Password"></label>
 						<input asp-for="Input.Password" class="input100" autocomplete="new-password" aria-required="true" placeholder="Type your password" />
 						<span asp-validation-for="Input.Password" class="focus-input100" data-symbol="&#xf190;"></span>
 					</div>
 
-					<div class="wrap-input100 validate-input" data-validate="Confirm password is required">
+					<div class="wrap-input100 validate-input m-b-23" data-validate="Confirm password is required">
 						<label asp-for="Input.ConfirmPassword"></label>
 						<input asp-for="Input.ConfirmPassword" class="input100" autocomplete="new-password" aria-required="true" placeholder="Confirm your password" />
 						<span asp-validation-for="Input.ConfirmPassword" class="focus-input100" data-symbol="&#xf190;"></span>
@@ -79,6 +80,12 @@
 						<label asp-for="Input.PhoneNumber"></label>
 						<input asp-for="Input.PhoneNumber" class="input100" autocomplete="Phone Number" aria-required="true" placeholder="Type your Phone number" />
 						<span asp-validation-for="Input.PhoneNumber" class="focus-input100" data-symbol="&#xf206;"></span>
+					</div>
+
+					<div class="btn-group" data-validate="Please select your gender">
+						<select asp-for="Input.Gender" asp-items="Html.GetEnumSelectList<GenderEnum>()" class="btn btn-info">
+							<option selected disabled value="">Please select your gender</option>
+						</select>
 					</div>
 
 					<div class="text-right p-t-8 p-b-31">

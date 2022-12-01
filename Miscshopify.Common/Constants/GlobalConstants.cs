@@ -22,5 +22,11 @@ namespace Miscshopify.Common.Constants
         {
             public const string Administrator = "Administrator";
         }
+
+        public static class Messages
+        {
+            public const string Success = "Success";
+            public const string Error = "Error";
+        }
     }
 }
