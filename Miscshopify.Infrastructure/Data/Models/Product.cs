@@ -20,9 +20,9 @@ namespace Miscshopify.Infrastructure.Data.Models
 
         public bool IsActive { get; set; } = true;
 
-        public Guid SubcategoryId { get; set; }
+        public Guid CategoryId { get; set; }
 
-        [ForeignKey(nameof(SubcategoryId))]
-        public Subcategory Subcategories { get; set; }
+        [ForeignKey(nameof(CategoryId))]
+        public Category Category { get; set; }
     }
 }

@@ -270,6 +270,9 @@ namespace Miscshopify.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(500)
@@ -286,41 +289,11 @@ namespace Miscshopify.Infrastructure.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("SubcategoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SubcategoryId");
-
-                    b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("Miscshopify.Infrastructure.Data.Models.Subcategory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Subcategories");
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -376,17 +349,6 @@ namespace Miscshopify.Infrastructure.Migrations
 
             modelBuilder.Entity("Miscshopify.Infrastructure.Data.Models.Product", b =>
                 {
-                    b.HasOne("Miscshopify.Infrastructure.Data.Models.Subcategory", "Subcategories")
-                        .WithMany("Products")
-                        .HasForeignKey("SubcategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Subcategories");
-                });
-
-            modelBuilder.Entity("Miscshopify.Infrastructure.Data.Models.Subcategory", b =>
-                {
                     b.HasOne("Miscshopify.Infrastructure.Data.Models.Category", "Category")
                         .WithMany("SubCategories")
                         .HasForeignKey("CategoryId")
@@ -399,11 +361,6 @@ namespace Miscshopify.Infrastructure.Migrations
             modelBuilder.Entity("Miscshopify.Infrastructure.Data.Models.Category", b =>
                 {
                     b.Navigation("SubCategories");
-                });
-
-            modelBuilder.Entity("Miscshopify.Infrastructure.Data.Models.Subcategory", b =>
-                {
-                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

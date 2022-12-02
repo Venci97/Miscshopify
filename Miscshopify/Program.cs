@@ -36,6 +36,7 @@ builder.Services.AddControllersWithViews()
 
 builder.Services.AddScoped<IAppDbRepository, AppDbRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 var app = builder.Build();
 

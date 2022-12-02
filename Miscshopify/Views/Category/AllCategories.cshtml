@@ -1,0 +1,37 @@
+﻿@using Miscshopify.Core.Models;
+@model IEnumerable<CategoryViewModel>
+@{
+}
+
+<div class="card-x">
+    <div class="card-body-x">
+        <div class="row my-2">
+            @*start*@
+            @foreach (var category in Model)
+            {
+                <div class="col-sm-6 col-md-4 col-xl-3 mb-5" style="background: rgba(255, 255, 255, 1);">
+                <div class="item rounded-xl overflow-hidden shadow border">
+                    <div class="px-3 pt-6">
+                        <div class="image">
+                            <img class="image" src="~/img/000000223557--laptop-dell-xps-15-9520-dxps159520i71270016g1t-win-11-14.jpg" width="100%" height="100%">
+                        </div>
+
+                        <div class="mt-6">
+                            <div class="row d-flex align-items-center mb-4">
+                                <div class="col-8 pr-0">
+                                    <h6 class="text-primary mb-0 text-break-line-1">@category.Name</h6>
+                                </div>
+                            </div>
+
+                            <p class="text-break-line-2">
+                                @category.Description
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+            @*end*@
+        </div>
+    </div>
+</div>
