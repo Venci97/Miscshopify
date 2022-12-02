@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Miscshopify.Core.Contracts;
 using Miscshopify.Core.Models;
 using Miscshopify.Infrastructure.Data.Models;
@@ -14,18 +15,25 @@ namespace Miscshopify.Core.Services
     public class CategoryService : ICategoryService
     {
         private readonly IAppDbRepository repo;
+        private readonly IUnitOfWork unitOfWork;
 
-        public CategoryService(IAppDbRepository _repo)
+        public CategoryService(IAppDbRepository _repo, IUnitOfWork _unitOfWork)
         {
             repo = _repo;
+            unitOfWork = _unitOfWork;
         }
 
         public async Task Add(CategoryViewModel model)
         {
+            unitOfWork.UploadImage(file);
+
             var category = new Category()
             {
+
                 Name = model.Name,
-                Description = model.Description
+                Description = model.Description,
+                
+                
             };
 
             await repo.AddAsync(category);

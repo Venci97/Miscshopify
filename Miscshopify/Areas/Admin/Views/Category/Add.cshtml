@@ -34,6 +34,11 @@
                                             <input asp-for="Description" class="form-control" aria-required="true" />
                                             <span asp-validation-for="Description" class="text-danger"></span>
                                         </div>
+                                        <div class="form-floating">
+                                            <label asp-for="ImagePath"></label>
+                                            <input type="file" name="file" />
+                                            <span asp-validation-for="ImagePath" class="text-danger"></span>
+                                        </div>
                                         @*<div class="form-group">
                                             <div class="controls">
                                                 <select asp-for="SubCategories" asp-items="Html.DropDownList<SubcategoryViewModel>()" class="btn btn-info"></select>

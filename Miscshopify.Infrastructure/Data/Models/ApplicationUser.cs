@@ -7,6 +7,9 @@ namespace Miscshopify.Infrastructure.Data.Models
 {
     public class ApplicationUser : IdentityUser
     {
+
+        public string ImagePath { get; set; }
+
         [Required]
         [StringLength(20)]
         public string FirstName { get; set; }

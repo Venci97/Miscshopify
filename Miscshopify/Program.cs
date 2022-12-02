@@ -25,6 +25,15 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<MiscshopifyContext>();
 
+builder.Services.AddIdentityCore<ApplicationUser>()
+    .AddRoles<IdentityRole>()
+    .AddClaimsPrincipalFactory<UserClaimsPrincipalFactory<ApplicationUser, IdentityRole>>()
+    .AddEntityFrameworkStores<MiscshopifyContext>()
+    .AddDefaultTokenProviders()
+    .AddDefaultUI();
+
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews()
     .AddMvcOptions(options =>

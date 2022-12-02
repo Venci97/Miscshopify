@@ -37,6 +37,7 @@ namespace Miscshopify.Areas.Admin.Controllers
 
             if (!ModelState.IsValid)
             {
+
                 return View(model);
             }
 

@@ -26,6 +26,8 @@ namespace Miscshopify.Areas.Identity.Pages.Account.Manage
             _signInManager = signInManager;
         }
 
+        public string ImagePath { get; set; }
+
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -81,6 +83,8 @@ namespace Miscshopify.Areas.Identity.Pages.Account.Manage
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
+
+            ImagePath = user.ImagePath;
 
             await LoadAsync(user);
             return Page();
