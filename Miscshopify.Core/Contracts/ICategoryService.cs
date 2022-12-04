@@ -13,7 +13,6 @@ namespace Miscshopify.Core.Contracts
         Task<IEnumerable<CategoryViewModel>> GetCategories();
         Task Add(CategoryViewModel model);
         Task<CategoryViewModel> Edit(Guid id);
-
         Task<bool> UpdateCategoryDetails(CategoryViewModel model);
     }
 }

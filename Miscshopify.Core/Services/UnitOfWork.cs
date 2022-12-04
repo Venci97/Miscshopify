@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Miscshopify.Core.Contracts;
+using Miscshopify.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

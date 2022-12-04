@@ -4,17 +4,22 @@ using Miscshopify.Common.Constants;
 using Miscshopify.Core.Contracts;
 using Miscshopify.Core.Models;
 using Miscshopify.Core.Services;
+using Miscshopify.Infrastructure.Data.Models;
 using System.Data;
 
 namespace Miscshopify.Areas.Admin.Controllers
 {
     public class CategoryController : AdminBaseController
     {
+        private readonly ILogger<CategoryController> logger;
         private readonly ICategoryService categoryService;
+        private Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnvironment;
 
-        public CategoryController(ICategoryService _categoryService)
+        public CategoryController(ILogger<CategoryController> _logger, ICategoryService _categoryService, Microsoft.AspNetCore.Hosting.IHostingEnvironment _hostingEnvironment)
         {
+            logger = _logger;
             categoryService = _categoryService;
+            hostingEnvironment = _hostingEnvironment;
         }
 
         public IActionResult Index()
@@ -36,11 +41,34 @@ namespace Miscshopify.Areas.Admin.Controllers
             ViewData["Title"] = "Add new category";
 
             if (!ModelState.IsValid)
-            {
-
+            {    
                 return View(model);
             }
 
+            string uploadPath = "uploads/categoryImg/";
+
+            var files = HttpContext.Request.Form.Files;
+            foreach (var file in files)
+            {
+                if (file != null && file.Length > 0)
+                {
+                    var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
+                    var uploadPathWithfileName = Path.Combine(uploadPath, fileName);
+
+                    var uploadAbsolutePath = Path.Combine(hostingEnvironment.WebRootPath, uploadPathWithfileName);
+
+                    using (var fileStream = new FileStream(uploadAbsolutePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                        model.ImagePath = uploadPathWithfileName;
+                    }
+                }
+            }
+
+            if (model.ImagePath == null)
+            {
+                model.ImagePath = "uploads/categoryImg/NoImage.jpg";
+            }
             await categoryService.Add(model);
 
             return RedirectToAction(nameof(ManageCategories));

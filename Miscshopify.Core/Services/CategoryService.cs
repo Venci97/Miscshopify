@@ -1,39 +1,27 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Miscshopify.Core.Contracts;
 using Miscshopify.Core.Models;
 using Miscshopify.Infrastructure.Data.Models;
 using Miscshopify.Infrastructure.Data.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Miscshopify.Core.Services
 {
     public class CategoryService : ICategoryService
     {
         private readonly IAppDbRepository repo;
-        private readonly IUnitOfWork unitOfWork;
 
-        public CategoryService(IAppDbRepository _repo, IUnitOfWork _unitOfWork)
+        public CategoryService(IAppDbRepository _repo)
         {
             repo = _repo;
-            unitOfWork = _unitOfWork;
         }
 
         public async Task Add(CategoryViewModel model)
         {
-            unitOfWork.UploadImage(file);
-
             var category = new Category()
             {
-
+                ImagePath = model.ImagePath,
                 Name = model.Name,
-                Description = model.Description,
-                
-                
+                Description = model.Description
             };
 
             await repo.AddAsync(category);
@@ -46,6 +34,7 @@ namespace Miscshopify.Core.Services
                 .Select(c => new CategoryViewModel()
                 {
                     Id = c.Id,
+                    ImagePath = c.ImagePath,
                     Name = c.Name,
                     Description = c.Description
                 })

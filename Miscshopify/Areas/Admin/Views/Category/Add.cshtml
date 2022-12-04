@@ -19,7 +19,7 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
                             <!-- users edit account form start -->
-                            <form id="add" method="post">
+                            <form id="add" method="post" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-12 col-sm-6">
                                         <input type="hidden" name="Id" value="@Model.Id" />
@@ -34,10 +34,10 @@
                                             <input asp-for="Description" class="form-control" aria-required="true" />
                                             <span asp-validation-for="Description" class="text-danger"></span>
                                         </div>
-                                        <div class="form-floating">
+                                        <div class="custom-file">
                                             <label asp-for="ImagePath"></label>
                                             <input type="file" name="file" />
-                                            <span asp-validation-for="ImagePath" class="text-danger"></span>
+                                            <span asp-validation-for="ImagePath" class="focus-input100"></span>
                                         </div>
                                         @*<div class="form-group">
                                             <div class="controls">

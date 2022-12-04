@@ -33,6 +33,7 @@ builder.Services.AddIdentityCore<ApplicationUser>()
     .AddDefaultUI();
 
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+builder.Services.AddTransient<ICategoryService, CategoryService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews()

@@ -14,7 +14,7 @@ namespace Miscshopify.Infrastructure.Data.Models
         [Key]
         public Guid Id { get; set; } = new Guid();
 
-        public string ImagePath { get; set; }
+        public string? ImagePath { get; set; }
 
         [Required]
         [StringLength(100)]
