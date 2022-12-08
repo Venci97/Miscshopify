@@ -8,7 +8,7 @@ namespace Miscshopify.Infrastructure.Data.Models
         [Key]
         public Guid Id { get; set; } = new Guid();
 
-        public string ImagePath { get; set; }
+        public string? ImagePath { get; set; }
 
         [Required]
         [StringLength(100)]
@@ -18,6 +18,7 @@ namespace Miscshopify.Infrastructure.Data.Models
         [StringLength(500)]
         public string Description { get; set; }
 
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
 
         public bool IsActive { get; set; } = true;

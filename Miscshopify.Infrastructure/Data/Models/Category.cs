@@ -24,6 +24,6 @@ namespace Miscshopify.Infrastructure.Data.Models
         [StringLength(500)]
         public string? Description { get; set; }
 
-        public IList<Product> SubCategories { get; set; } = new List<Product>();
+        public IList<Product> Products { get; set; } = new List<Product>();
     }
 }

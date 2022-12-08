@@ -1,5 +1,5 @@
 ﻿@using Miscshopify.Core.Models;
-@model IEnumerable<CategoryViewModel>
+@model IEnumerable<ProductViewModel>
 @{
 }
 <head>
@@ -11,8 +11,8 @@
 			<div class="container">
 				<div class="row justify-content-center">
 					<div class="col-md-6 text-center mb-5">
-						<h2 class="heading-section">Category List</h2>
-						<a href="/Admin/Category/Add" class="btn btn-sm btn-primary mr-25">Add Category</a>
+						<h2 class="heading-section">Product List</h2>
+						<a href="/Admin/Category/ManageCategories" class="btn btn-sm btn-primary mr-25">Add product by selecting category</a>
 					</div>
 				</div>
 				<div class="row">
@@ -24,29 +24,24 @@
 										<th>&nbsp;</th>
 										<th>Name</th>
 										<th>Description</th>
-										<th>Products</th>
+										<th>Price</th>
 										<th>&nbsp;</th>
 									</tr>
 								</thead>
 								<tbody>
-									@foreach (var category in Model)
+									@foreach (var product in Model)
 									{
 										<tr>
 											<td>
-												<img src="~/@category.ImagePath" style="border-radius: 50%;" width="50" height="50">
+												<img src="~/@product.ImagePath" style="border-radius: 50%;" width="50" height="50">
 											</td>
-											<td>@category.Name</td>
-											<td>@category.Description</td>
+											<td>@product.Name</td>
+											<td>@product.Description</td>
+											<td>@product.Price</td>
 											<td>
-												<a asp-area="Admin" asp-action="Edit" asp-controller="Category" asp-route-id="@category.Id" class="btn btn-block btn-outline-info btn-xs">
+												<a asp-area="Admin" asp-action="Edit" asp-controller="Product" asp-route-id="@product.Id" class="btn btn-block btn-outline-info btn-xs">
 													Edit
 													<i class="fa-solid fa-pen-to-square"></i>
-												</a>
-											</td>
-											<td>
-												<a asp-area="Admin" asp-action="Add" asp-controller="Product" asp-route-id="@category.Id" class="btn btn-block btn-outline-info btn-xs">
-													Add Product
-													<i class="fa-solid fa-plus"></i>
 												</a>
 											</td>
 										</tr>

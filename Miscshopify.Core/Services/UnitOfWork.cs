@@ -55,5 +55,5 @@ namespace Miscshopify.Core.Services
 				filename= filename.Substring(filename.LastIndexOf("\\") + 1);
 			return filename;
 		}
-	}
+    }
 }

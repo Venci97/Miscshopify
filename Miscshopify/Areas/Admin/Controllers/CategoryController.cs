@@ -48,6 +48,7 @@ namespace Miscshopify.Areas.Admin.Controllers
             string uploadPath = "uploads/categoryImg/";
 
             var files = HttpContext.Request.Form.Files;
+
             foreach (var file in files)
             {
                 if (file != null && file.Length > 0)

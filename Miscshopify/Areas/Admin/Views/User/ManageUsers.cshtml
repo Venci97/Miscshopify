@@ -20,7 +20,7 @@
 						<table class="table table-responsive-xl">
 							<thead>
 								<tr>
-						    		@*<th>&nbsp;</th>*@
+						    		<th>&nbsp;</th>
 						    		<th>Name</th>
 									<th>Email</th>
 									<th>Phone Number</th>
@@ -35,6 +35,9 @@
 								@foreach (var user in Model)
 								{
 									<tr>
+										<td>
+											<img src="~/uploads/@user.ImagePath" style="border-radius: 50%;" width="50" height="50">
+										</td>
 										<td>@user.Name</td>
 										<td>@user.Email</td>
 										<td>@user.PhoneNumber</td>

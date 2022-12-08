@@ -34,6 +34,7 @@ builder.Services.AddIdentityCore<ApplicationUser>()
 
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
+builder.Services.AddTransient<IProductService, ProductService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews()
@@ -47,6 +48,7 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddScoped<IAppDbRepository, AppDbRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 

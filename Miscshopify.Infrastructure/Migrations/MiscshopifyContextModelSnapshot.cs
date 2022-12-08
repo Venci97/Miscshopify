@@ -259,7 +259,6 @@ namespace Miscshopify.Infrastructure.Migrations
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("ImagePath")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -287,7 +286,6 @@ namespace Miscshopify.Infrastructure.Migrations
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("ImagePath")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -362,7 +360,7 @@ namespace Miscshopify.Infrastructure.Migrations
             modelBuilder.Entity("Miscshopify.Infrastructure.Data.Models.Product", b =>
                 {
                     b.HasOne("Miscshopify.Infrastructure.Data.Models.Category", "Category")
-                        .WithMany("SubCategories")
+                        .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -372,7 +370,7 @@ namespace Miscshopify.Infrastructure.Migrations
 
             modelBuilder.Entity("Miscshopify.Infrastructure.Data.Models.Category", b =>
                 {
-                    b.Navigation("SubCategories");
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

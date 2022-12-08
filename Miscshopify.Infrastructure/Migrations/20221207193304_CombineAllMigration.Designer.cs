@@ -12,8 +12,8 @@ using Miscshopify.Infrastructure.Data;
 namespace Miscshopify.Infrastructure.Migrations
 {
     [DbContext(typeof(MiscshopifyContext))]
-    [Migration("20221202133440_AvatarAdded")]
-    partial class AvatarAdded
+    [Migration("20221207193304_CombineAllMigration")]
+    partial class CombineAllMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -169,10 +169,6 @@ namespace Miscshopify.Infrastructure.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<byte[]>("Avatar")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -194,6 +190,10 @@ namespace Miscshopify.Infrastructure.Migrations
 
                     b.Property<int>("Gender")
                         .HasColumnType("int");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -260,6 +260,9 @@ namespace Miscshopify.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -283,6 +286,9 @@ namespace Miscshopify.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -356,7 +362,7 @@ namespace Miscshopify.Infrastructure.Migrations
             modelBuilder.Entity("Miscshopify.Infrastructure.Data.Models.Product", b =>
                 {
                     b.HasOne("Miscshopify.Infrastructure.Data.Models.Category", "Category")
-                        .WithMany("SubCategories")
+                        .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -366,7 +372,7 @@ namespace Miscshopify.Infrastructure.Migrations
 
             modelBuilder.Entity("Miscshopify.Infrastructure.Data.Models.Category", b =>
                 {
-                    b.Navigation("SubCategories");
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

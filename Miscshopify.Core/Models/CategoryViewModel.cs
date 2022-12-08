@@ -17,8 +17,6 @@ namespace Miscshopify.Core.Models
 
         public string? Description { get; set; }
 
-        public IList<Product>? SubCategories { get; set; }
-
-
+        //public IList<Product> Products { get; set; }
     }
 }
