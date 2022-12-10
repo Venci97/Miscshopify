@@ -56,27 +56,27 @@ namespace Miscshopify.Core.Services
 
         public async Task<ProductViewModel> Edit(Guid id)
         {
-            var cat = await repo.GetByIdAsync<Product>(id);
+            var product = await repo.GetByIdAsync<Product>(id);
 
             return new ProductViewModel()
             {
-                Id = cat.Id,
-                Name = cat.Name,
-                Description = cat.Description,
-                Price = cat.Price
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price
             };
         }
 
         public async Task<bool> UpdateProductDetails(ProductViewModel model)
         {
             bool result = false;
-            var cat = await repo.GetByIdAsync<Product>(model.Id);
+            var product = await repo.GetByIdAsync<Product>(model.Id);
 
-            if (cat != null)
+            if (product != null)
             {
-                cat.Name = model.Name;
-                cat.Description = model.Description;
-                cat.Price = model.Price;
+                product.Name = model.Name;
+                product.Description = model.Description;
+                product.Price = model.Price;
 
                 await repo.SaveChangesAsync();
                 result = true;
@@ -84,6 +84,34 @@ namespace Miscshopify.Core.Services
 
             return result;
         }
-        
+
+        public async Task<IEnumerable<ProductViewModel>> GetProductsByCategory(Guid Id)
+        {
+            return await repo.All<Product>()
+                .Where(c => c.CategoryId == Id)
+                .Select(c => new ProductViewModel()
+                {
+                    Id = c.Id,
+                    ImagePath = c.ImagePath,
+                    Name = c.Name,
+                    Description = c.Description,
+                    Price = c.Price
+                })
+                .ToListAsync();
+        }
+
+        public async Task<ProductViewModel> ProductDetails(Guid id)
+        {
+            var product = await repo.GetByIdAsync<Product>(id);
+
+            return new ProductViewModel()
+            {
+                Id = product.Id,
+                ImagePath = product.ImagePath,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price
+            };
+        }
     }
 }

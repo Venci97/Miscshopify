@@ -19,7 +19,10 @@
                         <div class="mt-6">
                             <div class="row d-flex align-items-center mb-4">
                                 <div class="col-8 pr-0">
-                                    <h6 class="text-primary mb-0 text-break-line-1">@category.Name</h6>
+                                        <a asp-action="GetProductsByCategory" asp-controller="Product" asp-route-id="@category.Id" class="btn info">
+                                            @category.Name
+                                        </a>
+                                    @*<h6 class="btn info">@category.Name</h6>*@
                                 </div>
                             </div>
 

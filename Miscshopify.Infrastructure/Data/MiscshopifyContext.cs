@@ -22,4 +22,5 @@ public class MiscshopifyContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<Category> Categories { get; set; }
     public DbSet<Product> Products { get; set; }
+    public DbSet<CartItem> Cart { get; set; }
 }

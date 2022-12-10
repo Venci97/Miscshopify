@@ -22,7 +22,7 @@ namespace Miscshopify.Controllers
         {
             await roleManager.CreateAsync(new IdentityRole()
             {
-                Name = "Administrator"
+                Name = "User"
             });
 
             return Ok();

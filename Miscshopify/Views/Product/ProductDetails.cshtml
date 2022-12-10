@@ -1,0 +1,307 @@
+﻿@using Miscshopify.Core.Models;
+@model ProductViewModel
+@{
+}
+
+<div id="content" class="p-5" style="background-color: white;">
+    <div>@*<script src="../demos/source/modules/smart.radiobutton.js" type="module"></script><link rel="stylesheet" type="text/css" href="./e-commerce-details/styles.css"><link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"><script src="../demos/source/modules/smart.carousel.js" type="module"></script><script src="./e-commerce-details/index.js" type="module"></script></div><div class="view-content" style="opacity: 1; visibility: visible; transition: opacity 0.3s ease-out 0s, visibility 0.3s ease-out 0s;">*@
+        <div class="container">
+            <div class="row">
+                <div class="col-12 mb-3"><h4>Product Details</h4></div>
+            </div>
+        
+            <div class="view-content">
+                <div class="card-body">
+                    <div class="row my-2">
+                        <div class="col-12 col-md-7 d-flex align-items-center justify-content-center mb-2 mb-md-0">
+                            <div class="d-flex align-items-center justify-content-center">
+                                <img src="~/@Model.ImagePath" class="img-thumnail" alt="product image" width="100%" height="100%">
+                            </div>
+                        </div>
+                          
+
+                        <div class="col-12 col-md-4">
+                            <h4>@Model.Name</h4>
+                            <div class="d-flex flex-wrap mt-1">
+                                <h4 class="text-primary mr-1">BGN @Model.Price</h4>
+                            </div>
+
+                            <p>Available - <span class="text-success">In stock</span></p>
+
+                            @*<p>
+                                @Model.Description
+                            </p>*@
+
+                            <ul class="product-features list-unstyled">
+                                <li>
+                                    <i class="fas fa-shopping-basket"></i>
+                                    <span>Free Shipping</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-money-bill-alt"></i>
+                                    <span>Cash on delivery</span>
+                                </li>
+                            </ul>
+                            @*<hr>
+
+                            <div>
+                                <h6>Colors</h6>
+
+                                <div>
+                                    <smart-radio-button class="purple smart-element smart-radio-button smart-toggle-box" checked="" type="radio" id="radioButton87a6" role="button" tabindex="0" aria-pressed="true">
+                                        <div class="smart-container" smart-id="container">
+                                            <div class="smart-overlay"></div>
+                                            <span class="smart-input" smart-id="radioButtonInput"></span>
+                                            <span class="smart-label" smart-id="radioButtonLabel"></span>
+                                            <input class="smart-hidden-input" type="hidden" smart-id="hiddenInput" name="" value="on">
+                                        </div>
+                                    </smart-radio-button>
+                                    <smart-radio-button class="green smart-element smart-radio-button smart-toggle-box" type="radio" id="radioButton005c" role="button" tabindex="0" aria-pressed="false">
+                                        <div class="smart-container" smart-id="container">
+                                            <div class="smart-overlay"></div>
+                                            <span class="smart-input" smart-id="radioButtonInput"></span>
+                                            <span class="smart-label" smart-id="radioButtonLabel"></span>
+                                            <input class="smart-hidden-input" type="hidden" smart-id="hiddenInput" name="" value="off">
+                                        </div>
+                                    </smart-radio-button>
+                                    <smart-radio-button class="red smart-element smart-radio-button smart-toggle-box" type="radio" id="radioButtonbe7c" role="button" tabindex="0" aria-pressed="false">
+                                        <div class="smart-container" smart-id="container">
+                                            <div class="smart-overlay"></div>
+                                            <span class="smart-input" smart-id="radioButtonInput"></span>
+                                            <span class="smart-label" smart-id="radioButtonLabel"></span>
+                                            <input class="smart-hidden-input" type="hidden" smart-id="hiddenInput" name="" value="off">
+                                        </div>
+                                    </smart-radio-button>
+                                    <smart-radio-button class="orange smart-element smart-radio-button smart-toggle-box" type="radio" id="radioButton7ed6" role="button" tabindex="0" aria-pressed="false">
+                                        <div class="smart-container" smart-id="container">
+                                            <div class="smart-overlay"></div>
+                                            <span class="smart-input" smart-id="radioButtonInput"></span>
+                                            <span class="smart-label" smart-id="radioButtonLabel"></span>
+                                            <input class="smart-hidden-input" type="hidden" smart-id="hiddenInput" name="" value="off">
+                                        </div>
+                                    </smart-radio-button>
+                                </div>
+                            </div>
+
+                            <hr>*@
+                            <div class="d-flex flex-column flex-sm-row pt-1">
+                                <a href="#" class="btn btn-primary mr-0 mr-sm-2 mb-1 mb-sm-0">
+                                    <i class="fas fa-shopping-basket mr-2"></i>
+                                    <span>Add to cart</span>
+                                </a>
+                                @*<a href="#" class="btn btn-outline-secondary mb-1 mb-sm-0">
+                                    <i class="fas fa-heart mr-2"></i>
+                                    <span>Wishlist</span>
+                                </a>*@
+                            </div>
+                            <div class="row text-center py-8">
+                                <hr>
+                                <label>Description</label>
+                                <p>
+                                    @Model.Description
+                                </p>
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row text-center py-8">
+                <div class="col-12 col-md-4 mb-4 mb-md-0">
+                    <div class="w-75 mx-auto">
+                        <i class="fas fa-medal text-primary font-size-40px"></i>
+                        <h4 class="mt-2 mb-1">100% Original</h4>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4 mb-4 mb-md-0">
+                    <div class="w-75 mx-auto">
+                        <i class="fas fa-clock text-primary font-size-40px"></i>
+                        <h4 class="mt-2 mb-1">10 Day Replacement</h4>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 mb-4 mb-md-0">
+                    <div class="w-75 mx-auto">
+                        <i class="fas fa-shield-alt text-primary font-size-40px"></i>
+                        <h4 class="mt-2 mb-1">2 Year Warranty</h4>
+                    </div>
+                </div>
+            </div>
+
+            @*<div class="card">
+                <div class="card-body">
+                    <h4 class="text-center mt-6 mb-7">Related products</h4>
+                    <smart-carousel id="carousel" class="related-products-carousel slide slider-style-adaptive-height multi-items smart-element smart-carousel smart-calculated-height" adaptive-height="" slide-show="" loop="" item-template="itemTemplateMultiItems" role="region" aria-roledescription="carousel" tabindex="0" style="height: 372px;">
+                        <div role="presentation" smart-id="container" class="smart-container">
+                            <div class="smart-items-container" role="presentation" smart-id="itemsContainer">
+                                <div id="carouselSlide0" aria-label="Slide 0" role="tabpanel" class="smart-carousel-item smart-active" item-id="0">
+                                    <div class="slides-holder">
+                                        <div class="item bg-secondary-opacity-1 border">
+                                            <div>
+                                                <h5>Apple Watch Series 6</h5>
+                                                <p>by Apple</p>
+                                            </div>
+
+                                            <div class="image">
+                                                <img class="image" src="assets/images/products/1.png">
+                                            </div>
+                                            <br>
+                                            <h6 class="text-primary">$359</h6>
+                                        </div>
+                                        <div class="item bg-secondary-opacity-1 border">
+                                            <div>
+                                                <h5>Apple Macbook Pro</h5>
+                                                <p>by Apple</p>
+                                            </div>
+
+                                            <div class="image">
+                                                <img class="image" src="assets/images/products/macbook-pro.png">
+                                            </div>
+                                            <br>
+                                            <h6 class="text-primary">$1279</h6>
+                                        </div>
+                                        <div class="item bg-secondary-opacity-1 border">
+                                            <div>
+                                                <h5>Apple iPhone X</h5>
+                                                <p>by Apple</p>
+                                            </div>
+
+                                            <div class="image">
+                                                <img class="image" src="assets/images/products/iphone.png">
+                                            </div>
+                                            <br>
+                                            <h6 class="text-primary">$679</h6>
+                                        </div>
+                                    </div>
+                                </div><div id="carouselSlide1" aria-label="Slide 1" role="tabpanel" class="smart-carousel-item smart-animate-trigger" item-id="1">
+                                    <div class="slides-holder">
+                                        <div class="item bg-secondary-opacity-1 border">
+                                            <div>
+                                                <h5>Apple Watch Series 6</h5>
+                                                <p>by Apple</p>
+                                            </div>
+
+                                            <div class="image">
+                                                <img class="image" src="assets/images/products/1.png">
+                                            </div>
+                                            <br>
+                                            <h6 class="text-primary">$359</h6>
+                                        </div>
+                                        <div class="item bg-secondary-opacity-1 border">
+                                            <div>
+                                                <h5>Apple Macbook Pro</h5>
+                                                <p>by Apple</p>
+                                            </div>
+
+                                            <div class="image">
+                                                <img class="image" src="assets/images/products/macbook-pro.png">
+                                            </div>
+                                            <br>
+                                            <h6 class="text-primary">$1279</h6>
+                                        </div>
+                                        <div class="item bg-secondary-opacity-1 border">
+                                            <div>
+                                                <h5>Apple iPhone X</h5>
+                                                <p>by Apple</p>
+                                            </div>
+
+                                            <div class="image">
+                                                <img class="image" src="assets/images/products/iphone-x.png">
+                                            </div>
+                                            <br>
+                                            <h6 class="text-primary">$679</h6>
+                                        </div>
+                                    </div>
+                                </div><div id="carouselSlide2" aria-label="Slide 2" role="tabpanel" class="smart-carousel-item smart-animate-trigger" item-id="2">
+                                    <div class="slides-holder">
+                                        <div class="item bg-secondary-opacity-1 border">
+                                            <div>
+                                                <h5>Apple Watch Series 6</h5>
+                                                <p>by Apple</p>
+                                            </div>
+
+                                            <div class="image">
+                                                <img class="image" src="assets/images/products/1.png">
+                                            </div>
+                                            <br>
+                                            <h6 class="text-primary">$359</h6>
+                                        </div>
+                                        <div class="item bg-secondary-opacity-1 border">
+                                            <div>
+                                                <h5>Apple Macbook Pro</h5>
+                                                <p>by Apple</p>
+                                            </div>
+
+                                            <div class="image">
+                                                <img class="image" src="assets/images/products/macbook-pro.png">
+                                            </div>
+                                            <br>
+                                            <h6 class="text-primary">$1279</h6>
+                                        </div>
+                                        <div class="item bg-secondary-opacity-1 border">
+                                            <div>
+                                                <h5>Apple iPhone X</h5>
+                                                <p>by Apple</p>
+                                            </div>
+
+                                            <div class="image">
+                                                <img class="image" src="assets/images/products/iphone.png">
+                                            </div>
+                                            <br>
+                                            <h6 class="text-primary">$679</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <smart-repeat-button initial-delay="0" delay="200" animation="advanced" unfocusable="" class="smart-arrow smart-arrow-left smart-element smart-repeat-button" aria-label="Previous slide" smart-id="arrowLeft" id="repeatButtondd33" role="button"><button class="smart-button smart-unselectable smart-container" type="button" role="presentation" smart-id="button" tabindex="-1"></button></smart-repeat-button>
+                            <smart-repeat-button initial-delay="0" delay="200" animation="advanced" unfocusable="" class="smart-arrow smart-arrow-right smart-element smart-repeat-button" aria-label="Next slide" smart-id="arrowRight" id="repeatButtond737" role="button"><button class="smart-button smart-unselectable smart-container" type="button" role="presentation" smart-id="button" tabindex="-1"></button></smart-repeat-button>
+                            <div class="smart-indicators-container" role="tablist" smart-id="indicatorsContainer"><span role="tab" aria-selected="true" class="smart-indicator smart-active" indicator-id="0" aria-label="Slide 0" aria-controls="carouselSlide0"></span><span role="tab" aria-selected="false" class="smart-indicator" indicator-id="1" aria-label="Slide 1" aria-controls="carouselSlide1"></span><span role="tab" aria-selected="false" class="smart-indicator" indicator-id="2" aria-label="Slide 2" aria-controls="carouselSlide2"></span></div>
+                        </div>
+                    </smart-carousel>
+
+                    <template id="itemTemplateMultiItems">
+                        <div class="slides-holder">
+                            <div class="item bg-secondary-opacity-1 border">
+                                <div>
+                                    <h5>{{label1}}</h5>
+                                    <p>by {{brand1}}</p>
+                                </div>
+
+                                <div class="image">
+                                    <img class="image" src="{{image1}}">
+                                </div>
+                                <br>
+                                <h6 class="text-primary">{{price1}}</h6>
+                            </div>
+                            <div class="item bg-secondary-opacity-1 border">
+                                <div>
+                                    <h5>{{label2}}</h5>
+                                    <p>by {{brand2}}</p>
+                                </div>
+
+                                <div class="image">
+                                    <img class="image" src="{{image2}}">
+                                </div>
+                                <br>
+                                <h6 class="text-primary">{{price2}}</h6>
+                            </div>
+                            <div class="item bg-secondary-opacity-1 border">
+                                <div>
+                                    <h5>{{label3}}</h5>
+                                    <p>by {{brand3}}</p>
+                                </div>
+
+                                <div class="image">
+                                    <img class="image" src="{{image3}}">
+                                </div>
+                                <br>
+                                <h6 class="text-primary">{{price3}}</h6>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>*@
+        </div>
+    </div>
+</div>

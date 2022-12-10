@@ -111,52 +111,19 @@ namespace Miscshopify.Areas.Admin.Controllers
             return RedirectToAction(nameof(ManageProducts));
         }
 
-        [HttpGet]
-        public IActionResult AddProductToCategory()
-        {
-            var model = new ProductViewModel();
-            ViewData["Title"] = "Add new product to this category";
-            return View(model);
-        }
-
-        //[HttpPost]
-        //public async Task<IActionResult> AddProductToCategory(Guid id, ProductViewModel model)
+        //[HttpGet]
+        //public IActionResult AddProductToCategory()
         //{
-        //    ViewData["Title"] = "Add new product";
-
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(model);
-        //    }
-
-        //    string uploadPath = "uploads/productImg/";
-
-        //    var files = HttpContext.Request.Form.Files;
-
-        //    foreach (var file in files)
-        //    {
-        //        if (file != null && file.Length > 0)
-        //        {
-        //            var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
-        //            var uploadPathWithfileName = Path.Combine(uploadPath, fileName);
-
-        //            var uploadAbsolutePath = Path.Combine(hostingEnvironment.WebRootPath, uploadPathWithfileName);
-
-        //            using (var fileStream = new FileStream(uploadAbsolutePath, FileMode.Create))
-        //            {
-        //                await file.CopyToAsync(fileStream);
-        //                model.ImagePath = uploadPathWithfileName;
-        //            }
-        //        }
-        //    }
-
-        //    if (model.ImagePath == null)
-        //    {
-        //        model.ImagePath = "uploads/categoryImg/NoImage.jpg";
-        //    }
-        //    await productService.AddProductToCategory(id, model);
-
-        //    return RedirectToAction(nameof(ManageProducts));
+        //    var model = new ProductViewModel();
+        //    ViewData["Title"] = "Add new product to this category";
+        //    return View(model);
         //}
+
+        public async Task<IActionResult> GetProductsByCategory(Guid Id)
+        {
+            var product = await productService.GetProductsByCategory(Id);
+
+            return View(product);
+        }
     }
 }
