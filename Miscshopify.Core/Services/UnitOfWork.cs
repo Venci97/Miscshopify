@@ -23,6 +23,10 @@ namespace Miscshopify.Core.Services
 		{
 			long totalBytes = file.Length;
 			string filename = file.FileName.Trim('"');
+			if (filename == null)
+			{
+				filename = "NoUserPhoto.png";
+			}
 			filename = EnsureFileName(filename);
 			byte[] buffer = new byte[16 * 1024];
 			using (FileStream output = System.IO.File.Create(GetPathAndFileName(filename)))

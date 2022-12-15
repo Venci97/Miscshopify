@@ -1,4 +1,5 @@
 ﻿using Miscshopify.Core.Models;
+using Miscshopify.Infrastructure.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,6 @@ namespace Miscshopify.Core.Contracts
         Task<bool> UpdateProductDetails(ProductViewModel model);
         Task<IEnumerable<ProductViewModel>> GetProductsByCategory(Guid Id);
         Task<ProductViewModel> ProductDetails(Guid id);
+        Task<Product> GetProductById(Guid id);
     }
 }

@@ -5,7 +5,7 @@ namespace Miscshopify.Core.Services
 {
     public class OrderService : IOrderService
     {
-        public Task PlaceOrder(CustomerOrder order)
+        public Task PlaceOrder(CustomerOrderViewModel order)
         {
             throw new NotImplementedException();
         }

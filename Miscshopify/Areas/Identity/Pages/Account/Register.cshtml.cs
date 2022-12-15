@@ -150,7 +150,7 @@ namespace Miscshopify.Areas.Identity.Pages.Account
                 user.LastName = Input.LastName;
                 user.PhoneNumber = Input.PhoneNumber;
                 user.Gender = Input.Gender;
-                user.ImagePath = file.FileName;
+                user.ImagePath = file.FileName; //TODO: repair if no photo is uploaded
                 
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);

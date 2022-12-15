@@ -4,6 +4,6 @@ namespace Miscshopify.Core.Contracts
 {
     public interface IOrderService
     {
-        Task PlaceOrder(CustomerOrder order);
+        Task PlaceOrder(CustomerOrderViewModel order);
     }
 }

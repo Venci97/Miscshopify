@@ -26,7 +26,7 @@ namespace Miscshopify.Controllers
         public async Task<IActionResult> ProductDetails(Guid Id)
         {
             var product = await productService.ProductDetails(Id);
-
+                
             return View(product);
         }
     }

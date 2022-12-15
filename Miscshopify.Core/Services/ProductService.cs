@@ -113,5 +113,10 @@ namespace Miscshopify.Core.Services
                 Price = product.Price
             };
         }
+
+        public async Task<Product> GetProductById(Guid id)
+        {
+            return await repo.GetByIdAsync<Product>(id);
+        }
     }
 }
