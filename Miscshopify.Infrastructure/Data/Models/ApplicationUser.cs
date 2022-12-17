@@ -18,6 +18,18 @@ namespace Miscshopify.Infrastructure.Data.Models
         [StringLength(20)]
         public string LastName { get; set; }
 
+        [Required]
+        [StringLength(50)]
+        public string City { get; set; }
+
+        [Required]
+        [StringLength(100)]
+        public string Address { get; set; }
+
+        [Required]
+        [StringLength(20)]
+        public string PostCode { get; set; }
+
         public GenderEnum Gender { get; set; }
 
         [Required]

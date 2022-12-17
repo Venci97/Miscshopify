@@ -69,5 +69,19 @@ namespace Miscshopify.Core.Services
 
             return result;
         }
+
+        public async Task<IEnumerable<CategoryViewModel>> GetRandomCategories()
+        {
+             return await repo.All<Category>()
+                .Select(c => new CategoryViewModel()
+                {
+                    Id = c.Id,
+                    ImagePath = c.ImagePath,
+                    Name = c.Name,
+                    Description = c.Description
+                })
+                .ToListAsync();
+
+        }
     }
 }

@@ -1,8 +1,185 @@
-﻿@{
+﻿@using Miscshopify.Core.Models;
+@model IEnumerable<CategoryViewModel>
+
+@{
     ViewData["Title"] = "Home Page";
 }
+<head>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" type="text/css" href="~/assets/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="~/assets/css/font-awesome.css">
+
+    <link rel="stylesheet" href="~/assets/css/templatemo-hexashop.css">
+
+    <link rel="stylesheet" href="~/assets/css/owl-carousel.css">
+
+    <link rel="stylesheet" href="~/assets/css/lightbox.css">
+    <!--
+
+    TemplateMo 571 Hexashop
+
+    https://templatemo.com/tm-571-hexashop
+
+    -->
+</head>
+
+<div class="main-banner" id="top">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="left-content">
+                    <div class="thumb">
+                        <div class="inner-content">
+                            <h4>Miscshopify</h4>
+                            <span>All you need on one click</span>
+                        </div>
+                        <img src="~/img/best-laptops-for-gaming.jpg" alt="Photo">
+                    </div>
+                </div>
+            </div>
+            @foreach(var category in Model)
+            {
+                <div class="col-lg-6">
+                    <div class="right-content">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="right-first-image">
+                                    <div class="thumb">
+                                        @*<div class="inner-content">
+                                            <h4>@category.Name</h4>
+                                            <span>@category.Description</span>
+                                        </div>*@
+                                        <div class="hover-content">
+                                            <div class="inner">
+                                                <h4>@category.Name</h4>
+                                                <p>@category.Description</p>
+                                                <div class="main-border-button">
+                                                    <a asp-action="GetProductsByCategory" asp-controller="Product" asp-route-id="@category.Id">Discover More</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <img src="~/@category.ImagePath">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>                
+
+<script src="~/assets/js/jquery-2.1.0.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="~/assets/js/popper.js"></script>
+<script src="~/assets/js/bootstrap.min.js"></script>
+
+<!-- Plugins -->
+<script src="~/assets/js/owl-carousel.js"></script>
+<script src="~/assets/js/accordions.js"></script>
+<script src="~/assets/js/datepicker.js"></script>
+<script src="~/assets/js/scrollreveal.min.js"></script>
+<script src="~/assets/js/waypoints.min.js"></script>
+<script src="~/assets/js/jquery.counterup.min.js"></script>
+<script src="~/assets/js/imgfix.min.js"></script>
+<script src="~/assets/js/slick.js"></script>
+<script src="~/assets/js/lightbox.js"></script>
+<script src="~/assets/js/isotope.js"></script>
+
+<!-- Global Init -->
+<script src="~/assets/js/custom.js"></script>
+
+<script>
+
+    $(function () {
+        var selectedClass = "";
+        $("p").click(function () {
+            selectedClass = $(this).attr("data-rel");
+            $("#portfolio").fadeTo(50, 0.1);
+            $("#portfolio div").not("." + selectedClass).fadeOut();
+            setTimeout(function () {
+                $("." + selectedClass).fadeIn();
+                $("#portfolio").fadeTo(50, 1);
+            }, 500);
+
+        });
+    });
+
+</script>
+
+@*<div class="col-lg-6">
+                            <div class="right-first-image">
+                                <div class="thumb">
+                                    <div class="inner-content">
+                                        <h4>Men</h4>
+                                        <span>Best Clothes For Men</span>
+                                    </div>
+                                    <div class="hover-content">
+                                        <div class="inner">
+                                            <h4>Men</h4>
+                                            <p>Lorem ipsum dolor sit amet, conservisii ctetur adipiscing elit incid.</p>
+                                            <div class="main-border-button">
+                                                <a href="#">Discover More</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <img src="assets/images/baner-right-image-02.jpg">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="right-first-image">
+                                <div class="thumb">
+                                    <div class="inner-content">
+                                        <h4>Kids</h4>
+                                        <span>Best Clothes For Kids</span>
+                                    </div>
+                                    <div class="hover-content">
+                                        <div class="inner">
+                                            <h4>Kids</h4>
+                                            <p>Lorem ipsum dolor sit amet, conservisii ctetur adipiscing elit incid.</p>
+                                            <div class="main-border-button">
+                                                <a href="#">Discover More</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <img src="assets/images/baner-right-image-03.jpg">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="right-first-image">
+                                <div class="thumb">
+                                    <div class="inner-content">
+                                        <h4>Accessories</h4>
+                                        <span>Best Trend Accessories</span>
+                                    </div>
+                                    <div class="hover-content">
+                                        <div class="inner">
+                                            <h4>Accessories</h4>
+                                            <p>Lorem ipsum dolor sit amet, conservisii ctetur adipiscing elit incid.</p>
+                                            <div class="main-border-button">
+                                                <a href="#">Discover More</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <img src="assets/images/baner-right-image-04.jpg">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>*@

@@ -1,0 +1,51 @@
+﻿@using Miscshopify.Core.Models;
+@model IEnumerable<OrderViewModel>
+@{
+}
+<head>
+	<link rel="stylesheet" href="~/plugins/fontawesome-free-6.2.0-web/css/all.min.css">
+</head>
+<div class="row">
+	<div class="col-12">
+		<section class="ftco-section">
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-md-6 text-center mb-5">
+						<h2 class="heading-section">New Orders</h2>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="table-wrap">
+							<table class="table table-responsive-xl">
+								<thead>
+									<tr>
+										<th>Customer Name</th>
+										<th>Status</th>
+										<th>Action</th>
+										<th>&nbsp;</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach (var order in Model)
+									{
+										<tr>
+											<td>@order.CustomerName</td>
+											<td>@order.Status</td>
+											<td>
+												<a asp-area="Admin" asp-action="OrderDetails" asp-controller="Order" asp-route-id="@order.Id" class="btn btn-block btn-outline-info btn-xs">
+													Details
+													@*<i class="fa-solid fa-plus"></i>*@
+												</a>
+											</td>
+										</tr>
+									}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+</div>

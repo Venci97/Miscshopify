@@ -7,17 +7,26 @@
 @inject UserManager<ApplicationUser> UserManager
 
 @{
-    var ImagePath = ((ClaimsIdentity)User.Identity).FindFirst("ImagePath");
 }
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
-    @*<li>
-        <img src="~/@" class="img-circle elevation-2" alt="User Image">
-    </li>*@
     <li class="nav-item">
-        <a id="manage" class="nav-link text-grey" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
+        <a class="nav-link" href="/Cart/Index" title="Cart">
+            <i class="fa-solid fa-cart-shopping"></i>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-grey" href="/Order/MyOrders" title="Cart">
+            My Orders
+        </a>
+    </li>
+    <li>
+        <img src="/uploads/@UserManager.GetUserAsync(User).Result?.ImagePath" class="img-circle elevation-2" style="border-radius: 50%;" width="40" height="40" alt="User Image">
+    </li>
+    <li class="nav-item">
+        <a id="manage" class="nav-link text-grey" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserAsync(User).Result?.FirstName</a>
     </li>
     <li class="nav-item">
         <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">

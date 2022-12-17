@@ -13,12 +13,17 @@ namespace Miscshopify.Infrastructure.Data.Models
         [Key]
         public Guid Id { get; set; } = new Guid();
 
+        [Required]
+        public string UserId { get; set; }
+
+        [Required]
+        [StringLength(150)]
+        public string CustomerName { get; set; }
+
         public OrderStatusEnum Status { get; set; } = OrderStatusEnum.Pending;
 
-        public virtual List<CartItem> Items { get; set; }
+        public virtual ApplicationUser User { get; set; }
 
-        //public Guid CartId { get; set; }
-
-        //public Cart Cart { get; set; }
+        public virtual List<OrderItem> Items { get; set; } = new List<OrderItem>();
     }
 }

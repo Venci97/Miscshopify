@@ -8,12 +8,10 @@ namespace Miscshopify.Controllers
 {
     public class CartController : BaseController
     {
-        private readonly IAppDbRepository repo;
         private readonly ICartService cartService;
 
-        public CartController(IAppDbRepository _repo, ICartService _cartService)
+        public CartController(ICartService _cartService)
         {
-            repo = _repo;
             cartService = _cartService;
         }
 
@@ -21,6 +19,14 @@ namespace Miscshopify.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userCart = await cartService.GetCartItems(userId);
+
+            decimal totalPrice = 0.0m;
+            foreach (var item in userCart)
+            {
+                totalPrice += item.Price;
+            }
+
+            ViewBag.TotalPrice = totalPrice;
 
             return View(userCart);
         }
@@ -38,20 +44,17 @@ namespace Miscshopify.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var cart = repo.All<Cart>()
-                .First(c => c.CustomerId == userId);
-
             cartService.RemoveFromCart(Id, userId);
 
             return RedirectToAction("Index");
         }
 
-        public IActionResult Checkout()
+        public async Task<IActionResult> Checkout()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            cartService.Checkout(userId);
+            var userCart = await cartService.GetCartItems(userId);
 
-            return RedirectToAction("Index");
+            return View(userCart);
         }
     }
 }

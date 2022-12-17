@@ -1,6 +1,7 @@
 ﻿@using Miscshopify.Core.Models;
 @model IEnumerable<CartItemViewModel>
 @{
+	var totalPrice = ViewBag.TotalPrice;
 }
 <head>
 	<link rel="stylesheet" href="~/plugins/fontawesome-free-6.2.0-web/css/all.min.css">
@@ -36,7 +37,10 @@
 												<img src="~/@item.ImagePath" style="border-radius: 50%;" width="50" height="50">
 											</td>
 											<td>@item.ProductName</td>
-											<td>@item.Quantity</td>
+											<td>
+												@item.Quantity
+												@*<input asp-for="@item.Quantity" class="input-group-field" type="number">*@
+											</td>
 											<td>@item.Price</td>
 											<td>
 												<a asp-action="RemoveFromCart" asp-controller="Cart" asp-route-id="@item.Id" class="btn btn-sm btn-primary mr-25">
@@ -49,7 +53,12 @@
 								</tbody>
 							</table>
 						</div>
+						<label class="form-label">Total Price</label>
+						<span class="focus-input100">@totalPrice</span>
 					</div>
+					<a asp-action="Checkout" asp-controller="Cart" class="btn btn-sm btn-primary mr-25">
+						Checkout
+					</a>
 				</div>
 			</div>
 		</section>

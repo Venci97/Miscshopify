@@ -1,0 +1,69 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using Miscshopify.Core.Models;
+@using System.Security.Claims;
+@using Miscshopify.Infrastructure.Data.Models;
+@model IEnumerable<CartItemViewModel>
+
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+	var user = UserManager.GetUserAsync(User).Result;
+}
+
+<div class="col-sm-30 col-md-20 col-xl-15 mb-20" style="background: rgba(255, 255, 255, 1);">
+    <div class="item rounded-xl overflow-hidden shadow border">
+        <div class="px-3 pt-6">
+			<table class="table table-responsive-xl">
+				<thead>
+					<tr>
+						<th>&nbsp;</th>
+						<th>Name</th>
+						<th>Quantity</th>
+						<th>Price</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var item in Model)
+					{
+						<tr>
+							<td>
+								<img src="~/@item.ImagePath" style="border-radius: 50%;" width="50" height="50">
+							</td>
+							<td>@item.ProductName</td>
+							<td>@item.Quantity</td>
+							<td>@item.Price</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+			<div class="wrap-input100">
+				<label class="form-label">Name</label>
+				<span class="focus-input100">@user.FirstName @user.LastName</span>
+			</div>
+			<div class="wrap-input100">
+				<label class="form-label">Email</label>
+				<span class="focus-input100">@user.Email</span>
+			</div>
+			<div class="wrap-input100">
+				<label class="form-label">City</label>
+				<span class="focus-input100">@user.City</span>
+			</div>
+			<div class="wrap-input100">
+				<label class="form-label">Address</label>
+				<span class="focus-input100">@user.Address</span>
+			</div>
+			<div class="wrap-input100">
+				<label class="form-label">Postcode</label>
+				<span class="focus-input100">@user.PostCode</span>
+			</div>
+			<div class="wrap-input100">
+				<label class="form-label">Phone</label>
+				<span class="focus-input100">@user.PhoneNumber</span>
+			</div>
+			<a asp-action="CompleteOrder" asp-controller="Order" class="btn btn-block btn-outline-info btn-xs">
+					Confirm
+				@*<i class="fa-solid fa-plus"></i>*@
+			</a>
+        </div>
+    </div>
+</div>

@@ -11,7 +11,6 @@ namespace Miscshopify.Core.Contracts
     {
         Task AddToCart(Guid productId, string userId);
         void RemoveFromCart(Guid CartItemId, string userId);
-        Task Checkout(string userId);
         Task<IEnumerable<CartItemViewModel>> GetCartItems(string userId);
     }
 }

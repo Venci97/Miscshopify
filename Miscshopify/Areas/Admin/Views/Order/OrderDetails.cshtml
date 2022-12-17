@@ -1,0 +1,74 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using Miscshopify.Core.Models;
+@using System.Security.Claims;
+@using Miscshopify.Infrastructure.Data.Models;
+@using Miscshopify.Infrastructure.Data.Models.Enums;
+@model OrderViewModel
+
+<div class="col-sm-30 col-md-20 col-xl-15 mb-20" style="background: rgba(255, 255, 255, 1);">
+	<div class="item rounded-xl overflow-hidden shadow border">
+		<div class="px-3 pt-6">
+			<table class="table table-responsive-xl">
+				<thead>
+					<tr>
+						<th>&nbsp;</th>
+						<th>Name</th>
+						<th>Description</th>
+						<th>Products</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var item in Model.Items)
+					{
+						<tr>
+							<td>
+								<img src="~/@item.ImagePath" style="border-radius: 50%;" width="50" height="50">
+							</td>
+							<td>@item.ProductName</td>
+							<td>@item.Quantity</td>
+							<td>@item.Price</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+			<div class="wrap-input100">
+				<label class="form-label">Name</label>
+				<span class="focus-input100">@Model.CustomerName</span>
+			</div>
+			<div class="wrap-input100">
+				<label class="form-label">Email</label>
+				<span class="focus-input100">@Model.CustomerEmail</span>
+			</div>
+			<div class="wrap-input100">
+				<label class="form-label">City</label>
+				<span class="focus-input100">@Model.CustomerCity</span>
+			</div>
+			<div class="wrap-input100">
+				<label class="form-label">Address</label>
+				<span class="focus-input100">@Model.CustomerAddress</span>
+			</div>
+			<div class="wrap-input100">
+				<label class="form-label">Postcode</label>
+				<span class="focus-input100">@Model.CustomerPostCode</span>
+			</div>
+			<div class="wrap-input100">
+				<label class="form-label">Phone</label>
+				<span class="focus-input100">@Model.CustomerPhoneNumber</span>
+			</div>
+			<form id="edit" method="post">
+			<div class="btn-group" data-validate="Please select order status">
+				<select asp-for="Status" asp-items="Html.GetEnumSelectList<OrderStatusEnum>()" class="btn btn-info">
+					<option selected disabled value="">Please select order status</option>
+				</select>
+			</div>
+			<div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
+				<button type="submit" class="btn btn-primary glow mb-1 mb-sm-0 mr-0 mr-sm-1">
+					Save
+					changes
+				</button>
+				<button type="reset" class="btn btn-light">Cancel</button>
+			</div>
+			</form>
+		</div>
+	</div>
+</div>

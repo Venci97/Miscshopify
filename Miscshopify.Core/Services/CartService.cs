@@ -34,44 +34,34 @@ namespace Miscshopify.Core.Services
                 cart = new Cart()
                 {
                     CustomerId = userId,
-                    CartItems = new List<CartItem>()
+                    Items = new List<CartItem>()
                 };
 
                 await repo.AddAsync(cart);
             }
 
-            cart.CartItems.Add(new CartItem()
+            var item = repo.All<CartItem>()
+                .FirstOrDefault(i => i.CustomerId == userId && i.ProductID == productId);
+
+			if (item == null)
             {
-                CustomerId = userId,
-                ImagePath = product.ImagePath,
-                ProductID = product.Id,
-                Quantity = 1,
-                UnitPrice = product.Price,
-                ProductName = product.Name
-            });
+                cart.Items.Add(new CartItem()
+                {
+                    CustomerId = userId,
+                    ImagePath = product.ImagePath,
+                    ProductID = product.Id,
+                    Quantity = 1,
+                    UnitPrice = product.Price,
+                    ProductName = product.Name
+                });
 
-            repo.SaveChanges();
-        }
-
-        public async Task Checkout(string userId)
-        {
-            var cart = repo.All<Cart>()
-                .First(c => c.CustomerId == userId);
-
-            var order = new Order()
-            {
-                Status = Infrastructure.Data.Models.Enums.OrderStatusEnum.Pending
-            };
-
-            foreach (var item in cart.CartItems)
-            {
-                order.Items.Add(item);
             }
-
-            repo.Delete(cart);
-
-            await repo.AddAsync(order);
-            await repo.SaveChangesAsync();
+            else
+            {
+                item.Quantity += 1;
+                item.UnitPrice = product.Price * item.Quantity;
+            }
+            repo.SaveChanges();
         }
 
         public async Task<IEnumerable<CartItemViewModel>> GetCartItems(string userId)
@@ -90,7 +80,23 @@ namespace Miscshopify.Core.Services
                 .ToListAsync();
         }
 
-        public void RemoveFromCart(Guid cartItemId, string userId)
+		public async Task<bool> UpdateCartQuantity(CartItemViewModel model)
+		{
+			bool result = false;
+			var cartItem = await repo.GetByIdAsync<CartItem>(model.Id);
+
+			if (cartItem != null)
+			{
+                cartItem.Quantity = model.Quantity;
+
+				await repo.SaveChangesAsync();
+				result = true;
+			}
+
+			return result;
+		}
+
+		public void RemoveFromCart(Guid cartItemId, string userId)
         {
             var item = repo.All<CartItem>()
                 .First(i => i.Id == cartItemId);

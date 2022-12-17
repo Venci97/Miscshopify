@@ -120,7 +120,19 @@ namespace Miscshopify.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
-            [Required]
+			[Required]
+			[StringLength(50)]
+			public string City { get; set; }
+
+			[Required]
+			[StringLength(100)]
+			public string Address { get; set; }
+
+			[Required]
+			[StringLength(20)]
+			public string PostCode { get; set; }
+
+			[Required]
             [Phone]
             [RegularExpression(GlobalConstants.Regex.PhoneNumberRegex)]
             [Display(Name = "Phone Number")]
@@ -151,6 +163,9 @@ namespace Miscshopify.Areas.Identity.Pages.Account
                 user.PhoneNumber = Input.PhoneNumber;
                 user.Gender = Input.Gender;
                 user.ImagePath = file.FileName; //TODO: repair if no photo is uploaded
+                user.Address = Input.Address;
+                user.City = Input.City;
+                user.PostCode = Input.PostCode;
                 
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
