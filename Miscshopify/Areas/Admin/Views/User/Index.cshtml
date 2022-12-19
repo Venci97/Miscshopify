@@ -1,0 +1,68 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using Miscshopify.Core.Models;
+@using Miscshopify.Infrastructure.Data.Models;
+@model IEnumerable<UserViewModel>
+
+@inject UserManager<ApplicationUser> UserManager
+@{
+
+}
+<head>
+	<link rel="stylesheet" href="~/plugins/fontawesome-free-6.2.0-web/css/all.min.css">
+</head>
+<div class="row">
+	<div class="col-12">
+		<section class="ftco-section">
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-md-6 text-center mb-5">
+						<h2 class="heading-section">Users List</h2>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="table-wrap">
+							<table class="table table-responsive-xl">
+								<thead>
+									<tr>
+					    				<th>Name</th>
+										<th>Email</th>
+										<th>Phone Number</th>
+										<th>Gender</th>
+										<th>Creation Date</th>
+										<th>Is User Active</th>
+										<th>Actions</th>
+										<th>&nbsp;</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach (var user in Model)
+									{
+										<tr>
+											<td>@user.Name</td>
+											<td>@user.Email</td>
+											<td>@user.PhoneNumber</td>
+											<td>@user.Gender</td>
+											<td>@user.CreationDate</td>
+											<td>@user.IsActive</td>	
+											<td>
+												<a asp-area="Admin" asp-action="Edit" asp-controller="User" asp-route-id="@user.Id" class="btn btn-block btn-outline-info btn-xs">
+													Edit
+													<i class="fa-solid fa-user-pen"></i>
+												</a>
+												<a asp-area="Admin" asp-action="Roles" asp-controller="User" asp-route-id="@user.Id" class="btn btn-block btn-outline-dark btn-xs">
+													Roles
+													<i class="fa-solid fa-user-gear"></i>
+												</a>
+											</td>
+										</tr>
+									}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>	
+		</section>
+	</div>
+</div>

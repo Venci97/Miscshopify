@@ -2,6 +2,73 @@
     ViewData["Title"] = "Admin Panel";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to Admin Panel</h1>
+<div class="row">
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-info">
+            <div class="inner">
+                <h3>New Orders</h3>
+            </div>
+            <div class="icon">
+                <i class="fa-solid fa-bag-shopping"></i>
+            </div>
+            <a href="/Admin/Order/NewOrders" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3>On The Way</h3>
+            </div>
+            <div class="icon">
+                <i class="fa-solid fa-truck-fast"></i>
+            </div>
+            <a href="/Admin/Order/OrdersOnTheWay" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-info">
+            <div class="inner">
+                <h3>All Orders</h3>
+            </div>
+            <div class="icon">
+                <i class="fa-solid fa-bag-shopping"></i>
+            </div>
+            <a href="/Admin/Order/Index" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-warning">
+            <div class="inner">
+                <h3>Users</h3>
+            </div>
+            <div class="icon">
+                <i class="fa-solid fa-user"></i>
+            </div>
+            <a href="/Admin/User/Index" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-danger">
+            <div class="inner">
+                <h3>Categories</h3>
+            </div>
+            <div class="icon">
+                <i class="fa-solid fa-list"></i>
+            </div>
+            <a href="/Admin/Category/Index" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3>Products</h3>
+            </div>
+            <div class="icon">
+                <i class="fa-solid fa-basket-shopping"></i>
+            </div>
+            <a href="/Admin/Product/Index" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
 </div>

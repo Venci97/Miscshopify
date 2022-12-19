@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Miscshopify.Core.Contracts;
+using Miscshopify.Core.Services;
 
 namespace Miscshopify.Controllers
 {
+    [AllowAnonymous]
     public class ProductController : BaseController
     {
         private readonly IProductService productService;

@@ -3,6 +3,7 @@ using Miscshopify.Core.Contracts;
 using Miscshopify.Core.Models;
 using Miscshopify.Infrastructure.Data.Models;
 using Miscshopify.Infrastructure.Data.Repositories;
+using System;
 
 namespace Miscshopify.Core.Services
 {
@@ -20,7 +21,13 @@ namespace Miscshopify.Core.Services
 
 			var user = await repo.GetByIdAsync<ApplicationUser>(userId);
 			var cart = repo.All<Cart>()
-                .First(c => c.CustomerId == userId);
+                .FirstOrDefault(c => c.CustomerId == userId);
+
+            if (cart == null)
+            {
+                throw new NullReferenceException("Cart Is Empty");
+            }
+
             var order = new Order()
             {
                 Status = Infrastructure.Data.Models.Enums.OrderStatusEnum.Pending,
@@ -126,6 +133,12 @@ namespace Miscshopify.Core.Services
         public async Task<OrderViewModel> GetOrderDetails(Guid Id)
         {
             var order = await repo.GetByIdAsync<Order>(Id);
+
+            if (order == null)
+            {
+                throw new NullReferenceException("Order not exist");
+            }
+
             var user = await repo.GetByIdAsync<ApplicationUser>(order.UserId);
 
             var orderView = new OrderViewModel()

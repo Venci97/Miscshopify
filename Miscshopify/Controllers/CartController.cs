@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Miscshopify.Core.Contracts;
 using Miscshopify.Infrastructure.Data.Models;
 using Miscshopify.Infrastructure.Data.Repositories;
@@ -26,7 +27,14 @@ namespace Miscshopify.Controllers
                 totalPrice += item.Price;
             }
 
-            ViewBag.TotalPrice = totalPrice;
+            int quantity = 0;
+			foreach (var item in userCart)
+			{
+				quantity += item.Quantity;
+			}
+
+			ViewBag.TotalPrice = totalPrice;
+            ViewBag.TotalQuantity = quantity;
 
             return View(userCart);
         }
@@ -42,9 +50,7 @@ namespace Miscshopify.Controllers
 
         public IActionResult RemoveFromCart(Guid Id)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            cartService.RemoveFromCart(Id, userId);
+            cartService.RemoveFromCart(Id);
 
             return RedirectToAction("Index");
         }
@@ -54,7 +60,16 @@ namespace Miscshopify.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userCart = await cartService.GetCartItems(userId);
 
-            return View(userCart);
+			decimal totalPrice = 0.0m;
+			foreach (var item in userCart)
+			{
+				totalPrice += item.Price;
+			}
+
+			ViewBag.TotalPrice = totalPrice;
+			ViewBag.TotalQuantity = userCart.Count();
+
+			return View(userCart);
         }
     }
 }

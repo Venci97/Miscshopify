@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Miscshopify.Core.Contracts;
 using Miscshopify.Core.Services;
 using Miscshopify.Models;
@@ -6,6 +7,7 @@ using System.Diagnostics;
 
 namespace Miscshopify.Controllers
 {
+    [AllowAnonymous]
     public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
@@ -19,9 +21,7 @@ namespace Miscshopify.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var category = await categoryService.GetRandomCategories();
-
-            return View(category);
+            return View();
         }
 
         public IActionResult Privacy()

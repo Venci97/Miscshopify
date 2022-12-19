@@ -18,9 +18,11 @@ namespace Miscshopify.Areas.Admin.Controllers
             hostingEnvironment = _hostingEnvironment;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var product = await productService.GetProducts();
+
+            return View(product);
         }
 
         [HttpGet]
@@ -74,14 +76,7 @@ namespace Miscshopify.Areas.Admin.Controllers
            
             await productService.Add(model);
 
-            return RedirectToAction(nameof(ManageProducts));
-        }
-
-        public async Task<IActionResult> ManageProducts()
-        {
-            var product = await productService.GetProducts();
-
-            return View(product);
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Edit(Guid id)
@@ -108,22 +103,21 @@ namespace Miscshopify.Areas.Admin.Controllers
                 ViewData[GlobalConstants.Messages.Error] = "Error! Something happen!";
             }
 
-            return RedirectToAction(nameof(ManageProducts));
+            return RedirectToAction(nameof(Index));
         }
-
-        //[HttpGet]
-        //public IActionResult AddProductToCategory()
-        //{
-        //    var model = new ProductViewModel();
-        //    ViewData["Title"] = "Add new product to this category";
-        //    return View(model);
-        //}
 
         public async Task<IActionResult> GetProductsByCategory(Guid Id)
         {
             var product = await productService.GetProductsByCategory(Id);
 
             return View(product);
+        }
+
+        public IActionResult RemoveProduct(Guid Id)
+        {
+            productService.RemoveProduct(Id);
+
+            return RedirectToAction("Index");
         }
     }
 }

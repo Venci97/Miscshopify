@@ -24,9 +24,11 @@ namespace Miscshopify.Areas.Admin.Controllers
             userService = _userService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var users = await userService.GetUsers();
+
+            return View(users);
         }
 
         public async Task<IActionResult> CreateRole()
@@ -37,13 +39,6 @@ namespace Miscshopify.Areas.Admin.Controllers
             });
 
             return Ok();
-        }
-
-        public async Task<IActionResult> ManageUsers()
-        {
-            var users = await userService.GetUsers();
-
-            return View(users);
         }
 
         public async Task<IActionResult> Edit(string id)
@@ -107,7 +102,7 @@ namespace Miscshopify.Areas.Admin.Controllers
                 await userManager.AddToRolesAsync(user, model.RoleNames);
             }
 
-            return RedirectToAction(nameof(ManageUsers));
+            return RedirectToAction(nameof(Index));
         }
 
     }

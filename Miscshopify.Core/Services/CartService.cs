@@ -3,11 +3,6 @@ using Miscshopify.Core.Contracts;
 using Miscshopify.Core.Models;
 using Miscshopify.Infrastructure.Data.Models;
 using Miscshopify.Infrastructure.Data.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Miscshopify.Core.Services
 {
@@ -25,6 +20,11 @@ namespace Miscshopify.Core.Services
         public async Task AddToCart(Guid productId, string userId)
         {
             var product = productService.GetProductById(productId).Result;
+
+            if (product == null)
+            {
+                throw new NullReferenceException("Product doesn't exist");
+            }
 
             var cart = repo.All<Cart>()
                 .FirstOrDefault(c => c.CustomerId == userId);
@@ -80,23 +80,7 @@ namespace Miscshopify.Core.Services
                 .ToListAsync();
         }
 
-		public async Task<bool> UpdateCartQuantity(CartItemViewModel model)
-		{
-			bool result = false;
-			var cartItem = await repo.GetByIdAsync<CartItem>(model.Id);
-
-			if (cartItem != null)
-			{
-                cartItem.Quantity = model.Quantity;
-
-				await repo.SaveChangesAsync();
-				result = true;
-			}
-
-			return result;
-		}
-
-		public void RemoveFromCart(Guid cartItemId, string userId)
+		public void RemoveFromCart(Guid cartItemId)
         {
             var item = repo.All<CartItem>()
                 .First(i => i.Id == cartItemId);

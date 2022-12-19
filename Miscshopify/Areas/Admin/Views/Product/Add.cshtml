@@ -4,7 +4,6 @@
 }
 
 <div class="content-body">
-    <!-- users edit start -->
     <section class="users-edit">
         <div class="card">
             <div class="card-content">
@@ -18,7 +17,6 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
-                            <!-- users edit account form start -->
                             <form id="add" method="post" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-12 col-sm-6">
@@ -44,11 +42,6 @@
                                             <input type="file" name="file" />
                                             <span asp-validation-for="ImagePath" class="focus-input100"></span>
                                         </div>
-                                        @*<div class="form-group">
-                                        <div class="controls">
-                                        <select asp-for="SubCategories" asp-items="Html.DropDownList<SubcategoryViewModel>()" class="btn btn-info"></select>
-                                        </div>
-                                        </div>*@
                                     </div>
                                     <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
                                         <button type="submit" class="btn btn-primary glow mb-1 mb-sm-0 mr-0 mr-sm-1">
@@ -59,15 +52,12 @@
                                     </div>
                                 </div>
                             </form>
-                            <!-- users edit account form ends -->
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- users edit ends -->
 </div>
 
 @section Scripts {

@@ -8,6 +8,8 @@
 
 @{
 	var user = UserManager.GetUserAsync(User).Result;
+	var totalPrice = ViewBag.TotalPrice;
+	var totalQuantity = ViewBag.TotalQuantity;
 }
 
 <div class="col-sm-30 col-md-20 col-xl-15 mb-20" style="background: rgba(255, 255, 255, 1);">
@@ -31,11 +33,17 @@
 							</td>
 							<td>@item.ProductName</td>
 							<td>@item.Quantity</td>
-							<td>@item.Price</td>
+							<td>@item.Price BGN</td>
 						</tr>
 					}
 				</tbody>
 			</table>
+			<hr>
+			<label class="form-label">Quantity:</label>
+			<span class="focus-input100">@totalQuantity </span>
+			<label class="form-label">Total Price:</label>
+			<span class="focus-input100">@totalPrice BGN</span>
+			<hr>
 			<div class="wrap-input100">
 				<label class="form-label">Name</label>
 				<span class="focus-input100">@user.FirstName @user.LastName</span>
@@ -60,10 +68,19 @@
 				<label class="form-label">Phone</label>
 				<span class="focus-input100">@user.PhoneNumber</span>
 			</div>
-			<a asp-action="CompleteOrder" asp-controller="Order" class="btn btn-block btn-outline-info btn-xs">
-					Confirm
-				@*<i class="fa-solid fa-plus"></i>*@
-			</a>
+			<hr>
+			<div>
+				<input type="radio" name="Subject" value="Subject1">
+				<i class="fa-solid fa-money-bill-1"></i>
+				<label class="form-label">Cash on delivery</label>
+			</div>
+			<div>
+				<input type="radio" name="myButton" value="theValue" onclick="this.checked=false;alert('Sorry, this option is not available!')">
+				<i class="fa-solid fa-credit-card"></i>
+				<label class="form-label">Credit/Debit Cart - Coming Soon...</label>
+			</div>
+			<hr>
+			<a asp-action="CompleteOrder" asp-controller="Order" class="btn btn-sm btn-primary mr-25">Confirm</a>
         </div>
     </div>
 </div>

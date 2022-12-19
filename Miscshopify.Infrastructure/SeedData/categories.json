@@ -1,0 +1,26 @@
+[
+    {
+        "Id": "266A6CBB-56CD-4500-EFD8-08DADFCBF404",
+        "ImagePath": "uploads/categoryImg/f02bef4482dc4cc9bc8de673601224bc.jfif",
+        "Name": "Phones",
+        "Description": "All New Android and IOS phones"
+    },
+    {
+        "Id": "BE2ED17B-0C49-4A87-4DB8-08DAE039C34B",
+        "ImagePath": "uploads/categoryImg/bac73bf3eded4024a2995334e5d1f22f.jpg",
+        "Name": "Laptops",
+        "Description": "All new brands Laptops"
+    },
+    {
+        "Id": "CF06817A-292E-458D-4DB9-08DAE039C34B",
+        "ImagePath": "uploads/categoryImg/4c513095d9a14724af468f5b942f7d81.jpg",
+        "Name": "Tv",
+        "Description": "Bring the cinema into your home"
+    },
+    {
+        "Id": "A7D777AD-9B16-48BE-4DBA-08DAE039C34B",
+        "ImagePath": "uploads/categoryImg/ccd5063b68cf4a9ca2cb2f8f3cb532fd.jpg",
+        "Name": "PC",
+        "Description": "Choose your gaming PC and run every new games."
+    }
+]

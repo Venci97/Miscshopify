@@ -87,7 +87,7 @@
 					</div>
 					<div class="wrap-input100 validate-input m-b-23" data-validate="Address is required">
 						<label asp-for="Input.Address"></label>
-						<input asp-for="Input.Address" class="input100" autocomplete="Address" aria-required="true" placeholder="City" />
+						<input asp-for="Input.Address" class="input100" autocomplete="Address" aria-required="true" placeholder="Address" />
 						<span asp-validation-for="Input.Address" class="focus-input100" data-symbol="&#xf190;"></span>
 					</div>
 					<div class="wrap-input100 validate-input m-b-23" data-validate="Postcode is required">
@@ -122,7 +122,6 @@
 					<div class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">
 							<div class="login100-form-bgbtn"></div>
-							@*<button class="login100-form-btn">Register</button>*@
 							<button id="registerSubmit" type="submit" class="login100-form-btn">Register</button>
 						</div>
 					</div>
@@ -155,34 +154,4 @@
 </body>
 </html>
 
-    @*<div class="col-md-6 col-md-offset-2">  
-        <section>
-            <h3>Use another service to register.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
-    </div>*@
 	}

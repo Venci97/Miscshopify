@@ -4,7 +4,6 @@
 }
 
 <div class="content-body">
-    <!-- users edit start -->
     <section class="users-edit">
         <div class="card">
             <div class="card-content">
@@ -18,7 +17,6 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
-                            <!-- users edit account form start -->
                             <form id="edit" method="post">
                                 <div class="row">
                                     <div class="col-12 col-sm-6">
@@ -34,11 +32,11 @@
                                             <input asp-for="Description" class="form-control" aria-required="true" />
                                             <span asp-validation-for="Description" class="text-danger"></span>
                                         </div>
-                                        @*<div class="form-group">
-                                        <div class="controls">
-                                        <select asp-for="SubCategories" asp-items="Html.DropDownList<SubcategoryViewModel>()" class="btn btn-info"></select>
-                                        </div>
-                                        </div>*@
+                                        <hr>
+                                        <a asp-area="Admin" asp-action="RemoveCategoryWithProducts" asp-controller="Category" asp-route-id="@Model.Id" class="btn btn-danger glow mb-1 mb-sm-0 mr-0 mr-sm-1">
+                                            Delete
+                                            <i class="fa-solid fa-xmark"></i>
+                                        </a>
                                     </div>
                                     <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
                                         <button type="submit" class="btn btn-primary glow mb-1 mb-sm-0 mr-0 mr-sm-1">
@@ -49,15 +47,12 @@
                                     </div>
                                 </div>
                             </form>
-                            <!-- users edit account form ends -->
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- users edit ends -->
 </div>
 
 @section Scripts {

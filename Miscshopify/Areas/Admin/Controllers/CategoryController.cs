@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Miscshopify.Common.Constants;
 using Miscshopify.Core.Contracts;
@@ -22,9 +23,11 @@ namespace Miscshopify.Areas.Admin.Controllers
             hostingEnvironment = _hostingEnvironment;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var category = await categoryService.GetCategories();
+
+            return View(category);
         }
 
         [HttpGet]
@@ -72,15 +75,8 @@ namespace Miscshopify.Areas.Admin.Controllers
             }
             await categoryService.Add(model);
 
-            return RedirectToAction(nameof(ManageCategories));
+            return RedirectToAction(nameof(Index));
         }
-
-		public async Task<IActionResult> ManageCategories()
-        {
-			var category = await categoryService.GetCategories();
-
-			return View(category);
-		}
 
         public async Task<IActionResult> Edit(Guid id)
         {
@@ -107,6 +103,13 @@ namespace Miscshopify.Areas.Admin.Controllers
             }
 
             return View(model);
+        }
+
+        public IActionResult RemoveCategoryWithProducts(Guid Id)
+        {
+            categoryService.RemoveCategoryWithProducts(Id);
+
+            return RedirectToAction("Index");
         }
     }
 }

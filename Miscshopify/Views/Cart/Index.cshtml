@@ -2,6 +2,7 @@
 @model IEnumerable<CartItemViewModel>
 @{
 	var totalPrice = ViewBag.TotalPrice;
+	var totalQuantity = ViewBag.TotalQuantity;
 }
 <head>
 	<link rel="stylesheet" href="~/plugins/fontawesome-free-6.2.0-web/css/all.min.css">
@@ -39,11 +40,10 @@
 											<td>@item.ProductName</td>
 											<td>
 												@item.Quantity
-												@*<input asp-for="@item.Quantity" class="input-group-field" type="number">*@
 											</td>
-											<td>@item.Price</td>
+											<td>@item.Price BGN</td>
 											<td>
-												<a asp-action="RemoveFromCart" asp-controller="Cart" asp-route-id="@item.Id" class="btn btn-sm btn-primary mr-25">
+												<a asp-action="RemoveFromCart" asp-controller="Cart" asp-route-id="@item.Id" class="btn btn-sm btn-danger mr-25">
 													Remove
 													<i class="fa-solid fa-circle-xmark"></i>
 												</a>
@@ -53,8 +53,10 @@
 								</tbody>
 							</table>
 						</div>
-						<label class="form-label">Total Price</label>
-						<span class="focus-input100">@totalPrice</span>
+						<label class="form-label">Quantity:</label>
+						<span class="focus-input100">@totalQuantity </span>
+						<label class="form-label">Total Price:</label>
+						<span class="focus-input100">@totalPrice BGN</span>
 					</div>
 					<a asp-action="Checkout" asp-controller="Cart" class="btn btn-sm btn-primary mr-25">
 						Checkout

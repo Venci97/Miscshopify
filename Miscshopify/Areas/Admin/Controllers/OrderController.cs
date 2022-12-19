@@ -15,9 +15,11 @@ namespace Miscshopify.Areas.Admin.Controllers
             orderService = _orderService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var orders = await orderService.GetAllOrders();
+
+            return View(orders);
         }
 
         public async Task<IActionResult> NewOrders()
@@ -30,13 +32,6 @@ namespace Miscshopify.Areas.Admin.Controllers
         public async Task<IActionResult> OrdersOnTheWay()
         {
             var orders = await orderService.GetOrdersOnTheWay();
-            
-            return View(orders);
-        }
-
-        public async Task<IActionResult> AllOrders()
-        {
-            var orders = await orderService.GetAllOrders();
             
             return View(orders);
         }
@@ -61,7 +56,7 @@ namespace Miscshopify.Areas.Admin.Controllers
 				ViewData[GlobalConstants.Messages.Error] = "Error! Something happen!";
 			}
 
-			return RedirectToAction(nameof(NewOrders));
+			return RedirectToAction(nameof(Index));
 		}
 	}
 }

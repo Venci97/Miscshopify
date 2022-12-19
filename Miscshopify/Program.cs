@@ -32,7 +32,6 @@ builder.Services.AddIdentityCore<ApplicationUser>()
     .AddDefaultTokenProviders()
     .AddDefaultUI();
 
-builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IProductService, ProductService>();
 

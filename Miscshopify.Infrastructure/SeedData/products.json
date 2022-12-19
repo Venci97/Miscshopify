@@ -1,0 +1,110 @@
+[
+    {
+        "Id": "AB40E33A-24D3-47D4-B570-08DADFCC0E2C",
+        "ImagePath": "uploads/productImg/54a276f14b3c44e6ae7f51d02ba7e1af.webp",
+        "Name": "Xiaomi POCO X4 PRO 5G",
+        "Description": "8GB RAM 256GB ROM. 108MP Triple camera.CPU: Qualcomm® Kryo™ 660,Octa-core,up to 2.2HzGPU: Qualcomm® Adreno™ 619. 5000 mAh Battery.",
+        "Price": 599.99,
+        "IsActive": 1,
+        "CategoryId": "266A6CBB-56CD-4500-EFD8-08DADFCBF404"
+    },
+    {
+        "Id": "8747CDE3-F434-45EE-389F-08DADFE174EE",
+        "ImagePath": "uploads/productImg/0007a5a4edb44fe4a91dcc59d1f0410e.jpg",
+        "Name": "Nothing Phone 1",
+        "Description": "8GB RAM 128GB ROM.",
+        "Price": 799.99,
+        "IsActive": 1,
+        "CategoryId": "266A6CBB-56CD-4500-EFD8-08DADFCBF404"
+    },
+    {
+        "Id": "B4B4EAF9-0A08-45C8-D150-08DAE03A344B",
+        "ImagePath": "uploads/productImg/930aef3d621b4f7ebc6a59a248ef0db9.jpg",
+        "Name": "Lenovo Z50-75",
+        "Description": "Notebook with AMD FX-7500 Radeon R7, 10 Compute Cores 4C + 6G, 2.10Ghz with 3.30Ghz in turbo mode with 2GB Dedicated videocard - Radeon R5 m260DX",
+        "Price": 799.99,
+        "IsActive": 1,
+        "CategoryId": "BE2ED17B-0C49-4A87-4DB8-08DAE039C34B"
+    },
+    {
+        "Id": "D4796CCB-B909-468B-135A-08DAE0FD13BC",
+        "ImagePath": "uploads/productImg/36adca4afd4b4368bcf590774f5b5660.jpg",
+        "Name": "Dell Inspiron 1545 15.6 Inch",
+        "Description": "Intel Pentium T4400 (2.20GHz, 1MB L2 cache, 800MHz FSB). RAM 4GB (2x2048MB) DDR 2 800Mhz. ROM 500GB SATA 5400 rpm",
+        "Price": 1009.99,
+        "IsActive": 1,
+        "CategoryId": "BE2ED17B-0C49-4A87-4DB8-08DAE039C34B"
+    },
+    {
+        "Id": "3B188390-8DB6-4783-135B-08DAE0FD13BC",
+        "ImagePath": "uploads/productImg/dac30fa37ac348a893f97c94b74f2bcb.webp",
+        "Name": "Sharp Aquos 50 Inch",
+        "Description": "Finding is better than searching. So customise your Android TV home screen to show you exactly the apps, films, and shows you want to watch. Now you can continue watching movies after interruptions, start new episodes or jump to another show without having to go back and forth. Everything is really easy with your go-to app.",
+        "Price": 729.99,
+        "IsActive": 1,
+        "CategoryId": "CF06817A-292E-458D-4DB9-08DAE039C34B"
+    },
+    {
+        "Id": "9086399C-0BE5-42FF-135C-08DAE0FD13BC",
+        "ImagePath": "uploads/productImg/4660f20a482942a28ab64fd2295ce8eb.jpg",
+        "Name": "Phillips 4K UHD LED Android TV",
+        "Description": "Choosing your next TV just got easy. When you're looking for superb picture and sound, easy connectivity and responsive, hassle-free gaming—you're looking for The One. Plus you get Ambilight for an immersive experience like no other.",
+        "Price": 1599.99,
+        "IsActive": 1,
+        "CategoryId": "CF06817A-292E-458D-4DB9-08DAE039C34B"
+    },
+    {
+        "Id": "CEAC6396-3DA0-4944-135D-08DAE0FD13BC",
+        "ImagePath": "CEAC6396-3DA0-4944-135D-08DAE0FD13BC",
+        "Name": "Skytech Prism II Gaming PC Desktop",
+        "Description": "AMD Ryzen 9 3900X 3.8GHz, RTX 3090 24GB, 32GB 3600mhz RGB Memory, 1TB Gen4 SSD, 360mm AIO",
+        "Price": 2099.99,
+        "IsActive": 1,
+        "CategoryId": "A7D777AD-9B16-48BE-4DBA-08DAE039C34B"
+    },
+    {
+        "Id": "5709DB41-E129-490B-135E-08DAE0FD13BC",
+        "ImagePath": "uploads/productImg/cd047469af474a5887904f8f2b99a8d8.jpg",
+        "Name": "XUM Gaming PC Desktop Computer",
+        "Description": "I7-3770 3.4GHz,GTX 1050TI 4GB GPU,16GB DDR3 RAM,256GB NVME M.2 SSD,1TB HDD,500W PSU,LEGEND ARGB CASE,600Mbps WiFi,Windows 10",
+        "Price": 1699.99,
+        "IsActive": 1,
+        "CategoryId": "A7D777AD-9B16-48BE-4DBA-08DAE039C34B"
+    },
+    {
+        "Id": "8355A0DD-A683-42AE-135F-08DAE0FD13BC",
+        "ImagePath": "uploads/productImg/dd5ff5b4634448cd9f519045bdcdd49e.jpeg",
+        "Name": "Nerd T-Shirt",
+        "Description": "T-Shirt with cool graffity",
+        "Price": 20.99,
+        "IsActive": 1,
+        "CategoryId": "0A681278-E942-47F9-0C19-08DAE1128DF6"
+    },
+    {
+        "Id": "DF12AEB6-18BE-4385-1360-08DAE0FD13BC",
+        "ImagePath": "uploads/productImg/6f21e499fabd46a8bf30072cc91a2c82.webp",
+        "Name": "Shirt with Graffiti",
+        "Description": "Cool Shirt",
+        "Price": 21.99,
+        "IsActive": 1,
+        "CategoryId": "0A681278-E942-47F9-0C19-08DAE1128DF6"
+    },
+    {
+        "Id": "56532F98-112B-474A-1361-08DAE0FD13BC",
+        "ImagePath": "uploads/productImg/e5ed61b227b246aab73c600bcd4229f5.gif",
+        "Name": "Black Jeans",
+        "Description": "Cool black Jeans",
+        "Price": 45.99,
+        "IsActive": 1,
+        "CategoryId": "0A681278-E942-47F9-0C19-08DAE1128DF6"
+    },
+    {
+        "Id": "6468F6AD-5DE5-4A34-1362-08DAE0FD13BC",
+        "ImagePath": "uploads/productImg/05dd0ffaa4304479829228080a078ad2.jpg",
+        "Name": "Green Shoes",
+        "Description": "Cool Green Shoes",
+        "Price": 57.99,
+        "IsActive": 1,
+        "CategoryId": "0A681278-E942-47F9-0C19-08DAE1128DF6"
+    }
+]

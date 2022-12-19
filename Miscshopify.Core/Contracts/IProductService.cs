@@ -17,5 +17,6 @@ namespace Miscshopify.Core.Contracts
         Task<IEnumerable<ProductViewModel>> GetProductsByCategory(Guid Id);
         Task<ProductViewModel> ProductDetails(Guid id);
         Task<Product> GetProductById(Guid id);
+        void RemoveProduct(Guid productId);
     }
 }

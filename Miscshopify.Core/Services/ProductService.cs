@@ -3,11 +3,6 @@ using Miscshopify.Core.Contracts;
 using Miscshopify.Core.Models;
 using Miscshopify.Infrastructure.Data.Models;
 using Miscshopify.Infrastructure.Data.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Miscshopify.Core.Services
 {
@@ -22,6 +17,11 @@ namespace Miscshopify.Core.Services
 
         public async Task Add(ProductViewModel model)
         {
+            if (model == null)
+            {
+                throw new NullReferenceException("Cannot add a empty product");
+            }
+
             var cat = await repo.GetByIdAsync<Category>(model.CategoryId);
 
             var product = new Product()
@@ -36,8 +36,8 @@ namespace Miscshopify.Core.Services
             cat.Products.Add(product);
 
             await repo.AddAsync(product);
-            await repo.SaveChangesAsync();
 
+            await repo.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<ProductViewModel>> GetProducts()
@@ -57,6 +57,11 @@ namespace Miscshopify.Core.Services
         public async Task<ProductViewModel> Edit(Guid id)
         {
             var product = await repo.GetByIdAsync<Product>(id);
+
+            if (product == null)
+            {
+                throw new NullReferenceException("Product doesn't exist");
+            }
 
             return new ProductViewModel()
             {
@@ -104,6 +109,11 @@ namespace Miscshopify.Core.Services
         {
             var product = await repo.GetByIdAsync<Product>(id);
 
+            if (product == null)
+            {
+                throw new NullReferenceException("Product not exist");
+            }
+
             return new ProductViewModel()
             {
                 Id = product.Id,
@@ -112,6 +122,16 @@ namespace Miscshopify.Core.Services
                 Description = product.Description,
                 Price = product.Price
             };
+        }
+
+        public void RemoveProduct(Guid productId)
+        {
+            var product = repo.All<Product>()
+                .First(i => i.Id == productId);
+
+            repo.Delete(product);
+
+            repo.SaveChanges();
         }
 
         public async Task<Product> GetProductById(Guid id)

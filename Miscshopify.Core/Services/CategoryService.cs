@@ -16,13 +16,18 @@ namespace Miscshopify.Core.Services
         }
 
         public async Task Add(CategoryViewModel model)
-        {
+        {   
             var category = new Category()
             {
                 ImagePath = model.ImagePath,
                 Name = model.Name,
                 Description = model.Description
             };
+
+            if (model == null)
+            {
+                throw new NullReferenceException("Empty category");
+            }
 
             await repo.AddAsync(category);
             await repo.SaveChangesAsync();
@@ -44,6 +49,11 @@ namespace Miscshopify.Core.Services
         public async Task<CategoryViewModel> Edit(Guid id)
         {
             var cat = await repo.GetByIdAsync<Category>(id);
+
+            if (cat == null)
+            {
+                throw new NullReferenceException("Invalid Category");
+            }
 
             return new CategoryViewModel()
             {
@@ -70,18 +80,27 @@ namespace Miscshopify.Core.Services
             return result;
         }
 
-        public async Task<IEnumerable<CategoryViewModel>> GetRandomCategories()
-        {
-             return await repo.All<Category>()
-                .Select(c => new CategoryViewModel()
-                {
-                    Id = c.Id,
-                    ImagePath = c.ImagePath,
-                    Name = c.Name,
-                    Description = c.Description
-                })
-                .ToListAsync();
+		public void RemoveCategoryWithProducts(Guid categoryId)
+		{
+			var category = repo.All<Category>()
+				.FirstOrDefault(i => i.Id == categoryId);
 
-        }
-    }
+            if (category == null)
+            {
+                throw new NullReferenceException("Category not exist");
+            }
+
+            var products = repo.All<Product>()
+                .Where(p => p.CategoryId == categoryId);
+
+            foreach (var item in products)
+            {
+                repo.Delete(item);
+            }
+
+			repo.Delete(category);
+
+		    repo.SaveChanges();
+		}
+	}
 }

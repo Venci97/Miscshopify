@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Miscshopify.Core.Contracts;
 using Miscshopify.Core.Services;
 
 namespace Miscshopify.Controllers
 {
+    [AllowAnonymous]
     public class CategoryController : BaseController
     {
         private readonly ICategoryService categoryService;
@@ -13,12 +15,7 @@ namespace Miscshopify.Controllers
             categoryService = _categoryService;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        public async Task<IActionResult> AllCategories()
+        public async Task<IActionResult> Index()
         {
             var category = await categoryService.GetCategories();
 

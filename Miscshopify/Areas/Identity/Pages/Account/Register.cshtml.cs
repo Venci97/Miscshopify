@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Logging;
 using Miscshopify.Common.Constants;
 using Miscshopify.Core.Contracts;
@@ -33,8 +34,8 @@ namespace Miscshopify.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private Microsoft.AspNetCore.Hosting.IHostingEnvironment _hostingEnvironment;
 
 
         public RegisterModel(
@@ -43,8 +44,8 @@ namespace Miscshopify.Areas.Identity.Pages.Account
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            IUnitOfWork unitOfWork,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnvironment)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -52,8 +53,8 @@ namespace Miscshopify.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
-            _unitOfWork = unitOfWork;
             _roleManager = roleManager;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         /// <summary>
@@ -149,20 +150,45 @@ namespace Miscshopify.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
-        public async Task<IActionResult> OnPostAsync(IFormFile file, string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
             if (ModelState.IsValid)
             {
-                _unitOfWork.UploadImage(file);
+                string uploadPath = "uploads/userImg/";
+                string imagePath = string.Empty;
+                var files = HttpContext.Request.Form.Files;
+
+                foreach (var file in files)
+                {
+                    if (file != null && file.Length > 0)
+                    {
+                        var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
+                        var uploadPathWithfileName = Path.Combine(uploadPath, fileName);
+
+                        var uploadAbsolutePath = Path.Combine(_hostingEnvironment.WebRootPath, uploadPathWithfileName);
+
+                        using (var fileStream = new FileStream(uploadAbsolutePath, FileMode.Create))
+                        {
+                            await file.CopyToAsync(fileStream);
+                            imagePath = uploadPathWithfileName;
+                        }
+                    }
+                }
+
+                if (imagePath == string.Empty)
+                {
+                    imagePath = "uploads/userImg/userPhoto.png";
+                }
 
                 var user = CreateUser();
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
                 user.PhoneNumber = Input.PhoneNumber;
                 user.Gender = Input.Gender;
-                user.ImagePath = file.FileName; //TODO: repair if no photo is uploaded
+                user.ImagePath = imagePath;
                 user.Address = Input.Address;
                 user.City = Input.City;
                 user.PostCode = Input.PostCode;
