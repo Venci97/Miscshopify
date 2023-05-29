@@ -1,13 +1,12 @@
-using Miscshopify.Common.Constants;
-using Miscshopify.ModelBinders;
-using System.Xml;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Miscshopify.Common.Constants;
 using Miscshopify.Core.Contracts;
+using Miscshopify.Core.Services;
 using Miscshopify.Infrastructure.Data;
 using Miscshopify.Infrastructure.Data.Models;
-using Miscshopify.Core.Services;
 using Miscshopify.Infrastructure.Data.Repositories;
+using Miscshopify.ModelBinders;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("MiscshopifyContextConnection") ?? throw new InvalidOperationException("Connection string 'MiscshopifyContextConnection' not found.");
@@ -50,6 +49,7 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<ISearchService, SearchService>();
 
 var app = builder.Build();
 

@@ -3,7 +3,6 @@ using Miscshopify.Core.Contracts;
 using Miscshopify.Core.Models;
 using Miscshopify.Infrastructure.Data.Models;
 using Miscshopify.Infrastructure.Data.Repositories;
-using System;
 
 namespace Miscshopify.Core.Services
 {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Miscshopify.Infrastructure.Data.Repositories
+﻿namespace Miscshopify.Infrastructure.Data.Repositories
 {
     public interface IAppDbRepository : IDisposable
     {

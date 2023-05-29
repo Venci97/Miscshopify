@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Miscshopify.Core.Contracts;
-using Miscshopify.Infrastructure.Data.Models;
-using Miscshopify.Infrastructure.Data.Repositories;
 using System.Security.Claims;
 
 namespace Miscshopify.Controllers

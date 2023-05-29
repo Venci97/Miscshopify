@@ -2,7 +2,6 @@
 using Miscshopify.Common.Constants;
 using Miscshopify.Core.Contracts;
 using Miscshopify.Core.Models;
-using Miscshopify.Core.Services;
 
 namespace Miscshopify.Areas.Admin.Controllers
 {

@@ -1,12 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors.Infrastructure;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Miscshopify.Common.Constants;
 using Miscshopify.Core.Contracts;
 using Miscshopify.Core.Models;
-using Miscshopify.Core.Services;
-using Miscshopify.Infrastructure.Data.Models;
-using System.Data;
 
 namespace Miscshopify.Areas.Admin.Controllers
 {

@@ -1,11 +1,4 @@
-﻿using Miscshopify.Infrastructure.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Miscshopify.Core.Models
+﻿namespace Miscshopify.Core.Models
 {
     public class ProductViewModel
     {

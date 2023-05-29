@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Miscshopify.Core.Contracts;
-using Miscshopify.Core.Services;
 using Miscshopify.Models;
 using System.Diagnostics;
 

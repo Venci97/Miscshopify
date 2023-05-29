@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Miscshopify.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Miscshopify.Core.Models;
 
 namespace Miscshopify.Core.Contracts
 {

@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Miscshopify.Common.Constants;
 
 namespace Miscshopify.Controllers
 {

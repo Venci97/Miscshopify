@@ -1,15 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Miscshopify.Core.Contracts;
 using Miscshopify.Core.Models;
 using Miscshopify.Core.Services;
 using Miscshopify.Infrastructure.Data.Models;
 using Miscshopify.Infrastructure.Data.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Miscshopify.Test
 {
