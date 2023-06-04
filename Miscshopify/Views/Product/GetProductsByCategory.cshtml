@@ -1,32 +1,40 @@
 ﻿@using Miscshopify.Core.Models;
 @model IEnumerable<ProductViewModel>
+
 @{
+    var cartMessage = TempData["CartMessage"] as string;
 }
 
-<div class="card-x">
-    <div class="card-body-x">
-        <div class="row my-2">
-            @foreach (var product in Model)
-            {
-                <div class="col-sm-6 col-md-4 col-xl-3 mb-5" style="background: rgba(255, 255, 255, 1);">
-                    <div class="item rounded-xl overflow-hidden shadow border">
-                        <div class="px-3 pt-6">
-                            <a asp-action="ProductDetails" asp-controller="Product" asp-route-id="@product.Id" class="btn info">
-                                @product.Name
-                                <div class="form-floating">
-                                    <img src="~/@product.ImagePath" class="img-thumnail" width="300" height="250">
-                                </div>
-                                <div class="mt-6">
-                                    <p class="text-break-line-2" style="width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
-                                        @product.Description
-                                    </p>
-                                    <h4 class="text-primary mr-1">BGN @product.Price</h4>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
+<head>
+    <title>Products</title>
+    <link href="~/css/site.css" rel="stylesheet">
+</head>
+
+<div class="container">
+    <div class="card-deck">
+        @foreach (var product in Model)
+        {
+            <div class="card-body card mb-3 col-md-3">
+                <a href="@Url.Action("ProductDetails", "Product", new { id = product.Id })">
+                    <img src="~/@product.ImagePath" class="card-img-top" alt="@product.Name">
+                    <h5 class="card-title">@product.Name</h5>
+                    <p class="card-text">@product.Price BGN</p>
+                </a>
+                <div class="d-flex flex-column flex-sm-row pt-1 center">
+                    <a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@product.Id" class="btn btn-primary mr-0 mr-sm-2 mb-1 mb-sm-0">
+                        <i class="fas fa-shopping-basket mr-2"></i>
+                        <span>Add to cart</span>
+                    </a>
                 </div>
-            }
-        </div>
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(cartMessage))
+        {
+            <div class="alert alert-success" role="alert">
+                @cartMessage
+            </div>
+        }
+
     </div>
 </div>

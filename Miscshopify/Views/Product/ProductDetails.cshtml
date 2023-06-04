@@ -3,13 +3,24 @@
 @{
 }
 
+@{
+    var cartMessage = TempData["CartMessage"] as string;
+}
+
 <div id="content" class="p-5" style="background-color: white;">
     <div>
         <div class="container">
             <div class="row">
                 <div class="col-12 mb-3"><h4>Product Details</h4></div>
             </div>
-        
+            
+            @if (!string.IsNullOrEmpty(cartMessage))
+            {
+                <div class="alert alert-success" role="alert">
+                    @cartMessage
+                </div>
+            }
+
             <div class="view-content">
                 <div class="card-body">
                     <div class="row my-2">
