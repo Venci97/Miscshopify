@@ -46,5 +46,5 @@ Miscshopify have 2 roles: Admin and User.
 <img src="https://res.cloudinary.com/dswjalyge/image/upload/v1671488027/ProductDetails_qpjyzx.png" alt="Product Details">
 <img src="https://res.cloudinary.com/dswjalyge/image/upload/v1671488041/AdminPanel_kqac6u.png" alt="Admin Panel">
 <img src="https://res.cloudinary.com/dswjalyge/image/upload/v1671488035/Cart_ccuysi.png" alt="Cart">
-<img src="https://res.cloudinary.com/dswjalyge/image/upload/v1671488018/Products_lpn8tl.png" alt="Products">
-<img src="https://res.cloudinary.com/dswjalyge/image/upload/v1671488005/Categories_amrc9i.png" alt="Categories">
+<img src="https://res.cloudinary.com/dswjalyge/image/upload/v1685839414/Products1_zxbx4y.png" alt="Products">
+<img src="https://res.cloudinary.com/dswjalyge/image/upload/v1685839555/Categories1_frprsu.png" alt="Categories">
