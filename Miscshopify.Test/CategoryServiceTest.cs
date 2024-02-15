@@ -9,8 +9,10 @@ namespace Miscshopify.Test
 {
 	public class CategoryServiceTest
 	{
-		private ServiceProvider serviceProvider;
-		private InMemoryDbContext dbContext;
+#pragma warning disable NUnit1032 // An IDisposable field/property should be Disposed in a TearDown method
+        private ServiceProvider serviceProvider;
+#pragma warning restore NUnit1032 // An IDisposable field/property should be Disposed in a TearDown method
+        private InMemoryDbContext dbContext;
 
 		[SetUp]
 		public async Task Setup()

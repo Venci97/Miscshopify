@@ -4,12 +4,15 @@ using Miscshopify.Core.Services;
 using Miscshopify.Infrastructure.Data.Models;
 using Miscshopify.Infrastructure.Data.Models.Enums;
 using Miscshopify.Infrastructure.Data.Repositories;
+using NUnit.Framework.Legacy;
 
 namespace Miscshopify.Test
 {
     public class OrderServiceTest
     {
+#pragma warning disable NUnit1032 // An IDisposable field/property should be Disposed in a TearDown method
         private ServiceProvider serviceProvider;
+#pragma warning restore NUnit1032 // An IDisposable field/property should be Disposed in a TearDown method
         private InMemoryDbContext dbContext;
 
         [SetUp]
@@ -52,7 +55,7 @@ namespace Miscshopify.Test
 
             var ordersList = service.GetMyOrders("11111111-2121-2121-2121-111111111111").Result;
 
-            Assert.AreNotEqual(0, ordersList.Count());
+            ClassicAssert.AreNotEqual(0, ordersList.Count());
         }
 
         [Test]
@@ -62,7 +65,7 @@ namespace Miscshopify.Test
 
             var ordersList = service.GetAllOrders().Result;
 
-            Assert.AreNotEqual(0, ordersList.Count());
+            ClassicAssert.AreNotEqual(0, ordersList.Count());
         }
 
         [Test]
@@ -72,7 +75,7 @@ namespace Miscshopify.Test
 
             var ordersList = service.GetOrdersOnTheWay().Result;
 
-            Assert.AreEqual(0, ordersList.Count());
+            ClassicAssert.AreEqual(0, ordersList.Count());
         }
 
         [Test]
@@ -82,7 +85,7 @@ namespace Miscshopify.Test
 
             var ordersList = service.GetNewOrders().Result;
 
-            Assert.AreNotEqual(0, ordersList.Count());
+            ClassicAssert.AreNotEqual(0, ordersList.Count());
         }
 
         [Test]
@@ -98,7 +101,7 @@ namespace Miscshopify.Test
                 result = true;
             }
 
-            Assert.IsTrue(result);
+            ClassicAssert.IsTrue(result);
         }
 
         [Test]

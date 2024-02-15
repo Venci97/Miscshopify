@@ -15,8 +15,9 @@ public class MiscshopifyContext : IdentityDbContext<ApplicationUser>
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.ApplyConfiguration(new InitialDataSeed<Category>(@"SeedData/categories.json"));
-        builder.ApplyConfiguration(new InitialDataSeed<Product>(@"SeedData/products.json"));
+		string path = Directory.GetCurrentDirectory();
+        builder.ApplyConfiguration(new InitialDataSeed<Category>(path + ".Infrastructure\\SeedData\\categories.json"));
+        builder.ApplyConfiguration(new InitialDataSeed<Product>(path + ".Infrastructure\\SeedData\\products.json"));
 
         base.OnModelCreating(builder);
 		
@@ -24,7 +25,6 @@ public class MiscshopifyContext : IdentityDbContext<ApplicationUser>
 		// For example, you can rename the ASP.NET Identity table names and more.
 		// Add your customizations after calling base.OnModelCreating(builder);
 	}
-
     public DbSet<Category> Categories { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Cart> Carts { get; set; }

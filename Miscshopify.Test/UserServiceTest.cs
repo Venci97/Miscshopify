@@ -4,12 +4,15 @@ using Miscshopify.Core.Services;
 using Miscshopify.Infrastructure.Data.Models;
 using Miscshopify.Infrastructure.Data.Models.Enums;
 using Miscshopify.Infrastructure.Data.Repositories;
+using NUnit.Framework.Legacy;
 
 namespace Miscshopify.Test
 {
     public class UserServiceTest
     {
+#pragma warning disable NUnit1032 // An IDisposable field/property should be Disposed in a TearDown method
         private ServiceProvider serviceProvider;
+#pragma warning restore NUnit1032 // An IDisposable field/property should be Disposed in a TearDown method
         private InMemoryDbContext dbContext;
 
         [SetUp]
@@ -35,7 +38,7 @@ namespace Miscshopify.Test
 
             var userList = service.GetUsers().Result;
 
-            Assert.AreNotEqual(0, userList.Count());
+            ClassicAssert.AreNotEqual(0, userList.Count());
         }
 
         [Test]
@@ -55,7 +58,7 @@ namespace Miscshopify.Test
 
             var user = service.GetUserById("11111111-2121-2121-2121-111111111111").Result;
 
-            Assert.NotNull(user);
+            ClassicAssert.NotNull(user);
         }
 
         [TearDown]

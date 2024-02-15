@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32922.545
@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miscshopify.Infrastructure"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miscshopify.Common", "Miscshopify.Common\Miscshopify.Common.csproj", "{BE95C258-CE24-4AA4-B01C-D0155F569175}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miscshopify.Test", "Miscshopify.Test\Miscshopify.Test.csproj", "{E2656BD0-D9F5-4883-BA15-4E6BB3BF5B66}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miscshopify.Test", "Miscshopify.Test\Miscshopify.Test.csproj", "{E2656BD0-D9F5-4883-BA15-4E6BB3BF5B66}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
