@@ -18,7 +18,7 @@ namespace Miscshopify.Test
 				.UseSqlite(connection)
 				.Options;
 
-			using var context = new MiscshopifyContext(dbContextOptions);
+            using var context = new MiscshopifyContext(dbContextOptions);
 
 			context.Database.EnsureCreated();
 		}

@@ -30,16 +30,6 @@ namespace Miscshopify.Areas.Admin.Controllers
             return View(users);
         }
 
-        public async Task<IActionResult> CreateRole()
-        {
-            await roleManager.CreateAsync(new IdentityRole()
-            {
-                Name = "Administrator"
-            });
-
-            return Ok();
-        }
-
         public async Task<IActionResult> Edit(string id)
         {
             var model = await userService.EditUser(id);
