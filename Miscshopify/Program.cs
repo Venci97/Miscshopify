@@ -7,6 +7,8 @@ using Miscshopify.Infrastructure.Data;
 using Miscshopify.Infrastructure.Data.Models;
 using Miscshopify.Infrastructure.Data.Repositories;
 using Miscshopify.ModelBinders;
+using Miscshopify.Api;
+using Miscshopify.Api.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("MiscshopifyContextConnection") ?? throw new InvalidOperationException("Connection string 'MiscshopifyContextConnection' not found.");
@@ -15,12 +17,12 @@ builder.Services.AddDbContext<MiscshopifyContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
-    {
-        options.SignIn.RequireConfirmedAccount = true;
-        options.Password.RequireDigit = true;
-        options.Password.RequiredLength = 6;
-        options.Password.RequireUppercase = true;
-    })
+{
+    options.SignIn.RequireConfirmedAccount = true;
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 6;
+    options.Password.RequireUppercase = true;
+})
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<MiscshopifyContext>();
 
@@ -33,6 +35,10 @@ builder.Services.AddIdentityCore<ApplicationUser>()
 
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IProductService, ProductService>();
+
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+
+builder.Services.AddSingleton<StripeService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews()
@@ -51,7 +57,6 @@ builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ISearchService, SearchService>();
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -62,11 +67,11 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection(); 
+app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseAuthentication();;
+app.UseAuthentication();
 
 app.UseAuthorization();
 app.MapRazorPages();

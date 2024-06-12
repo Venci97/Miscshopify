@@ -1,0 +1,154 @@
+﻿@{
+    ViewData["Title"] = "Create Payment";
+    var totalPrice = ViewBag.TotalPrice;
+}
+
+<div class="container p-0">
+    <div class="card px-4">
+        <p class="h8 py-3">Payment Details</p>
+        <form id="payment-form" method="post">
+            <div class="row gx-3">
+                <div class="col-12">
+                    <div class="d-flex flex-column">
+                        <p class="text mb-1">Person Name</p>
+                        <input class="form-control mb-3" type="text" placeholder="Name" value="Barry Allen">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="d-flex flex-column">
+                        <p class="text mb-1">Card Number</p>
+                        <div id="card-number-element" class="form-control mb-3">
+                            <!-- A Stripe Element will be inserted here. -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="d-flex flex-column">
+                        <p class="text mb-1">Expiry</p>
+                        <div id="card-expiry-element" class="form-control mb-3">
+                            <!-- A Stripe Element will be inserted here. -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="d-flex flex-column">
+                        <p class="text mb-1">CVV/CVC</p>
+                        <div id="card-cvc-element" class="form-control mb-3">
+                            <!-- A Stripe Element will be inserted here. -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-primary mb-3" type="submit" id="submit-button">
+                        <span class="ps-3">Pay @totalPrice BGN</span>
+                        <span class="fas fa-arrow-right"></span>
+                    </button>
+                </div>
+            </div>
+            <div id="card-errors" role="alert" class="text-danger"></div>
+            <input type="hidden" name="amount" value="@totalPrice" />
+            @Html.AntiForgeryToken()
+        </form>
+    </div>
+</div>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var stripe = Stripe('pk_test_51PPTzbLe5Gl3FGyNaOdu28XMvglgiH2Xp4fglMDSTcKIrYmILIdyyPrwHaI2N9bNMZjq6UhmCJOKGbFrfPGn841R00DjM7akSp');
+        var elements = stripe.elements();
+
+        var style = {
+            base: {
+                fontSize: '16px',
+                color: '#32325d',
+                '::placeholder': {
+                    color: '#aab7c4'
+                }
+            },
+            invalid: {
+                color: '#fa755a',
+                iconColor: '#fa755a'
+            }
+        };
+
+        var cardNumber = elements.create('cardNumber', { style: style });
+        var cardExpiry = elements.create('cardExpiry', { style: style });
+        var cardCvc = elements.create('cardCvc', { style: style });
+
+        cardNumber.mount('#card-number-element');
+        cardExpiry.mount('#card-expiry-element');
+        cardCvc.mount('#card-cvc-element');
+
+        cardNumber.on('change', function (event) {
+            var displayError = document.getElementById('card-errors');
+            if (event.error) {
+                displayError.textContent = event.error.message;
+            } else {
+                displayError.textContent = '';
+            }
+        });
+
+        cardExpiry.on('change', function (event) {
+            var displayError = document.getElementById('card-errors');
+            if (event.error) {
+                displayError.textContent = event.error.message;
+            } else {
+                displayError.textContent = '';
+            }
+        });
+
+        cardCvc.on('change', function (event) {
+            var displayError = document.getElementById('card-errors');
+            if (event.error) {
+                displayError.textContent = event.error.message;
+            } else {
+                displayError.textContent = '';
+            }
+        });
+
+        var form = document.getElementById('payment-form');
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            stripe.createToken(cardNumber).then(function (result) {
+                if (result.error) {
+                    var errorElement = document.getElementById('card-errors');
+                    errorElement.textContent = result.error.message;
+                } else {
+                    stripeTokenHandler(result.token);
+                }
+            });
+        });
+
+        function stripeTokenHandler(token) {
+            var form = document.getElementById('payment-form');
+            var hiddenInput = document.createElement('input');
+            hiddenInput.setAttribute('type', 'hidden');
+            hiddenInput.setAttribute('name', 'stripeToken');
+            hiddenInput.setAttribute('value', token.id);
+            form.appendChild(hiddenInput);
+
+            var formData = $(form).serialize();
+
+            $.ajax({
+                type: "POST",
+                url: form.action,
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        window.location.href = response.redirectUrl;
+                    } else {
+                        var errorElement = document.getElementById('card-errors');
+                        errorElement.textContent = response.message;
+                    }
+                },
+                error: function (xhr, status, error) {
+                    var errorElement = document.getElementById('card-errors');
+                    errorElement.textContent = 'An error occurred: ' + error;
+                }
+            });
+        }
+    });
+</script>

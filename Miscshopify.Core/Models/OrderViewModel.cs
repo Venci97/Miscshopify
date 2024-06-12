@@ -1,5 +1,6 @@
 ﻿using Miscshopify.Infrastructure.Data.Models;
 using Miscshopify.Infrastructure.Data.Models.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace Miscshopify.Core.Models
 {
@@ -24,5 +25,43 @@ namespace Miscshopify.Core.Models
         public string CustomerPostCode { get; set; }
 
         public List<OrderItem> Items { get; set; } = new List<OrderItem>();
+
+        public PaymentMethodEnum PaymentMethod { get; set; }
+
+        [Display(Name = "Payment Method")]
+        public string PaymentMethodDisplayName
+        {
+            get
+            {
+                switch (PaymentMethod)
+                {
+                    case PaymentMethodEnum.Card:
+                        return "Card";
+                    case PaymentMethodEnum.CashOnDelivery:
+                        return "Cash on Delivery";
+                    default:
+                        return PaymentMethod.ToString(); // fallback to enum value
+                }
+            }
+        }
+
+        [Display(Name = "Payment Method")]
+        public string OrderStatusDisplayName
+        {
+            get
+            {
+                switch (Status)
+                {
+                    case OrderStatusEnum.Pending:
+                        return "Pending";
+                    case OrderStatusEnum.OnTheWay:
+                        return "On the way";
+                    case OrderStatusEnum.Completed:
+                        return "Completed";
+                    default:
+                        return Status.ToString(); // fallback to enum value
+                }
+            }
+        }
     }
 }

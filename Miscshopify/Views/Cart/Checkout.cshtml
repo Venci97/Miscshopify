@@ -7,80 +7,95 @@
 @inject UserManager<ApplicationUser> UserManager
 
 @{
-	var user = UserManager.GetUserAsync(User).Result;
-	var totalPrice = ViewBag.TotalPrice;
-	var totalQuantity = ViewBag.TotalQuantity;
+    var user = UserManager.GetUserAsync(User).Result;
+    var totalPrice = ViewBag.TotalPrice;
+    var totalQuantity = ViewBag.TotalQuantity;
 }
 
 <div class="col-sm-30 col-md-20 col-xl-15 mb-20" style="background: rgba(255, 255, 255, 1);">
     <div class="item rounded-xl overflow-hidden shadow border">
         <div class="px-3 pt-6">
-			<table class="table table-responsive-xl">
-				<thead>
-					<tr>
-						<th>&nbsp;</th>
-						<th>Name</th>
-						<th>Quantity</th>
-						<th>Price</th>
-					</tr>
-				</thead>
-				<tbody>
-					@foreach (var item in Model)
-					{
-						<tr>
-							<td>
-								<img src="~/@item.ImagePath" style="border-radius: 50%;" width="50" height="50">
-							</td>
-							<td>@item.ProductName</td>
-							<td>@item.Quantity</td>
-							<td>@item.Price BGN</td>
-						</tr>
-					}
-				</tbody>
-			</table>
-			<hr>
-			<label class="form-label">Quantity:</label>
-			<span class="focus-input100">@totalQuantity </span>
-			<label class="form-label">Total Price:</label>
-			<span class="focus-input100">@totalPrice BGN</span>
-			<hr>
-			<div class="wrap-input100">
-				<label class="form-label">Name</label>
-				<span class="focus-input100">@user.FirstName @user.LastName</span>
-			</div>
-			<div class="wrap-input100">
-				<label class="form-label">Email</label>
-				<span class="focus-input100">@user.Email</span>
-			</div>
-			<div class="wrap-input100">
-				<label class="form-label">City</label>
-				<span class="focus-input100">@user.City</span>
-			</div>
-			<div class="wrap-input100">
-				<label class="form-label">Address</label>
-				<span class="focus-input100">@user.Address</span>
-			</div>
-			<div class="wrap-input100">
-				<label class="form-label">Postcode</label>
-				<span class="focus-input100">@user.PostCode</span>
-			</div>
-			<div class="wrap-input100">
-				<label class="form-label">Phone</label>
-				<span class="focus-input100">@user.PhoneNumber</span>
-			</div>
-			<hr>
-			<div>
-				<input type="radio" name="Subject" value="Subject1">
-				<i class="fa-solid fa-money-bill-1"></i>
-				<label class="form-label">Cash on delivery</label>
-			</div>
-			<div>
-				<input type="radio" name="myButton" value="theValue" onclick="this.checked=false;alert('Sorry, this option is not available!')">
-				<i class="fa-solid fa-credit-card"></i>
-				<label class="form-label">Credit/Debit Cart - Coming Soon...</label>
-			</div>
-			<hr>
-			<a asp-action="CompleteOrder" asp-controller="Order" class="btn btn-sm btn-primary mr-25">Confirm</a>
+            <table class="table table-responsive-xl">
+                <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>Name</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <img src="~/@item.ImagePath" style="border-radius: 50%;" width="50" height="50">
+                            </td>
+                            <td>@item.ProductName</td>
+                            <td>@item.Quantity</td>
+                            <td>@item.Price BGN</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <hr>
+            <label class="form-label">Quantity:</label>
+            <span class="focus-input100">@totalQuantity </span>
+            <label class="form-label">Total Price:</label>
+            <span class="focus-input100">@totalPrice BGN</span>
+            <hr>
+            <div class="wrap-input100">
+                <label class="form-label">Name</label>
+                <span class="focus-input100">@user.FirstName @user.LastName</span>
+            </div>
+            <div class="wrap-input100">
+                <label class="form-label">Email</label>
+                <span class="focus-input100">@user.Email</span>
+            </div>
+            <div class="wrap-input100">
+                <label class="form-label">City</label>
+                <span class="focus-input100">@user.City</span>
+            </div>
+            <div class="wrap-input100">
+                <label class="form-label">Address</label>
+                <span class="focus-input100">@user.Address</span>
+            </div>
+            <div class="wrap-input100">
+                <label class="form-label">Postcode</label>
+                <span class="focus-input100">@user.PostCode</span>
+            </div>
+            <div class="wrap-input100">
+                <label class="form-label">Phone</label>
+                <span class="focus-input100">@user.PhoneNumber</span>
+            </div>
+            <hr>
+            <div>
+                <input type="radio" id="cashOnDelivery" name="paymentMethod" value="cashOnDelivery">
+                <i class="fa-solid fa-money-bill-1"></i>
+                <label class="form-label" for="cashOnDelivery">Cash on delivery</label>
+            </div>
+            <div>
+                <input type="radio" id="creditCard" name="paymentMethod" value="creditCard">
+                <i class="fa-solid fa-credit-card"></i>
+                <label class="form-label" for="creditCard">Credit/Debit Card</label>
+            </div>
+            <hr>
+            <button id="confirmButton" class="btn btn-sm btn-primary mr-25">Confirm</button>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.getElementById('confirmButton').addEventListener('click', function () {
+            var paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            var totalPrice = '@totalPrice';
+
+            if (paymentMethod === 'cashOnDelivery') {
+                window.location.href = '@Url.Action("CompleteOrder", "Order")' + '?paymentMethod=' + paymentMethod;
+            } else if (paymentMethod === 'creditCard') {
+                window.location.href = '@Url.Action("CreatePayment", "Payment")' + '?totalPrice=' + totalPrice + '&paymentMethod=' + paymentMethod;
+            }
+        });
+    </script>
+}

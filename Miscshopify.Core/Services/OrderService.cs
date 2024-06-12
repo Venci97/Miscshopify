@@ -2,7 +2,13 @@
 using Miscshopify.Core.Contracts;
 using Miscshopify.Core.Models;
 using Miscshopify.Infrastructure.Data.Models;
+using Miscshopify.Infrastructure.Data.Models.Enums;
 using Miscshopify.Infrastructure.Data.Repositories;
+using Stripe;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Miscshopify.Core.Services
 {
@@ -15,11 +21,10 @@ namespace Miscshopify.Core.Services
             repo = _repo;
         }
 
-        public async Task CompleteOrder(string userId)
+        public async Task CompleteOrder(string userId, PaymentMethodEnum paymentMethod)
         {
-
-			var user = await repo.GetByIdAsync<ApplicationUser>(userId);
-			var cart = repo.All<Cart>()
+            var user = await repo.GetByIdAsync<ApplicationUser>(userId);
+            var cart = repo.All<Cart>()
                 .FirstOrDefault(c => c.CustomerId == userId);
 
             if (cart == null)
@@ -31,7 +36,8 @@ namespace Miscshopify.Core.Services
             {
                 Status = Infrastructure.Data.Models.Enums.OrderStatusEnum.Pending,
                 UserId = userId,
-                CustomerName = $"{user.FirstName} {user.LastName}"
+                CustomerName = $"{user.FirstName} {user.LastName}",
+                PaymentMethod = paymentMethod
             };
 
             var items = repo.All<CartItem>()
@@ -61,23 +67,38 @@ namespace Miscshopify.Core.Services
             await repo.SaveChangesAsync();
         }
 
-		public async Task<IEnumerable<OrderViewModel>> GetMyOrders(string userId)
-		{
-			var order = await repo.All<Order>()
+        public async Task<bool> UpdatePaymentMethod(Guid id, PaymentMethodEnum paymentMethod)
+        {
+            var order = await repo.GetByIdAsync<Order>(id);
+
+            if (order != null)
+            {
+                order.PaymentMethod = paymentMethod;
+                await repo.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<IEnumerable<OrderViewModel>> GetMyOrders(string userId)
+        {
+            var order = await repo.All<Order>()
                 .Where(c => c.UserId == userId)
-				.Select(c => new OrderViewModel()
-				{
-					Id = c.Id,
-					CustomerId = c.UserId,
-					CustomerName = c.CustomerName,
-					Status = c.Status,
-				})
-				.ToListAsync();
+                .Select(c => new OrderViewModel()
+                {
+                    Id = c.Id,
+                    CustomerId = c.UserId,
+                    CustomerName = c.CustomerName,
+                    Status = c.Status,
+                    PaymentMethod = c.PaymentMethod
+                })
+                .ToListAsync();
 
-			return order;
-		}
+            return order;
+        }
 
-		public async Task<IEnumerable<OrderViewModel>> GetAllOrders()
+        public async Task<IEnumerable<OrderViewModel>> GetAllOrders()
         {
             var order = await repo.All<Order>()
                 .Select(c => new OrderViewModel()
@@ -85,11 +106,12 @@ namespace Miscshopify.Core.Services
                     Id = c.Id,
                     CustomerId = c.UserId,
                     CustomerName = c.CustomerName,
-					Status = c.Status,
+                    Status = c.Status,
+                    PaymentMethod = c.PaymentMethod
                 })
                 .ToListAsync();
 
-			return order;
+            return order;
         }
 
         public async Task<IEnumerable<OrderViewModel>> GetNewOrders()
@@ -100,8 +122,9 @@ namespace Miscshopify.Core.Services
                 {
                     Id = c.Id,
                     CustomerId = c.UserId,
-					CustomerName = c.CustomerName,
-					Status = c.Status
+                    CustomerName = c.CustomerName,
+                    Status = c.Status,
+                    PaymentMethod = c.PaymentMethod
                 })
                 .ToListAsync();
 
@@ -121,8 +144,9 @@ namespace Miscshopify.Core.Services
                 {
                     Id = c.Id,
                     CustomerId = c.UserId,
-					CustomerName = c.CustomerName,
-					Status = c.Status
+                    CustomerName = c.CustomerName,
+                    Status = c.Status,
+                    PaymentMethod = c.PaymentMethod
                 })
                 .ToListAsync();
 
@@ -142,7 +166,7 @@ namespace Miscshopify.Core.Services
 
             var orderView = new OrderViewModel()
             {
-                Id = order.Id,
+                Id = order.Id,  
                 CustomerAddress = user.Address,
                 CustomerCity = user.City,
                 CustomerEmail = user.Email,
@@ -150,7 +174,8 @@ namespace Miscshopify.Core.Services
                 CustomerPhoneNumber = user.PhoneNumber,
                 CustomerPostCode = user.PostCode,
                 CustomerId = order.UserId,
-                Status = order.Status
+                Status = order.Status,
+                PaymentMethod = order.PaymentMethod
             };
 
             var orderItem = repo.All<OrderItem>()
@@ -164,20 +189,22 @@ namespace Miscshopify.Core.Services
             return orderView;
         }
 
-		public async Task<bool> UpdateOrderDetails(OrderViewModel model)
-		{
-			bool result = false;
-			var order = await repo.GetByIdAsync<Order>(model.Id);
+        public async Task<bool> UpdateOrderDetails(OrderViewModel model)
+        {
+            bool result = false;
+            var order = await repo.GetByIdAsync<Order>(model.Id);
 
-			if (order != null)
-			{
+            if (order != null)
+            {
                 order.Status = model.Status;
+                order.PaymentMethod = model.PaymentMethod;
 
-				await repo.SaveChangesAsync();
-				result = true;
-			}
+                await repo.SaveChangesAsync();
+                result = true;
+            }
 
-			return result;
-		}
-	}
+            return result;
+        }
+    }
 }
+    

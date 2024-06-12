@@ -1,4 +1,5 @@
 ﻿using Miscshopify.Infrastructure.Data.Models.Enums;
+using Stripe;
 using System.ComponentModel.DataAnnotations;
 
 namespace Miscshopify.Infrastructure.Data.Models
@@ -20,5 +21,7 @@ namespace Miscshopify.Infrastructure.Data.Models
         public virtual ApplicationUser User { get; set; }
 
         public virtual List<OrderItem> Items { get; set; } = new List<OrderItem>();
+
+        public PaymentMethodEnum PaymentMethod { get; set; }
     }
 }

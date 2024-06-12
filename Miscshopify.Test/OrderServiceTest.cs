@@ -37,7 +37,7 @@ namespace Miscshopify.Test
         {
             var service = serviceProvider.GetService<IOrderService>();
 
-            Assert.DoesNotThrowAsync(async () => await service.CompleteOrder("11111111-2121-2121-2121-111111111111"));
+            Assert.DoesNotThrowAsync(async () => await service.CompleteOrder("11111111-2121-2121-2121-111111111111", PaymentMethodEnum.CashOnDelivery));
         }
 
         [Test]
@@ -45,7 +45,7 @@ namespace Miscshopify.Test
         {
             var service = serviceProvider.GetService<IOrderService>();
 
-            Assert.CatchAsync<NullReferenceException>(async () => await service.CompleteOrder("11111111-2323-2323-2323-111111111111"), "Cart Is Empty");
+            Assert.CatchAsync<NullReferenceException>(async () => await service.CompleteOrder("11111111-2323-2323-2323-111111111111", PaymentMethodEnum.CashOnDelivery), "Cart Is Empty");
         }
 
         [Test]

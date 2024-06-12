@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Miscshopify.Core.Contracts;
+using Miscshopify.Infrastructure.Data.Models.Enums;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Miscshopify.Controllers
 {
@@ -13,27 +15,28 @@ namespace Miscshopify.Controllers
             orderService = _orderService;
         }
 
-        public async Task<IActionResult> CompleteOrder()
+        [HttpGet]
+        public async Task<IActionResult> CompleteOrder(PaymentMethodEnum paymentMethod)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            await orderService.CompleteOrder(userId);
+            await orderService.CompleteOrder(userId, paymentMethod);
 
             return View();
         }
 
-		public async Task<IActionResult> MyOrders()
-		{
-			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			var orders = await orderService.GetMyOrders(userId);
+        public async Task<IActionResult> MyOrders()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var orders = await orderService.GetMyOrders(userId);
 
-			return View(orders);
-		}
+            return View(orders);
+        }
 
-		public async Task<IActionResult> OrderDetails(Guid Id)
-		{
-			var orderDetails = await orderService.GetOrderDetails(Id);
+        public async Task<IActionResult> OrderDetails(Guid Id)
+        {
+            var orderDetails = await orderService.GetOrderDetails(Id);
 
-			return View(orderDetails);
-		}
-	}
+            return View(orderDetails);
+        }
+    }
 }

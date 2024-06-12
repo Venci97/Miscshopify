@@ -22,8 +22,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Stripe.net" Version="44.11.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Miscshopify.Api\Miscshopify.Api.csproj" />
     <ProjectReference Include="..\Miscshopify.Core\Miscshopify.Core.csproj" />
   </ItemGroup>
   <ProjectExtensions>
