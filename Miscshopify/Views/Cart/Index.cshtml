@@ -1,68 +1,135 @@
 ﻿@using Miscshopify.Core.Models;
 @model IEnumerable<CartItemViewModel>
 @{
-	var totalPrice = ViewBag.TotalPrice;
-	var totalQuantity = ViewBag.TotalQuantity;
+    var totalPrice = ViewBag.TotalPrice;
+    var totalQuantity = ViewBag.TotalQuantity;
 }
 <head>
-	<link rel="stylesheet" href="~/plugins/fontawesome-free-6.2.0-web/css/all.min.css">
+    <link rel="stylesheet" href="~/plugins/fontawesome-free-6.2.0-web/css/all.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    
 </head>
-<div class="row">
-	<div class="col-12">
-		<section class="ftco-section">
-			<div class="container">
-				<div class="row justify-content-center">
-					<div class="col-md-6 text-center mb-5">
-						<h2 class="heading-section">Cart</h2>
-						<a href="/Category/Index" class="btn btn-sm btn-primary mr-25">Continue shoping</a>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-12">
-						<div class="table-wrap">
-							<table class="table table-responsive-xl">
-								<thead>
-									<tr>
-										<th>&nbsp;</th>
-										<th>Name</th>
-										<th>Quantity</th>
-										<th>Price</th>
-										<th>&nbsp;</th>
-									</tr>
-								</thead>
-								<tbody>
-									@foreach (var item in Model)
-									{
-										<tr>
-											<td>
-												<img src="~/@item.ImagePath" style="border-radius: 50%;" width="50" height="50">
-											</td>
-											<td>@item.ProductName</td>
-											<td>
-												@item.Quantity
-											</td>
-											<td>@item.Price BGN</td>
-											<td>
-												<a asp-action="RemoveFromCart" asp-controller="Cart" asp-route-id="@item.Id" class="btn btn-sm btn-danger mr-25">
-													Remove
-													<i class="fa-solid fa-circle-xmark"></i>
-												</a>
-											</td>
-										</tr>
-									}
-								</tbody>
-							</table>
-						</div>
-						<label class="form-label">Quantity:</label>
-						<span class="focus-input100">@totalQuantity </span>
-						<label class="form-label">Total Price:</label>
-						<span class="focus-input100">@totalPrice BGN</span>
-					</div>
-					<a asp-action="Checkout" asp-controller="Cart" class="btn btn-sm btn-primary mr-25">
-						Checkout
-					</a>
-				</div>
-			</div>
-		</section>
-	</div>
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-lg-8 table-responsive mb-5">
+            <table class="table table-light table-borderless table-hover text-center mb-0">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody class="align-middle">
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="align-middle">
+                                <img src="~/@item.ImagePath" alt="" style="width: 50px;">
+                            </td>
+                            <td class="align-middle">@item.ProductName</td>
+                            <td class="align-middle">@item.Price BGN</td>
+                            <td class="align-middle">
+                                <div class="input-group quantity mx-auto" style="width: 100px;">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-sm btn-primary btn-minus" type="button">
+                                            <i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control form-control-sm bg-secondary border-0 text-center" data-id="@item.Id" value="@item.Quantity" readonly>
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-sm btn-primary btn-plus" type="button">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="align-middle">@totalPrice</td>
+                            <td class="align-middle">
+                                <a asp-action="RemoveFromCart" asp-controller="Cart" asp-route-id="@item.Id" class="btn btn-sm btn-danger">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-4">
+            <form class="mb-30" action="">
+                <div class="input-group">
+                    <input type="text" class="form-control border-0 p-4" placeholder="Coupon Code">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary">Apply Coupon</button>
+                    </div>
+                </div>
+            </form>
+            <h5 class="section-title position-relative text-uppercase mb-3">
+                <span class="bg-secondary pr-3">Cart Summary</span>
+            </h5>
+            <div class="bg-light p-30 mb-5">
+                <div class="border-bottom pb-2">
+                    <div class="d-flex justify-content-between mb-3">
+                        <h6>Subtotal</h6>
+                        <h6>@totalPrice BGN</h6>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <h6 class="font-weight-medium">Shipping</h6>
+                        <h6 class="font-weight-medium">0,00 BGN</h6>
+                    </div>
+                </div>
+                <div class="pt-2">
+                    <div class="d-flex justify-content-between mt-2">
+                        <h5>Total</h5>
+                        <h5>@(totalPrice) BGN</h5>
+                    </div>
+                    <a asp-action="Checkout" asp-controller="Cart" class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout</a>
+                </div>
+            </div>
+            <a href="/Category/Index" class="btn btn-block btn-secondary">Continue Shopping</a>
+        </div>
+    </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.btn-minus').click(function () {
+            var $input = $(this).closest('.input-group').find('input');
+            var value = parseInt($input.val());
+            if (value > 1) {
+                $input.val(value - 1);
+                updateQuantity($input.data('id'), value - 1);
+            }
+        });
+
+        $('.btn-plus').click(function () {
+            var $input = $(this).closest('.input-group').find('input');
+            var value = parseInt($input.val());
+            $input.val(value + 1);
+            updateQuantity($input.data('id'), value + 1);
+        });
+
+        function updateQuantity(id, quantity) {
+            $.ajax({
+                url: '@Url.Action("UpdateQuantity", "Cart")',
+                type: 'POST',
+                data: {
+                    id: id,
+                    quantity: quantity
+                },
+                success: function (response) {
+                    location.reload(); // Reload the page to reflect changes
+                },
+                error: function () {
+                    console.log('Error updating quantity');
+                }
+            });
+        }
+    });
+</script>

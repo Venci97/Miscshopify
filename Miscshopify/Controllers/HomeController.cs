@@ -20,7 +20,8 @@ namespace Miscshopify.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View();
+            var category = await categoryService.GetCategories();
+            return View(category);
         }
 
         public IActionResult Privacy()

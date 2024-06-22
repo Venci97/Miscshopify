@@ -3,6 +3,10 @@ using Miscshopify.Core.Contracts;
 using Miscshopify.Core.Models;
 using Miscshopify.Infrastructure.Data.Models;
 using Miscshopify.Infrastructure.Data.Repositories;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Miscshopify.Core.Services
 {
@@ -19,7 +23,7 @@ namespace Miscshopify.Core.Services
 
         public async Task AddToCart(Guid productId, string userId)
         {
-            var product = productService.GetProductById(productId).Result;
+            var product = await productService.GetProductById(productId);
 
             if (product == null)
             {
@@ -40,10 +44,9 @@ namespace Miscshopify.Core.Services
                 await repo.AddAsync(cart);
             }
 
-            var item = repo.All<CartItem>()
-                .FirstOrDefault(i => i.CustomerId == userId && i.ProductID == productId);
+            var existingItem = cart.Items.FirstOrDefault(i => i.ProductID == productId);
 
-			if (item == null)
+            if (existingItem == null)
             {
                 cart.Items.Add(new CartItem()
                 {
@@ -51,18 +54,19 @@ namespace Miscshopify.Core.Services
                     ImagePath = product.ImagePath,
                     ProductID = product.Id,
                     Quantity = 1,
-                    UnitPrice = product.Price,
+                    UnitPrice = product.Price, // Set initial unit price when adding new item
                     ProductName = product.Name
                 });
-
             }
             else
             {
-                item.Quantity += 1;
-                item.UnitPrice = product.Price * item.Quantity;
+                existingItem.Quantity += 1;
+                existingItem.UnitPrice = product.Price * existingItem.Quantity; // Update unit price for existing item
             }
-            repo.SaveChanges();
+
+            await repo.SaveChangesAsync(); // Save changes asynchronously
         }
+
 
         public async Task<IEnumerable<CartItemViewModel>> GetCartItems(string userId)
         {
@@ -80,13 +84,25 @@ namespace Miscshopify.Core.Services
                 .ToListAsync();
         }
 
-		public void RemoveFromCart(Guid cartItemId)
+        public async Task UpdateCartItemQuantity(Guid cartItemId, int quantity, string userId)
+        {
+            var item = await repo.All<CartItem>()
+                .FirstOrDefaultAsync(i => i.Id == cartItemId && i.CustomerId == userId);
+
+            if (item != null)
+            {
+                item.Quantity = quantity;
+                item.UnitPrice = (await productService.GetProductById(item.ProductID)).Price;
+                await repo.SaveChangesAsync();
+            }
+        }
+
+        public void RemoveFromCart(Guid cartItemId)
         {
             var item = repo.All<CartItem>()
                 .First(i => i.Id == cartItemId);
 
             repo.Delete(item);
-
             repo.SaveChanges();
         }
     }

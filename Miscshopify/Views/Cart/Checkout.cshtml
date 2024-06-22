@@ -75,7 +75,7 @@
                 <label class="form-label" for="cashOnDelivery">Cash on delivery</label>
             </div>
             <div>
-                <input type="radio" id="creditCard" name="paymentMethod" value="creditCard">
+                <input type="radio" id="Card" name="paymentMethod" value="Card">
                 <i class="fa-solid fa-credit-card"></i>
                 <label class="form-label" for="creditCard">Credit/Debit Card</label>
             </div>
@@ -93,7 +93,7 @@
 
             if (paymentMethod === 'cashOnDelivery') {
                 window.location.href = '@Url.Action("CompleteOrder", "Order")' + '?paymentMethod=' + paymentMethod;
-            } else if (paymentMethod === 'creditCard') {
+            } else if (paymentMethod === 'Card') {
                 window.location.href = '@Url.Action("CreatePayment", "Payment")' + '?totalPrice=' + totalPrice + '&paymentMethod=' + paymentMethod;
             }
         });

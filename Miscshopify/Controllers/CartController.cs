@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Miscshopify.Core.Contracts;
 using System.Security.Claims;
+using System.Threading.Tasks;
+using System;
 
 namespace Miscshopify.Controllers
 {
@@ -21,17 +23,17 @@ namespace Miscshopify.Controllers
             decimal totalPrice = 0.0m;
             foreach (var item in userCart)
             {
-                totalPrice += item.Price;
+                totalPrice += item.Price * item.Quantity;
             }
 
-            int quantity = 0;
-			foreach (var item in userCart)
-			{
-				quantity += item.Quantity;
-			}
+            int totalQuantity = 0;
+            foreach (var item in userCart)
+            {
+                totalQuantity += item.Quantity;
+            }
 
-			ViewBag.TotalPrice = totalPrice;
-            ViewBag.TotalQuantity = quantity;
+            ViewBag.TotalPrice = totalPrice;
+            ViewBag.TotalQuantity = totalQuantity;
 
             return View(userCart);
         }
@@ -40,7 +42,7 @@ namespace Miscshopify.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            cartService.AddToCart(Id, userId);
+            cartService.AddToCart(Id, userId).Wait();
 
             return RedirectToAction("Index");
         }
@@ -52,21 +54,42 @@ namespace Miscshopify.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> UpdateQuantity(Guid id, int quantity)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (quantity < 1)
+            {
+                return BadRequest("Quantity must be at least 1.");
+            }
+
+            await cartService.UpdateCartItemQuantity(id, quantity, userId);
+
+            return RedirectToAction("Index");
+        }
+
         public async Task<IActionResult> Checkout()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userCart = await cartService.GetCartItems(userId);
 
-			decimal totalPrice = 0.0m;
-			foreach (var item in userCart)
-			{
-				totalPrice += item.Price;
-			}
+            decimal totalPrice = 0.0m;
+            foreach (var item in userCart)
+            {
+                totalPrice += item.Price * item.Quantity;
+            }
 
-			ViewBag.TotalPrice = totalPrice;
-			ViewBag.TotalQuantity = userCart.Count();
+            int totalQuantity = 0;
+            foreach (var item in userCart)
+            {
+                totalQuantity += item.Quantity;
+            }
 
-			return View(userCart);
+            ViewBag.TotalPrice = totalPrice;
+            ViewBag.TotalQuantity = totalQuantity;
+
+            return View(userCart);
         }
     }
 }

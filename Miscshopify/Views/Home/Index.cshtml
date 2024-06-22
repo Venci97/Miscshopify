@@ -1,4 +1,7 @@
-﻿@{
+﻿@using Miscshopify.Core.Models
+@model IEnumerable<CategoryViewModel>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 <head>
@@ -13,73 +16,124 @@
     <link rel="stylesheet" href="~/assets/css/templatemo-hexashop.css">
     <link rel="stylesheet" href="~/assets/css/owl-carousel.css">
     <link rel="stylesheet" href="~/assets/css/lightbox.css">
-
+    <link rel="stylesheet" href="~/assets/css/animate.css">
 </head>
 
-<div class="main-banner" id="top">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="left-content">
-                    <div class="thumb">
-                        <div class="inner-content">
-                            <h4>Miscshopify</h4>
-                            <span>All you need on one click</span>
+<body>
+    <!-- Carousel Start -->
+    <div class="container-fluid mb-3">
+        <div class="row px-xl-5">
+            <div class="col-lg-8">
+                <div id="header-carousel" class="carousel slide carousel-fade mb-30 mb-lg-0" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <li data-target="#header-carousel" data-slide-to="0" class="active"></li>
+                        <li data-target="#header-carousel" data-slide-to="1"></li>
+                    </ol>
+                    <div class="carousel-inner">
+                        <div class="carousel-item position-relative active" style="height: 430px;">
+                            <img class="position-absolute w-100 h-100" src="~/img/best-laptops-for-gaming.jpg" style="object-fit: cover;">
+                            <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                                <div class="p-3" style="max-width: 700px;">
+                                    <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">Miscshopify</h1>
+                                    <p class="mx-md-5 text-white px-5 animate__animated animate__bounceIn">All you need on one click</p>
+                                </div>
+                            </div>
                         </div>
-                        <img src="~/img/best-laptops-for-gaming.jpg" alt="Photo">
+                        <div class="carousel-item position-relative" style="height: 430px;">
+                            <img class="position-absolute w-100 h-100" src="~/img/ecommerce-strategy--dropshipping--online-business.jpg" style="object-fit: cover;">
+                            <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                                <div class="p-3" style="max-width: 700px;">
+                                    <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">About us</h1>
+                                    <p class="mx-md-5 text-white px-5 animate__animated animate__bounceIn">Learn more about our store.</p>
+                                    <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="/Category/Index">Purchase Now!</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="left-content">
-                    <div class="thumb">
-                        <div class="inner-content">
-                            <h4>Categories</h4>
-                            <span>Explore our Categories and Products</span>
-                            <div class="main-border-button">
-                                <a href="/Category/Index">Purchase Now!</a>
-                            </div>
-                        </div>
-                        <img src="~/img/ecommerce-strategy--dropshipping--online-business.jpg" alt="Photo">
+            <div class="col-lg-4">
+                <div class="product-offer mb-30" style="position: relative; height: 200px;; margin-bottom: 30px;">
+                    <img class="img-fluid" src="img/online-shopping-concept-about-electronics-and-gadgets.jpg" style="height: 200px; width: 444px" alt="">
+                    <div class="offer-text" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(0, 0, 0, 0.5);">
+                        <h6 class="text-white text-uppercase">We have all you want.</h6>
+                        <h3 class="text-white mb-3">From electronics...</h3>
+                        @* <a href="/Category/Index" class="btn btn-primary">Shop Now</a> *@
+                    </div>
+                </div>
+                <div class="product-offer mb-30" style="position: relative; height: 200px;">
+                    <img class="img-fluid" src="img/Image-clothes2.png" style="height: 200px; width: 444px" alt="">
+                    <div class="offer-text" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(0, 0, 0, 0.5);">
+                        <h6 class="text-white text-uppercase">... to fashion...</h6>
+                        <h3 class="text-white mb-3">...and many more products.</h3>
+                        <a href="/Category/Index" class="btn btn-primary">Shop Now</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+    <!-- Carousel End -->
+    
+    <!-- Categories Start-->
+    <div class="container-fluid pt-5">
+        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Categories</span></h2>
+        <div class="row px-xl-5 pb-3">
+            @foreach (var category in Model)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+                    <a class="text-decoration-none" href="@Url.Action("GetProductsByCategory", "Product", new { id = category.Id })">
+                        <div class="cat-item d-flex align-items-center mb-4">
+                            <div class="overflow-hidden" style="width: 100px; height: 100px;">
+                                <img class="img-fluid" src="~/@category.ImagePath" alt="@category.Name">
+                            </div>
+                            <div class="flex-fill pl-3">
+                                <h6>@category.Name</h6>
+                                <small class="text-body">100 Products</small> <!-- Тук може да добавите броя на продуктите за съответната категория -->
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+    <!-- Categories End-->
 
-<script src="~/assets/js/jquery-2.1.0.min.js"></script>
+    <script src="~/assets/js/jquery-2.1.0.min.js"></script>
 
-<!-- Bootstrap -->
-<script src="~/assets/js/popper.js"></script>
-<script src="~/assets/js/bootstrap.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="~/assets/js/popper.js"></script>
+    <script src="~/assets/js/bootstrap.min.js"></script>
 
-<!-- Plugins -->
-<script src="~/assets/js/owl-carousel.js"></script>
-<script src="~/assets/js/accordions.js"></script>
-<script src="~/assets/js/datepicker.js"></script>
-<script src="~/assets/js/scrollreveal.min.js"></script>
-<script src="~/assets/js/waypoints.min.js"></script>
-<script src="~/assets/js/jquery.counterup.min.js"></script>
-<script src="~/assets/js/imgfix.min.js"></script>
-<script src="~/assets/js/slick.js"></script>
-<script src="~/assets/js/lightbox.js"></script>
-<script src="~/assets/js/isotope.js"></script>
+    <!-- Plugins -->
+    <script src="~/assets/js/owl-carousel.js"></script>
+    <script src="~/assets/js/accordions.js"></script>
+    <script src="~/assets/js/datepicker.js"></script>
+    <script src="~/assets/js/scrollreveal.min.js"></script>
+    <script src="~/assets/js/waypoints.min.js"></script>
+    <script src="~/assets/js/jquery.counterup.min.js"></script>
+    <script src="~/assets/js/imgfix.min.js"></script>
+    <script src="~/assets/js/slick.js"></script>
+    <script src="~/assets/js/lightbox.js"></script>
+    <script src="~/assets/js/isotope.js"></script>
+    <script src="~/assets/js/custom.js"></script>
 
-<!-- Global Init -->
-<script src="~/assets/js/custom.js"></script>
-
-<script>
-    $(function () {
-        var selectedClass = "";
-        $("p").click(function () {
-            selectedClass = $(this).attr("data-rel");
-            $("#portfolio").fadeTo(50, 0.1);
-            $("#portfolio div").not("." + selectedClass).fadeOut();
-            setTimeout(function () {
-                $("." + selectedClass).fadeIn();
-                $("#portfolio").fadeTo(50, 1);
-            }, 500);
+    <script>
+        $(function () {
+            var selectedClass = "";
+            $("p").click(function () {
+                selectedClass = $(this).attr("data-rel");
+                $("#portfolio").fadeTo(50, 0.1);
+                $("#portfolio div").not("." + selectedClass).fadeOut();
+                setTimeout(function () {
+                    $("." + selectedClass).fadeIn();
+                    $("#portfolio").fadeTo(50, 1);
+                }, 500);
+            });
         });
-    });
-</script>
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#header-carousel').carousel();
+        });
+    </script>
+</body>
