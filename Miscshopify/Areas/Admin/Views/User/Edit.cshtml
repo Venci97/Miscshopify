@@ -2,117 +2,252 @@
 @using Miscshopify.Infrastructure.Data.Models.Enums;
 @model UserEditViewModel
 @{
+    ViewData["Title"] = "Edit User";
 }
 
-<div class="content-body">
-    <section class="users-edit">
-        <div class="card">
+<link href="~/css/admin/user-edit.css" rel="stylesheet" />
+
+<div class="user-edit-section">
+    <section class="user-edit-section">
+        <div class="user-edit-card">
             <div class="card-content">
                 <div class="card-body">
-                    <ul class="nav nav-tabs mb-2" role="tablist">
+                    <ul class="nav-tabs" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center active" id="account-tab" data-toggle="tab" href="#account" aria-controls="account" role="tab" aria-selected="true">
-                                <i class="ft-user mr-25"></i><span class="d-none d-sm-block">Edit Category</span>
+                            <a class="nav-link active" id="account-tab" data-toggle="tab" href="#account" aria-controls="account" role="tab" aria-selected="true">
+                                <i class="fas fa-user-edit"></i>
+                                <span>Edit User</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center" id="information-tab" data-toggle="tab" href="#information" aria-controls="information" role="tab" aria-selected="false">
-                                <i class="ft-info mr-25"></i><span class="d-none d-sm-block">Information</span>
+                            <a class="nav-link" id="information-tab" data-toggle="tab" href="#information" aria-controls="information" role="tab" aria-selected="false">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Information</span>
                             </a>
                         </li>
                     </ul>
+
                     <div class="tab-content">
+                        <!-- Account Tab -->
                         <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
-                            <div class="media mb-2">
-                                <a class="mr-2" href="#">
-                                    <img src="../../../app-assets/images/portrait/small/avatar-s-26.png" alt="users avatar" class="users-avatar-shadow rounded-circle" height="64" width="64">
-                                </a>
-                                <div class="media-body">
-                                    <h4 class="media-heading">Avatar</h4>
-                                    <div class="col-12 px-0 d-flex">
-                                        <a href="#" class="btn btn-sm btn-primary mr-25">Change</a>
-                                        <a href="#" class="btn btn-sm btn-secondary">Reset</a>
+                            <!-- Avatar Section -->
+                            <div class="avatar-section">
+                                @* <div class="avatar-container">
+                                    <img src="~/@(Model.ImagePath ?? "images/avatars/default-avatar.png")"
+                                         class="avatar-image" alt="User avatar"
+                                         onerror="this.src='https://via.placeholder.com/80?text=👤'">
+                                </div> *@
+                                <div class="avatar-info">
+                                    <h4 class="avatar-title">Profile Picture</h4>
+                                    <div class="avatar-actions">
+                                        <div class="file-upload-wrapper">
+                                            <input type="file" name="avatarFile" id="avatarInput" class="file-upload-input" accept="image/*">
+                                            <label for="avatarInput" class="file-upload-button">
+                                                <i class="fas fa-camera"></i>
+                                                Change Avatar
+                                            </label>
+                                        </div>
+                                        <button type="button" class="btn btn-secondary" onclick="resetAvatar()">
+                                            <i class="fas fa-redo"></i>
+                                            Reset
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                            <form id="edit" method="post">
+
+                            <form id="edit" method="post" enctype="multipart/form-data">
                                 <div class="row">
-                                    <div class="col-12 col-sm-6">
+                                    <div class="col-12 col-md-6">
                                         <input type="hidden" name="Id" value="@Model.Id" />
                                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                        <div class="form-floating">
-                                            <label asp-for="FirstName" class="form-label"></label>
-                                            <input asp-for="FirstName" class="form-control" aria-required="true" />
+
+                                        <div class="form-group">
+                                            <label asp-for="FirstName" class="form-label">First Name *</label>
+                                            <input asp-for="FirstName" class="form-control" aria-required="true"
+                                                   placeholder="Enter first name" />
                                             <span asp-validation-for="FirstName" class="text-danger"></span>
                                         </div>
-                                        <div class="form-floating">
-                                            <label asp-for="LastName" class="form-label"></label>
-                                            <input asp-for="LastName" class="form-control" aria-required="true" />
+
+                                        <div class="form-group">
+                                            <label asp-for="LastName" class="form-label">Last Name *</label>
+                                            <input asp-for="LastName" class="form-control" aria-required="true"
+                                                   placeholder="Enter last name" />
                                             <span asp-validation-for="LastName" class="text-danger"></span>
                                         </div>
-                                        <div class="form-floating">
-                                            <label asp-for="Email" class="form-label"></label>
-                                            <input asp-for="Email" class="form-control" aria-required="true" />
+
+                                        <div class="form-group">
+                                            <label asp-for="Email" class="form-label">Email Address *</label>
+                                            <input asp-for="Email" class="form-control" aria-required="true"
+                                                   placeholder="Enter email address" type="email" />
                                             <span asp-validation-for="Email" class="text-danger"></span>
                                         </div>
-                                        <div class="form-floating">
-                                            <label asp-for="PhoneNumber" class="form-label"></label>
-                                            <input asp-for="PhoneNumber" class="form-control" aria-required="true" />
+
+                                        <div class="form-group">
+                                            <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+                                            <input asp-for="PhoneNumber" class="form-control"
+                                                   placeholder="Enter phone number" type="tel" />
                                             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                                         </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-6">
                                         <div class="form-group">
-                                            <div class="controls">
-                                                <select asp-for="Gender" asp-items="Html.GetEnumSelectList<GenderEnum>()" class="btn btn-info"></select>
+                                            <label asp-for="Gender" class="form-label">Gender</label>
+                                            <select asp-for="Gender" asp-items="Html.GetEnumSelectList<GenderEnum>()" class="form-select">
+                                                <option value="">Select Gender</option>
+                                            </select>
+                                            <span asp-validation-for="Gender" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="form-label">Account Status</label>
+                                            <select asp-for="IsActive" class="form-select">
+                                                <option value="true">Active</option>
+                                                <option value="false">Inactive</option>
+                                            </select>
+                                            <div class="mt-2">
+                                                @if (Model.IsActive)
+                                                {
+                                                    <span class="status-badge status-active">
+                                                        <i class="fas fa-check-circle"></i>
+                                                        Active User
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="status-badge status-inactive">
+                                                        <i class="fas fa-times-circle"></i>
+                                                        Inactive User
+                                                    </span>
+                                                }
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-12 col-sm-6">
+
+                                        <!-- Password Change Section -->
                                         <div class="form-group">
-                                            <label>Status</label>
-                                            <select asp-for="IsActive" class="form-control">
-                                                <option value="true">Active</option>
-                                                <option value="false">Delete</option>
-                                            </select>
+                                            <label class="form-label">Change Password</label>
+                                            <input type="password" class="form-control" id="newPassword"
+                                                   placeholder="Enter new password" />
+                                            <div class="password-strength">
+                                                <div class="strength-bar">
+                                                    <div class="strength-fill strength-weak"></div>
+                                                </div>
+                                                <div class="strength-text">Password strength: Weak</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="password" class="form-control" id="confirmPassword"
+                                                   placeholder="Confirm new password" />
                                         </div>
                                     </div>
-                                    <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
-                                        <button type="submit" class="btn btn-primary glow mb-1 mb-sm-0 mr-0 mr-sm-1">
-                                            Save
-                                            changes
-                                        </button>
-                                        <button type="reset" class="btn btn-light">Cancel</button>
+
+                                    <div class="col-12">
+                                        <div class="form-actions">
+                                            <button type="submit" class="btn btn-primary" id="submitButton">
+                                                <i class="fas fa-save"></i>
+                                                Save Changes
+                                            </button>
+                                            <a href="/Admin/User/Index" class="btn btn-light">
+                                                <i class="fas fa-times"></i>
+                                                Cancel
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
                         </div>
+
+                        <!-- Information Tab -->
                         <div class="tab-pane" id="information" aria-labelledby="information-tab" role="tabpanel">
-                            <form id="edit" method="post">
-                                <div class="row">
-                                    <div class="col-12 col-sm-6">
-                                        <h5 class="mb-1"><i class="ft-link mr-25"></i>Social Links</h5>
-                                        <div class="form-group">
-                                            <label>Twitter</label>
-                                            <input class="form-control" type="text" value="https://www.twitter.com/">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Facebook</label>
-                                            <input class="form-control" type="text" value="https://www.facebook.com/">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Google+</label>
-                                            <input class="form-control" type="text">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>LinkedIn</label>
-                                            <input class="form-control" type="text">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Instagram</label>
-                                            <input class="form-control" type="text" value="https://www.instagram.com/">
-                                        </div>
+                            <div class="user-stats">
+                                @* <div class="stat-card">
+                                    <div class="stat-number">@Model.CreationDate.ToString("MMM yyyy")</div>
+                                    <div class="stat-label">Member Since</div>
+                                </div> *@
+                                <div class="stat-card">
+                                    <div class="stat-number">
+                                        @if (Model.IsActive)
+                                        {
+                                            <i class="fas fa-check text-success"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fas fa-times text-danger"></i>
+                                        }
+                                    </div>
+                                    <div class="stat-label">Status</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number">@Model.Gender</div>
+                                    <div class="stat-label">Gender</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number">
+                                        @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                                        {
+                                            <i class="fas fa-check text-success"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fas fa-times text-danger"></i>
+                                        }
+                                    </div>
+                                    <div class="stat-label">Phone</div>
+                                </div>
+                            </div>
+
+                            <div class="user-info-section">
+                                <h5 class="mb-3">
+                                    <i class="fas fa-id-card"></i>
+                                    User Details
+                                </h5>
+
+                                <div class="info-grid">
+                                    <div class="info-item">
+                                        <strong>User ID:</strong>
+                                        <span class="user-id">@Model.Id</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <strong>Full Name:</strong>
+                                        <span>@Model.FirstName @Model.LastName</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <strong>Email:</strong>
+                                        <span>@Model.Email</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <strong>Phone:</strong>
+                                        <span>@(Model.PhoneNumber ?? "Not provided")</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <strong>Gender:</strong>
+                                        <span>@Model.Gender</span>
+                                    </div>
+                                    @* <div class="info-item">
+                                        <strong>Account Created:</strong>
+                                        <span>@Model.CreationDate.ToString("MMMM dd, yyyy")</span>
+                                    </div> *@
+                                    <div class="info-item">
+                                        <strong>Account Status:</strong>
+                                        <span class="status-badge @(Model.IsActive ? "status-active" : "status-inactive")">
+                                            @(Model.IsActive ? "Active" : "Inactive")
+                                        </span>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
+
+                            <!-- Activity Log (placeholder) -->
+                            <div class="activity-section mt-4">
+                                <h5 class="mb-3">
+                                    <i class="fas fa-history"></i>
+                                    Recent Activity
+                                </h5>
+                                <div class="activity-placeholder">
+                                    <p class="text-muted">User activity log would be displayed here.</p>
+                                    <!-- In a real application, you would display actual user activity data -->
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -122,5 +257,120 @@
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptspartial" />
-}
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Avatar upload handling
+        document.getElementById('avatarInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const avatarImage = document.querySelector('.avatar-image');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    avatarImage.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function resetAvatar() {
+            const avatarImage = document.querySelector('.avatar-image');
+            avatarImage.src = 'https://via.placeholder.com/80?text=👤';
+            document.getElementById('avatarInput').value = '';
+        }
+
+        // Password strength indicator
+        document.getElementById('newPassword')?.addEventListener('input', function() {
+            const password = this.value;
+            const strengthBar = document.querySelector('.strength-fill');
+            const strengthText = document.querySelector('.strength-text');
+
+            let strength = 0;
+            let text = 'Weak';
+            let className = 'strength-weak';
+
+            if (password.length >= 8) strength++;
+            if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+            if (password.match(/\d/)) strength++;
+            if (password.match(/[^a-zA-Z\d]/)) strength++;
+
+            if (strength === 2) {
+                text = 'Fair';
+                className = 'strength-fair';
+            } else if (strength === 3) {
+                text = 'Good';
+                className = 'strength-good';
+            } else if (strength >= 4) {
+                text = 'Strong';
+                className = 'strength-strong';
+            }
+
+            strengthBar.className = `strength-fill ${className}`;
+            strengthText.textContent = `Password strength: ${text}`;
+        });
+
+        // Form submission enhancement
+        document.getElementById('edit').addEventListener('submit', function(e) {
+            const submitButton = document.getElementById('submitButton');
+            const originalText = submitButton.innerHTML;
+
+            // Show loading state
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving Changes...';
+            submitButton.disabled = true;
+
+            // Password confirmation check
+            const newPassword = document.getElementById('newPassword')?.value;
+            const confirmPassword = document.getElementById('confirmPassword')?.value;
+
+            if (newPassword && newPassword !== confirmPassword) {
+                e.preventDefault();
+                alert('New password and confirmation do not match.');
+                submitButton.innerHTML = originalText;
+                submitButton.disabled = false;
+                return;
+            }
+
+            // Allow form to submit normally
+            console.log('User edit form submitted successfully');
+        });
+
+        // Tab functionality
+        document.querySelectorAll('.nav-link').forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // Remove active class from all tabs
+                document.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+
+                // Add active class to clicked tab
+                this.classList.add('active');
+                const target = this.getAttribute('href');
+                document.querySelector(target).classList.add('active');
+            });
+        });
+
+        // Add input validation styling
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.value.trim() !== '') {
+                    this.classList.add('filled');
+                } else {
+                    this.classList.remove('filled');
+                }
+            });
+
+            input.addEventListener('input', function() {
+                if (this.checkValidity()) {
+                    this.classList.remove('input-validation-error');
+                }
+            });
+        });
+
+        // Initialize form with current values
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('User edit form loaded for:', '@Model.FirstName @Model.LastName');
+        });
+    </script>
+    }

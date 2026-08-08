@@ -1,29 +1,351 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using Miscshopify.Infrastructure.Data.Models
+@inject UserManager<ApplicationUser> UserManager
+
+@{
     if (ViewData.TryGetValue("ParentLayout", out var parentLayout))
     {
         Layout = (string)parentLayout;
     }
     else
     {
-        Layout = "/Areas/Identity/Pages/_Layout.cshtml";
+        Layout = "/Views/Shared/_Layout.cshtml";
     }
+
+    // Load user data for the sidebar
+    var user = await UserManager.GetUserAsync(User);
+    var userImagePath = !string.IsNullOrEmpty(user?.ImagePath)
+        ? $"{user.ImagePath}?v={DateTime.Now.Ticks}"
+        : "/images/default-avatar.png";
+    var userFullName = $"{user?.FirstName} {user?.LastName}";
+    var userEmail = user?.Email;
 }
 
-<h1>Manage your account</h1>
-
-<div>
-    <h2>Change your account settings</h2>
-    <hr />
-    <div class="row">
-        <div class="col-md-3">
-            <partial name="_ManageNav" />
+<div class="manage-account-container">
+    <!-- Header Section -->
+    <div class="manage-header">
+        <div class="header-content">
+            <h1 class="header-title">Manage Your Account</h1>
+            <p class="header-subtitle">Control your personal information and account settings</p>
         </div>
-        <div class="col-md-9">
-            @RenderBody()
+    </div>
+
+    <!-- Main Content -->
+    <div class="manage-content">
+        <!-- Navigation Sidebar -->
+        <div class="manage-sidebar">
+            <div class="sidebar-card">
+                <div class="sidebar-header">
+                    <div class="user-avatar-section">
+                        <img src="@Url.Content(userImagePath)"
+                             class="user-avatar-large"
+                             alt="Profile picture"
+                             onerror="handleSidebarImageError(this)">
+                        <div class="user-info">
+                            <h3 class="user-name" style="color: black;">@userFullName</h3>
+                            <p class="user-email">@userEmail</p>
+                        </div>
+                    </div>
+                </div>
+                <nav class="sidebar-nav">
+                    <partial name="_ManageNav" />
+                </nav>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="manage-main">
+            <div class="content-card">
+                @RenderBody()
+            </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
     @RenderSection("Scripts", required: false)
+
+    <script>
+        // Handle sidebar image errors
+        function handleSidebarImageError(img) {
+            console.log('Sidebar image failed to load:', img.src);
+            img.onerror = null;
+
+            // Try to load default avatar with cache busting
+            const defaultPath = '/images/default-avatar.png';
+            if (!img.src.includes('default-avatar.png')) {
+                img.src = defaultPath + '?v=' + Date.now();
+            } else {
+                // If default also fails, use SVG as last resort
+                img.onerror = function() {
+                    this.onerror = null;
+                    this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iNDAiIGZpbGw9IiNFRTVFNjQiLz4KPHBhdGggZD0iTTQwIDQ0QzQ2LjYyNzQgNDQgNTIgMzguNjI3NCA1MiAzMkM1MiAyNS4zNzI2IDQ2LjYyNzQgMjAgNDAgMjBDMzMuMzcyNiAyMCAyOCAyNS4zNzI2IDI4IDMyQzI4IDM4LjYyNzQgMzMuMzcyNiA0NCA0MCA0NFoiIGZpbGw9IiM5QzlDOUMiLz4KPHBhdGggZD0iTTU2IDU2VjU0QzU2IDQ4LjQ4IDUxLjUyIDQ0IDQ2IDQ0SDM0QzI4LjQ4IDQ0IDI0IDQ4LjQ4IDI0IDU0VjU2SDU2WiIgZmlsbD0iIzlDOUM5QyIvPgo8L3N2Zz4K';
+                };
+            }
+        }
+
+        // Refresh sidebar when page loads (in case of image updates)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if we need to refresh sidebar images
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('refresh')) {
+                setTimeout(() => {
+                    refreshSidebarImages();
+                }, 300);
+            }
+
+            // Initialize sidebar image error handling
+            const sidebarImage = document.querySelector('.user-avatar-large');
+            if (sidebarImage) {
+                sidebarImage.onerror = function() {
+                    handleSidebarImageError(this);
+                };
+            }
+        });
+
+        function refreshSidebarImages() {
+            console.log('Refreshing sidebar images...');
+            const sidebarImage = document.querySelector('.user-avatar-large');
+            if (sidebarImage) {
+                const originalSrc = sidebarImage.src.split('?')[0];
+                sidebarImage.src = originalSrc + '?v=' + Date.now();
+            }
+        }
+
+        // Global function to refresh all avatars (call this after image upload)
+        function refreshAllAvatars() {
+            refreshSidebarImages();
+
+            // Also refresh header avatar if exists
+            const headerAvatar = document.querySelector('.user-avatar');
+            if (headerAvatar) {
+                const headerSrc = headerAvatar.src.split('?')[0];
+                headerAvatar.src = headerSrc + '?v=' + Date.now();
+            }
+        }
+    </script>
 }
+
+<style>
+    .manage-account-container {
+        min-height: calc(100vh - 80px);
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        padding: 2rem 0;
+    }
+
+    .manage-header {
+        background: white;
+        border-bottom: 1px solid #e5e7eb;
+        margin-bottom: 2rem;
+    }
+
+    .header-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    .header-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+    }
+
+    .header-subtitle {
+        font-size: 1.125rem;
+        color: #6b7280;
+        margin-bottom: 1.5rem;
+    }
+
+    .manage-content {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    .manage-sidebar {
+        position: sticky;
+        top: 2rem;
+        height: fit-content;
+    }
+
+    .sidebar-card {
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+
+    .sidebar-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #f3f4f6;
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    }
+
+    .user-avatar-section {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .user-avatar-large {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        border: 4px solid rgba(255, 255, 255, 0.2);
+        object-fit: cover;
+    }
+
+    .user-info {
+        flex: 1;
+    }
+
+    .user-name {
+        font-weight: 500;
+        color: #374151;
+        font-size: 0.875rem;
+    }
+
+    .user-email {
+        color: rgba(255, 255, 255, 0.8);
+        margin: 0;
+        font-size: 0.875rem;
+    }
+
+    .sidebar-nav {
+        padding: 1rem;
+    }
+
+    .manage-main {
+        min-height: 600px;
+    }
+
+    .content-card {
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        padding: 2rem;
+        min-height: 500px;
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 1024px) {
+        .manage-content {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .manage-sidebar {
+            position: static;
+        }
+
+        .header-content {
+            padding: 0 1rem;
+        }
+
+        .manage-content {
+            padding: 0 1rem;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .manage-account-container {
+            padding: 1rem 0;
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+        }
+
+        .header-subtitle {
+            font-size: 1rem;
+        }
+
+        .user-avatar-section {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .user-avatar-large {
+            width: 60px;
+            height: 60px;
+        }
+
+        .content-card {
+            padding: 1.5rem;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .content-card {
+            padding: 1rem;
+        }
+
+        .sidebar-card {
+            border-radius: 0.75rem;
+        }
+    }
+    /* Status Message Styles */
+    .status-message {
+        padding: 1rem 1.5rem;
+        border-radius: 0.75rem;
+        margin-bottom: 1.5rem;
+        font-weight: 500;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        animation: slideIn 0.3s ease-out;
+    }
+
+    .status-message.success {
+        background: #d1fae5;
+        color: #065f46;
+        border: 1px solid #a7f3d0;
+    }
+
+    .status-message.error {
+        background: #fef2f2;
+        color: #dc2626;
+        border: 1px solid #fecaca;
+    }
+
+    .status-message i {
+        font-size: 1.25rem;
+        margin-top: 0.125rem;
+        flex-shrink: 0;
+    }
+
+    .status-message span {
+        line-height: 1.5;
+    }
+
+    @@keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Responsive adjustments */
+    @@media (max-width: 768px) {
+        .status-message {
+            padding: 1rem;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+            .status-message i {
+                align-self: flex-start;
+            }
+    }
+</style>

@@ -2,20 +2,144 @@
 @model LogoutModel
 @{
     ViewData["Title"] = "Log out";
+    Layout = null;
 }
 
-<header>
-    <h1>@ViewData["Title"]</h1>
-    @{
-        if (User.Identity.IsAuthenticated)
-        {
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-                <button type="submit" class="nav-link btn btn-link text-dark">Click here to Logout</button>
-            </form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log Out - Modern Store</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 flex items-center justify-center p-4" style="font-family: 'Inter', sans-serif;">
+    <div class="max-w-md w-full">
+        <div class="bg-white rounded-2xl shadow-xl p-8 text-center">
+            <!-- Header -->
+            <div class="mb-8">
+                <div class="w-20 h-20 bg-gradient-to-br from-purple-100 to-pink-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <i class="fas fa-sign-out-alt text-purple-600 text-3xl"></i>
+                    }
+                    else
+                    {
+                        <i class="fas fa-check-circle text-green-500 text-3xl"></i>
+                    }
+                </div>
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">@ViewData["Title"]</h1>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <p class="text-gray-600">Are you sure you want to log out?</p>
+                }
+                else
+                {
+                    <p class="text-gray-600">You have successfully logged out</p>
+                }
+            </div>
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <!-- Logout Form -->
+                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                    <button type="submit"
+                            class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-4 rounded-lg font-semibold text-lg hover:from-purple-700 hover:to-pink-700 transform hover:-translate-y-0.5 transition-all duration-300 shadow-lg hover:shadow-xl mb-4">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Yes, Log Out
+                    </button>
+                </form>
+
+                <!-- Cancel Option -->
+                <a href="~/"
+                   class="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 font-medium transition-colors">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Homepage
+                </a>
+            }
+            else
+            {
+                <!-- Success Message -->
+                <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <div class="flex items-center justify-center space-x-2 text-green-700">
+                        <i class="fas fa-check-circle"></i>
+                        <span class="font-medium">You have successfully logged out of the application.</span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="space-y-3">
+                    <a href="~/"
+                       class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-4 rounded-lg font-semibold text-lg hover:from-purple-700 hover:to-pink-700 transform hover:-translate-y-0.5 transition-all duration-300 shadow-lg hover:shadow-xl inline-flex items-center justify-center gap-2">
+                        <i class="fas fa-home"></i>
+                        Go to Homepage
+                    </a>
+
+                    <a asp-page="./Login"
+                       class="w-full border-2 border-gray-300 text-gray-700 py-3 px-4 rounded-lg font-semibold text-lg hover:border-purple-500 hover:text-purple-600 hover:bg-purple-50 transform hover:-translate-y-0.5 transition-all duration-300 inline-flex items-center justify-center gap-2">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Sign In Again
+                    </a>
+                </div>
+            }
+
+            <!-- Security Note -->
+            <div class="mt-8 pt-6 border-t border-gray-200">
+                <div class="flex items-center justify-center gap-2 text-xs text-gray-500">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Your session has been securely handled</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Smooth animations */
+        .fa-sign-out-alt {
+            animation: slideOut 2s ease-in-out infinite;
         }
-        else
-        {
-            <p>You have successfully logged out of the application.</p>
+
+        .fa-check-circle {
+            animation: bounceGentle 2s ease-in-out infinite;
         }
-    }
-</header>
+
+        @@keyframes slideOut {
+            0%, 100%
+
+        {
+            transform: translateX(0) rotate(0deg);
+        }
+
+        25% {
+            transform: translateX(-2px) rotate(-5deg);
+        }
+
+        75% {
+            transform: translateX(2px) rotate(5deg);
+        }
+
+        }
+
+        @@keyframes bounceGentle {
+            0%, 100%
+
+        {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.05);
+        }
+
+        }
+
+        /* Form transitions */
+        button, a {
+            transition: all 0.3s ease;
+        }
+    </style>
+</body>
+</html>

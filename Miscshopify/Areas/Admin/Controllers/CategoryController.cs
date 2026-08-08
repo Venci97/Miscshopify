@@ -26,20 +26,26 @@ namespace Miscshopify.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult Add()
+        public async Task<IActionResult> Add()
         {
             var model = new CategoryViewModel();
             ViewData["Title"] = "Add new category";
+
+            model.AvailableParentCategories = (await categoryService.GetAllCategoriesForDropdown()).ToList();
+
             return View(model);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Add(CategoryViewModel model)
         {
             ViewData["Title"] = "Add new category";
 
+            model.AvailableParentCategories = (await categoryService.GetAllCategoriesForDropdown()).ToList();
+
             if (!ModelState.IsValid)
-            {    
+            {
                 return View(model);
             }
 
@@ -77,15 +83,55 @@ namespace Miscshopify.Areas.Admin.Controllers
         {
             var model = await categoryService.Edit(id);
 
+            model.AvailableParentCategories = (await categoryService.GetAllCategoriesForDropdown()).ToList();
+
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(CategoryViewModel model)
         {
+            model.AvailableParentCategories = (await categoryService.GetAllCategoriesForDropdown()).ToList();
+
             if (!ModelState.IsValid)
             {
                 return View(model);
+            }
+
+            string uploadPath = "uploads/categoryImg/";
+
+            var files = HttpContext.Request.Form.Files;
+
+            foreach (var file in files)
+            {
+                if (file != null && file.Length > 0)
+                {
+                    var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
+                    var uploadPathWithfileName = Path.Combine(uploadPath, fileName);
+
+                    var uploadAbsolutePath = Path.Combine(hostingEnvironment.WebRootPath, uploadPathWithfileName);
+
+                    var directory = Path.GetDirectoryName(uploadAbsolutePath);
+                    if (!Directory.Exists(directory))
+                    {
+                        Directory.CreateDirectory(directory);
+                    }
+
+                    using (var fileStream = new FileStream(uploadAbsolutePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                        model.ImagePath = uploadPathWithfileName;
+                    }
+                }
+            }
+
+            if (string.IsNullOrEmpty(model.ImagePath))
+            {
+                var existingCategory = await categoryService.GetCategoryById(model.Id);
+                if (existingCategory != null)
+                {
+                    model.ImagePath = existingCategory.ImagePath;
+                }
             }
 
             if (await categoryService.UpdateCategoryDetails(model))
@@ -98,6 +144,17 @@ namespace Miscshopify.Areas.Admin.Controllers
             }
 
             return View(model);
+        }
+
+        public async Task<IActionResult> Subcategories(Guid id)
+        {
+            var subcategories = await categoryService.GetSubcategories(id);
+            var parentCategory = await categoryService.GetCategoryById(id);
+
+            ViewBag.ParentCategoryName = parentCategory?.Name;
+            ViewBag.ParentCategoryId = id;
+
+            return View(subcategories);
         }
 
         public IActionResult RemoveCategoryWithProducts(Guid Id)

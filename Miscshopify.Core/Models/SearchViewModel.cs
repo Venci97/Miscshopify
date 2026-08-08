@@ -1,10 +1,10 @@
-﻿using Miscshopify.Infrastructure.Data.Models;
+﻿using System.Collections.Generic;
 
 namespace Miscshopify.Core.Models
 {
     public class SearchViewModel
     {
-        public List<Category> Categories { get; set; }
-        public List<Product> Products { get; set; }
+        public List<CategoryViewModel> Categories { get; set; }
+        public List<ProductViewModel> Products { get; set; }
     }
 }

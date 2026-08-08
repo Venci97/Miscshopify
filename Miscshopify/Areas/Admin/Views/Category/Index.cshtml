@@ -1,62 +1,350 @@
 ﻿@using Miscshopify.Core.Models;
 @model IEnumerable<CategoryViewModel>
 @{
+    ViewData["Title"] = "Categories Management";
+    var totalCategories = Model.Count();
+    var mainCategories = Model.Count(c => c.ParentId == null);
+    var subcategories = Model.Count(c => c.ParentId != null);
 }
-<head>
-	<link rel="stylesheet" href="~/plugins/fontawesome-free-6.2.0-web/css/all.min.css">
-</head>
-<div class="row">
-	<div class="col-12">
-		<section class="ftco-section">
-			<div class="container">
-				<div class="row justify-content-center">
-					<div class="col-md-6 text-center mb-5">
-						<h2 class="heading-section">Category List</h2>
-						<a href="/Admin/Category/Add" class="btn btn-sm btn-primary mr-25">Add Category</a>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-12">
-						<div class="table-wrap">
-							<table class="table table-responsive-xl">
-								<thead>
-									<tr>
-										<th>&nbsp;</th>
-										<th>Name</th>
-										<th>Description</th>
-										<th>Products</th>
-										<th>&nbsp;</th>
-									</tr>
-								</thead>
-								<tbody>
-									@foreach (var category in Model)
-									{
-										<tr>
-											<td>
-												<img src="~/@category.ImagePath" style="border-radius: 50%;" width="50" height="50">
-											</td>
-											<td>@category.Name</td>
-											<td>@category.Description</td>
-											<td>
-												<a asp-area="Admin" asp-action="Edit" asp-controller="Category" asp-route-id="@category.Id" class="btn btn-block btn-outline-info btn-xs">
-													Edit
-													<i class="fa-solid fa-pen-to-square"></i>
-												</a>
-											</td>
-											<td>
-												<a asp-area="Admin" asp-action="Add" asp-controller="Product" asp-route-id="@category.Id" class="btn btn-block btn-outline-info btn-xs">
-													Add Product
-													<i class="fa-solid fa-plus"></i>
-												</a>
-											</td>
-										</tr>
-									}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-	</div>
+
+<link href="~/css/admin/category-index.css" rel="stylesheet" />
+
+<div class="category-index-section">
+    <div class="category-header">
+        <h1 class="category-title">
+            <i class="fas fa-tags"></i>
+            Category Management
+        </h1>
+        <div class="category-actions">
+            <a href="/Admin/Category/Add" class="btn btn-primary">
+                <i class="fas fa-plus-circle"></i>
+                Add New Category
+            </a>
+        </div>
+    </div>
+
+    <!-- Category Statistics -->
+    <div class="category-stats">
+        <div class="stat-card highlight">
+            <div class="stat-number">@totalCategories</div>
+            <div class="stat-label">Total Categories</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">@mainCategories</div>
+            <div class="stat-label">Main Categories</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">@subcategories</div>
+            <div class="stat-label">Subcategories</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">@Model.Count(c => c.ProductsCount > 0)</div>
+            <div class="stat-label">With Products</div>
+        </div>
+    </div>
+
+    <!-- Search and Filter Section -->
+    <div class="search-filter-section">
+        <div class="search-filter-grid">
+            <div class="search-group">
+                <label class="search-label">Search Categories</label>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search by name or description...">
+            </div>
+            <div class="search-group">
+                <label class="search-label">Category Type</label>
+                <select class="filter-select" id="typeFilter">
+                    <option value="">All Types</option>
+                    <option value="main">Main Categories</option>
+                    <option value="sub">Subcategories</option>
+                </select>
+            </div>
+            <div class="search-group">
+                <label class="search-label">Sort By</label>
+                <select class="filter-select" id="sortFilter">
+                    <option value="name">Name A-Z</option>
+                    <option value="name-desc">Name Z-A</option>
+                    <option value="products">Most Products</option>
+                    <option value="products-desc">Fewest Products</option>
+                </select>
+            </div>
+            <div class="search-group">
+                <button class="btn btn-primary" onclick="applyFilters()">
+                    <i class="fas fa-filter"></i>
+                    Apply Filters
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <button class="quick-action-btn active" data-filter="all">All Categories</button>
+        <button class="quick-action-btn" data-filter="main">Main Categories</button>
+        <button class="quick-action-btn" data-filter="sub">Subcategories</button>
+        <button class="quick-action-btn" data-filter="with-products">With Products</button>
+    </div>
+
+    <div class="category-card">
+        <div class="card-content">
+            <div class="table-container">
+                @if (Model.Any())
+                {
+                    <table class="category-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 80px;">Image</th> <!-- Нова колона за снимка -->
+                                <th>Category Name</th>
+                                <th>Description</th>
+                                <th style="width: 120px;">Products</th>
+                                <th style="width: 120px;">Type</th>
+                                <th style="width: 200px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var category in Model)
+                            {
+                                <tr>
+                                    <!-- Нова клетка за снимка -->
+                                    <td class="category-image-cell">
+                                        <div class="category-image-container">
+                                            @if (!string.IsNullOrEmpty(category.ImagePath))
+                                            {
+                                                <img src="~/@category.ImagePath"
+                                                     class="category-image"
+                                                     alt="@category.Name"
+                                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                                <div class="category-image-placeholder" style="display: none;">
+                                                    <i class="fas fa-folder"></i>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="category-image-placeholder">
+                                                    <i class="fas fa-folder"></i>
+                                                </div>
+                                            }
+                                        </div>
+                                    </td>
+                                    <!-- Останалите клетки остават същите -->
+                                    <td>
+                                        <div class="category-name">@category.Name</div>
+                                    </td>
+                                    <td>
+                                        <div class="category-description" title="@category.Description">
+                                            @category.Description
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="stat-number">@category.ProductsCount</div>
+                                    </td>
+                                    <td>
+                                        @if (category.ParentId == null)
+                                        {
+                                            <span class="status-badge status-primary">
+                                                <i class="fas fa-folder"></i>
+                                                Main
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status-badge status-secondary">
+                                                <i class="fas fa-folder-open"></i>
+                                                Subcategory
+                                            </span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <a href="@Url.Action("Edit", new { id = category.Id })" class="btn-warning">
+                                                <i class="fas fa-edit"></i>
+                                                Edit
+                                            </a>
+
+                                            @if (category.ParentId == null)
+                                            {
+                                                <a href="@Url.Action("Subcategories", new { id = category.Id })" class="btn-info">
+                                                    <i class="fas fa-folder"></i>
+                                                    Subcategories
+                                                </a>
+                                            }
+
+                                            <a href="@Url.Action("Add", "Product", new { Id = category.Id })" class="btn-success">
+                                                <i class="fas fa-plus"></i>
+                                                Add Product
+                                            </a>
+                                            <a href="@Url.Action("RemoveCategoryWithProducts", new { Id = category.Id })" class="btn-danger"
+                                               onclick="return confirm('Are you sure you want to delete this category and all its products?')">
+                                                <i class="fas fa-trash"></i>
+                                                Delete
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="empty-state">
+                        <i class="fas fa-tags"></i>
+                        <h3>No Categories Found</h3>
+                        <p>Get started by creating your first category.</p>
+                        <a href="/Admin/Category/Add" class="btn btn-primary mt-2">
+                            <i class="fas fa-plus-circle"></i>
+                            Create First Category
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Search and filter functionality
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const typeFilter = document.getElementById('typeFilter').value;
+            const sortFilter = document.getElementById('sortFilter').value;
+
+            const rows = document.querySelectorAll('.category-table tbody tr');
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                const categoryName = row.querySelector('.category-name').textContent.toLowerCase();
+                const categoryDescription = row.querySelector('.category-description').textContent.toLowerCase();
+                const categoryType = row.querySelector('.status-badge').textContent.toLowerCase().trim();
+                const productsCount = parseInt(row.querySelector('.stat-number').textContent);
+
+                let shouldShow = true;
+
+                // Search filter
+                if (searchTerm && !categoryName.includes(searchTerm) && !categoryDescription.includes(searchTerm)) {
+                    shouldShow = false;
+                }
+
+                // Type filter
+                if (typeFilter && shouldShow) {
+                    if (typeFilter === 'main' && categoryType !== 'main') shouldShow = false;
+                    else if (typeFilter === 'sub' && categoryType !== 'subcategory') shouldShow = false;
+                }
+
+                row.style.display = shouldShow ? '' : 'none';
+                if (shouldShow) visibleCount++;
+            });
+
+            // Show message if no results
+            const emptyState = document.querySelector('.empty-state');
+            if (emptyState) {
+                emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+            }
+
+            console.log('Filters applied. Visible categories:', visibleCount);
+        }
+
+        // Quick actions
+        document.querySelectorAll('.quick-action-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.quick-action-btn').forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+
+                const filter = this.getAttribute('data-filter');
+                console.log('Quick filter applied:', filter);
+                // Implement quick filter logic here
+            });
+        });
+
+        // Real-time search
+        document.getElementById('searchInput').addEventListener('input', function() {
+            clearTimeout(this.searchTimeout);
+            this.searchTimeout = setTimeout(applyFilters, 300);
+        });
+
+        // Auto-apply filters when select changes
+        document.getElementById('typeFilter').addEventListener('change', applyFilters);
+        document.getElementById('sortFilter').addEventListener('change', applyFilters);
+
+        // Add interactive features
+        document.addEventListener('DOMContentLoaded', function() {
+            const rows = document.querySelectorAll('.category-table tbody tr');
+
+            rows.forEach((row, index) => {
+                // Add staggered animation
+                row.style.animationDelay = `${(index + 1) * 0.1}s`;
+
+                // Add click effect for the entire row
+                row.addEventListener('click', function(e) {
+                    if (!e.target.closest('a') && !e.target.closest('button')) {
+                        const editLink = this.querySelector('a.btn-warning');
+                        if (editLink) {
+                            editLink.click();
+                        }
+                    }
+                });
+            });
+
+            // Initialize tooltips for truncated descriptions
+            document.querySelectorAll('.category-description').forEach(desc => {
+                const fullText = desc.getAttribute('title');
+                if (fullText && fullText.length > 50) {
+                    desc.addEventListener('mouseenter', function() {
+                        this.setAttribute('data-original-title', fullText);
+                    });
+                }
+            });
+
+            // Add confirmation for delete buttons
+            const deleteButtons = document.querySelectorAll('.btn-danger');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    if (!confirm('Are you sure you want to delete this category and all its products?')) {
+                        e.preventDefault();
+                    }
+                });
+            });
+        });
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + F to focus search
+            if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+
+            // Ctrl/Cmd + N to add new category
+            if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+                e.preventDefault();
+                window.location.href = '/Admin/Category/Add';
+            }
+        });
+                // Enhanced image error handling
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle broken images
+            document.querySelectorAll('.category-image').forEach(img => {
+                img.addEventListener('error', function() {
+                    this.style.display = 'none';
+                    const placeholder = this.nextElementSibling;
+                    if (placeholder) {
+                        placeholder.style.display = 'flex';
+                    }
+                });
+
+                // Check if image source is empty
+                if (!img.src || img.src === window.location.origin + '/') {
+                    img.style.display = 'none';
+                    const placeholder = img.nextElementSibling;
+                    if (placeholder) {
+                        placeholder.style.display = 'flex';
+                    }
+                }
+            });
+
+            // ... останалия JavaScript код остава същия ...
+        });
+    </script>
+}

@@ -6,7 +6,7 @@ namespace Miscshopify.Infrastructure.Data.Models
     public class Product
     {
         [Key]
-        public Guid Id { get; set; } = new Guid();
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         public string? ImagePath { get; set; }
 
@@ -27,5 +27,7 @@ namespace Miscshopify.Infrastructure.Data.Models
 
         [ForeignKey(nameof(CategoryId))]
         public Category Category { get; set; }
+
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
     }
 }

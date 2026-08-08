@@ -1,139 +1,250 @@
 ﻿@using Miscshopify.Core.Models
 @model IEnumerable<CategoryViewModel>
-
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Miscshopify - Your Modern Shopping Destination";
 }
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
-
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="~/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="~/assets/css/font-awesome.css">
-    <link rel="stylesheet" href="~/assets/css/templatemo-hexashop.css">
-    <link rel="stylesheet" href="~/assets/css/owl-carousel.css">
-    <link rel="stylesheet" href="~/assets/css/lightbox.css">
-    <link rel="stylesheet" href="~/assets/css/animate.css">
-</head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
 
-<body>
-    <!-- Carousel Start -->
-    <div class="container-fluid mb-3">
-        <div class="row px-xl-5">
-            <div class="col-lg-8">
-                <div id="header-carousel" class="carousel slide carousel-fade mb-30 mb-lg-0" data-ride="carousel">
-                    <ol class="carousel-indicators">
-                        <li data-target="#header-carousel" data-slide-to="0" class="active"></li>
-                        <li data-target="#header-carousel" data-slide-to="1"></li>
-                    </ol>
-                    <div class="carousel-inner">
-                        <div class="carousel-item position-relative active" style="height: 430px;">
-                            <img class="position-absolute w-100 h-100" src="~/img/best-laptops-for-gaming.jpg" style="object-fit: cover;">
-                            <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
-                                <div class="p-3" style="max-width: 700px;">
-                                    <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">Miscshopify</h1>
-                                    <p class="mx-md-5 text-white px-5 animate__animated animate__bounceIn">All you need on one click</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="carousel-item position-relative" style="height: 430px;">
-                            <img class="position-absolute w-100 h-100" src="~/img/ecommerce-strategy--dropshipping--online-business.jpg" style="object-fit: cover;">
-                            <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
-                                <div class="p-3" style="max-width: 700px;">
-                                    <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">About us</h1>
-                                    <p class="mx-md-5 text-white px-5 animate__animated animate__bounceIn">Learn more about our store.</p>
-                                    <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="/Category/Index">Purchase Now!</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="product-offer mb-30" style="position: relative; height: 200px;; margin-bottom: 30px;">
-                    <img class="img-fluid" src="img/online-shopping-concept-about-electronics-and-gadgets.jpg" style="height: 200px; width: 444px" alt="">
-                    <div class="offer-text" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(0, 0, 0, 0.5);">
-                        <h6 class="text-white text-uppercase">We have all you want.</h6>
-                        <h3 class="text-white mb-3">From electronics...</h3>
-                        @* <a href="/Category/Index" class="btn btn-primary">Shop Now</a> *@
-                    </div>
-                </div>
-                <div class="product-offer mb-30" style="position: relative; height: 200px;">
-                    <img class="img-fluid" src="img/Image-clothes2.png" style="height: 200px; width: 444px" alt="">
-                    <div class="offer-text" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(0, 0, 0, 0.5);">
-                        <h6 class="text-white text-uppercase">... to fashion...</h6>
-                        <h3 class="text-white mb-3">...and many more products.</h3>
-                        <a href="/Category/Index" class="btn btn-primary">Shop Now</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Carousel End -->
-    
-    <!-- Categories Start-->
-    <div class="container-fluid pt-5">
-        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Categories</span></h2>
-        <div class="row px-xl-5 pb-3">
-            @foreach (var category in Model)
-            {
-                <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-                    <a class="text-decoration-none" href="@Url.Action("GetProductsByCategory", "Product", new { id = category.Id })">
-                        <div class="cat-item d-flex align-items-center mb-4">
-                            <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                                <img class="img-fluid" src="~/@category.ImagePath" alt="@category.Name">
-                            </div>
-                            <div class="flex-fill pl-3">
-                                <h6>@category.Name</h6>
-                                <small class="text-body">100 Products</small> <!-- Тук може да добавите броя на продуктите за съответната категория -->
-                            </div>
-                        </div>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="~/css/home.css" rel="stylesheet" />
+</head>
+<body class="home-page">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-overlay">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Welcome to <span class="brand-gradient">Miscshopify</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Discover everything you need in one place. From cutting-edge electronics to trendy fashion and beyond.
+                </p>
+                <div class="hero-actions">
+                    <a href="/Category/Index" class="btn-primary">
+                        <i class="fas fa-shopping-bag mr-2"></i>
+                        Start Shopping
+                    </a>
+                    <a href="#categories" class="btn-secondary">
+                        <i class="fas fa-grid mr-2"></i>
+                        Browse Categories
                     </a>
                 </div>
-            }
+            </div>
         </div>
-    </div>
-    <!-- Categories End-->
+    </section>
 
-    <script src="~/assets/js/jquery-2.1.0.min.js"></script>
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shipping-fast"></i>
+                    </div>
+                    <h3 class="feature-title">Free Shipping</h3>
+                    <p class="feature-description">Free delivery on orders over $50</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Secure Payment</h3>
+                    <p class="feature-description">100% secure payment processing</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-undo-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Easy Returns</h3>
+                    <p class="feature-description">30-day return policy</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3 class="feature-title">24/7 Support</h3>
+                    <p class="feature-description">Round-the-clock customer service</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <!-- Bootstrap -->
-    <script src="~/assets/js/popper.js"></script>
-    <script src="~/assets/js/bootstrap.min.js"></script>
+    <!-- Categories Section -->
+    <section id="categories" class="categories-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Shop by Category</h2>
+                <p class="section-subtitle">Explore our wide range of product categories</p>
+            </div>
 
-    <!-- Plugins -->
-    <script src="~/assets/js/owl-carousel.js"></script>
-    <script src="~/assets/js/accordions.js"></script>
-    <script src="~/assets/js/datepicker.js"></script>
-    <script src="~/assets/js/scrollreveal.min.js"></script>
-    <script src="~/assets/js/waypoints.min.js"></script>
-    <script src="~/assets/js/jquery.counterup.min.js"></script>
-    <script src="~/assets/js/imgfix.min.js"></script>
-    <script src="~/assets/js/slick.js"></script>
-    <script src="~/assets/js/lightbox.js"></script>
-    <script src="~/assets/js/isotope.js"></script>
-    <script src="~/assets/js/custom.js"></script>
+            <!-- Categories Container -->
+            <div class="categories-container">
+                <!-- Visible Categories (First Row) -->
+                <div class="categories-visible">
+                    <div class="categories-grid">
+                        @{
+                            var visibleCategories = Model.Take(4);
+                            foreach (var category in visibleCategories)
+                            {
+                                <a href="@Url.Action("GetProductsByCategory", "Product", new { id = category.Id })" class="category-card">
+                                    <div class="category-image-container">
+                                        <img src="~/@category.ImagePath"
+                                             alt="@category.Name"
+                                             class="category-image"
+                                             onerror="this.onerror=null; this.src='/images/category-placeholder.jpg'">
+                                        <div class="category-overlay">
+                                            <div class="overlay-content">
+                                                <i class="fas fa-arrow-right"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="category-content">
+                                        <h3 class="category-name">@category.Name</h3>
+                                        <p class="category-count">@(category.ProductsCount) Products</p>
+                                    </div>
+                                </a>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <!-- Hidden Categories (Expandable) -->
+                @if (Model.Count() > 4)
+                {
+                    <div class="categories-hidden" id="hiddenCategories">
+                        <div class="categories-grid">
+                            @{
+                                var hiddenCategories = Model.Skip(4);
+                                foreach (var category in hiddenCategories)
+                                {
+                                    <a href="@Url.Action("GetProductsByCategory", "Product", new { id = category.Id })" class="category-card">
+                                        <div class="category-image-container">
+                                            <img src="~/@category.ImagePath"
+                                                 alt="@category.Name"
+                                                 class="category-image"
+                                                 onerror="this.onerror=null; this.src='/images/category-placeholder.jpg'">
+                                            <div class="category-overlay">
+                                                <div class="overlay-content">
+                                                    <i class="fas fa-arrow-right"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="category-content">
+                                            <h3 class="category-name">@category.Name</h3>
+                                            <p class="category-count">@(category.ProductsCount) Products</p>
+                                        </div>
+                                    </a>
+                                }
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Expand Button -->
+                    <div class="expand-categories-container">
+                        <button id="expandCategories" class="expand-categories-btn">
+                            <span>Show All Categories</span>
+                            <i class="fas fa-chevron-down expand-icon"></i>
+                        </button>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to Start Shopping?</h2>
+                <p class="cta-description">
+                    Join thousands of satisfied customers who trust Miscshopify for their shopping needs.
+                </p>
+                <a href="/Category/Index" class="btn-primary btn-large">
+                    <i class="fas fa-shopping-cart mr-2"></i>
+                    Explore All Products
+                </a>
+            </div>
+        </div>
+    </section>
 
     <script>
-        $(function () {
-            var selectedClass = "";
-            $("p").click(function () {
-                selectedClass = $(this).attr("data-rel");
-                $("#portfolio").fadeTo(50, 0.1);
-                $("#portfolio div").not("." + selectedClass).fadeOut();
-                setTimeout(function () {
-                    $("." + selectedClass).fadeIn();
-                    $("#portfolio").fadeTo(50, 1);
-                }, 500);
+        document.addEventListener('DOMContentLoaded', function() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-in');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all category cards and feature cards
+            document.querySelectorAll('.category-card, .feature-card').forEach(card => {
+                observer.observe(card);
+            });
+
+            // Expand categories functionality
+            const expandButton = document.getElementById('expandCategories');
+            const hiddenCategories = document.getElementById('hiddenCategories');
+            const expandIcon = document.querySelector('.expand-icon');
+
+            if (expandButton && hiddenCategories) {
+                expandButton.addEventListener('click', function() {
+                    if (hiddenCategories.classList.contains('expanded')) {
+                        // Hide categories
+                        hiddenCategories.classList.remove('expanded');
+                        expandButton.querySelector('span').textContent = 'Show All Categories';
+                        expandIcon.classList.remove('fa-chevron-up');
+                        expandIcon.classList.add('fa-chevron-down');
+
+                        // Smooth scroll back to categories section
+                        document.getElementById('categories').scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    } else {
+                        // Show hidden categories
+                        hiddenCategories.classList.add('expanded');
+                        expandButton.querySelector('span').textContent = 'Show Less';
+                        expandIcon.classList.remove('fa-chevron-down');
+                        expandIcon.classList.add('fa-chevron-up');
+
+                        // Animate in hidden categories
+                        const hiddenCards = hiddenCategories.querySelectorAll('.category-card');
+                        hiddenCards.forEach((card, index) => {
+                            card.style.animationDelay = `${index * 0.1}s`;
+                            observer.observe(card);
+                        });
+                    }
+                });
+            }
+
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
             });
         });
     </script>
-    <script>
-        $(document).ready(function () {
-            $('#header-carousel').carousel();
-        });
-    </script>
 </body>
+</html>

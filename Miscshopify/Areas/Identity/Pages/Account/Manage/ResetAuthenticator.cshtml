@@ -5,20 +5,331 @@
     ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
 }
 
-<partial name="_StatusMessage" for="StatusMessage" />
-<h3>@ViewData["Title"]</h3>
-<div class="alert alert-warning" role="alert">
-    <p>
-        <span class="glyphicon glyphicon-warning-sign"></span>
-        <strong>If you reset your authenticator key your authenticator app will not work until you reconfigure it.</strong>
-    </p>
-    <p>
-        This process disables 2FA until you verify your authenticator app.
-        If you do not complete your authenticator app configuration you may lose access to your account.
-    </p>
+<div class="reset-authenticator">
+    <h3 class="section-title">@ViewData["Title"]</h3>
+    <partial name="_StatusMessage" for="StatusMessage" />
+
+    <div class="manage-form">
+        <!-- Critical Warning Message -->
+        <div class="critical-warning">
+            <div class="warning-header">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h4 class="warning-title">Reset Authenticator Key</h4>
+            </div>
+            <div class="warning-content">
+                <p class="warning-text">
+                    <strong>If you reset your authenticator key, your authenticator app will not work until you reconfigure it.</strong>
+                </p>
+                <div class="warning-details">
+                    <p>This process will:</p>
+                    <ul class="warning-list">
+                        <li><i class="fas fa-ban"></i> Disable two-factor authentication until you verify your authenticator app</li>
+                        <li><i class="fas fa-exclamation-circle"></i> Invalidate your current authenticator setup</li>
+                        <li><i class="fas fa-sync-alt"></i> Require you to set up your authenticator app again</li>
+                    </ul>
+                    <p class="critical-note">
+                        <i class="fas fa-skull-crossbones"></i>
+                        <strong>Warning:</strong> If you do not complete your authenticator app configuration after resetting,
+                        you may lose access to your account.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reset Form -->
+        <form id="reset-authenticator-form" method="post" class="reset-form">
+            <div class="form-actions">
+                <button id="reset-authenticator-button" class="submit-btn danger" type="submit">
+                    <i class="fas fa-key"></i>
+                    Reset Authenticator Key
+                </button>
+                <a asp-page="./TwoFactorAuthentication" class="cancel-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to 2FA Settings
+                </a>
+            </div>
+        </form>
+
+        <!-- Recovery Advice -->
+        <div class="recovery-advice">
+            <div class="advice-icon">
+                <i class="fas fa-life-ring"></i>
+            </div>
+            <div class="advice-content">
+                <h5>Before You Reset</h5>
+                <p>
+                    Make sure you have your recovery codes saved and accessible. If you get locked out,
+                    recovery codes are your only way to regain access to your account.
+                </p>
+                <a asp-page="./GenerateRecoveryCodes" class="advice-link">
+                    <i class="fas fa-shield-alt"></i>
+                    Generate New Recovery Codes
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <form id="reset-authenticator-form" method="post">
-        <button id="reset-authenticator-button" class="btn btn-danger" type="submit">Reset authenticator key</button>
-    </form>
-</div>
+
+<style>
+    .reset-authenticator {
+        max-width: 700px;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 1.5rem;
+    }
+
+    .manage-form {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .critical-warning {
+        background: #fef2f2;
+        border: 2px solid #fecaca;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+
+    .warning-header {
+        background: #dc2626;
+        color: white;
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+        .warning-header i {
+            font-size: 1.5rem;
+        }
+
+    .warning-title {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .warning-content {
+        padding: 1.5rem;
+    }
+
+    .warning-text {
+        color: #dc2626;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+    }
+
+    .warning-details {
+        color: #7f1d1d;
+    }
+
+        .warning-details p {
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+    .warning-list {
+        list-style: none;
+        padding: 0;
+        margin: 1rem 0 1.5rem 0;
+    }
+
+        .warning-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: #7f1d1d;
+        }
+
+        .warning-list i {
+            color: #dc2626;
+            margin-top: 0.125rem;
+            flex-shrink: 0;
+        }
+
+    .critical-note {
+        background: #fecaca;
+        padding: 1rem;
+        border-radius: 6px;
+        border-left: 4px solid #dc2626;
+        margin: 1.5rem 0 0 0;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+        .critical-note i {
+            color: #7f1d1d;
+            font-size: 1.25rem;
+            margin-top: 0.125rem;
+        }
+
+    .reset-form {
+        margin: 2rem 0;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .submit-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: none;
+        font-size: 1rem;
+    }
+
+        .submit-btn.danger {
+            background: #dc2626;
+            color: white;
+        }
+
+            .submit-btn.danger:hover {
+                background: #b91c1c;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+            }
+
+    .cancel-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        text-decoration: none;
+        color: #6b7280;
+        background: #f9fafb;
+        border: 1px solid #d1d5db;
+        transition: all 0.2s ease;
+    }
+
+        .cancel-btn:hover {
+            background: #f3f4f6;
+            color: #374151;
+            text-decoration: none;
+        }
+
+    .recovery-advice {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        background: #f0f9ff;
+        border: 1px solid #bae6fd;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .advice-icon {
+        flex-shrink: 0;
+        color: #0369a1;
+        font-size: 1.5rem;
+        margin-top: 0.125rem;
+    }
+
+    .advice-content h5 {
+        color: #0369a1;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .advice-content p {
+        color: #0369a1;
+        margin-bottom: 1rem;
+        line-height: 1.5;
+    }
+
+    .advice-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #0369a1;
+        text-decoration: none;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.7);
+        border-radius: 6px;
+        transition: all 0.2s;
+    }
+
+        .advice-link:hover {
+            background: white;
+            text-decoration: none;
+            color: #0369a1;
+        }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .manage-form {
+            padding: 1.5rem;
+        }
+
+        .warning-header {
+            flex-direction: column;
+            text-align: center;
+            gap: 0.5rem;
+            padding: 1rem;
+        }
+
+        .form-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .submit-btn,
+        .cancel-btn {
+            justify-content: center;
+            text-align: center;
+        }
+
+        .recovery-advice {
+            flex-direction: column;
+            text-align: center;
+            gap: 0.75rem;
+        }
+
+        .critical-note {
+            flex-direction: column;
+            gap: 0.5rem;
+            text-align: center;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .manage-form {
+            padding: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+        }
+
+        .warning-title {
+            font-size: 1.1rem;
+        }
+
+        .warning-content {
+            padding: 1rem;
+        }
+    }
+</style>

@@ -5,21 +5,207 @@
     ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
 }
 
-<partial name="_StatusMessage" for="StatusMessage" />
-<h3>@ViewData["Title"]</h3>
+<div class="disable-2fa">
+    <h3 class="section-title">@ViewData["Title"]</h3>
+    <partial name="_StatusMessage" for="StatusMessage" />
 
-<div class="alert alert-warning" role="alert">
-    <p>
-        <strong>This action only disables 2FA.</strong>
-    </p>
-    <p>
-        Disabling 2FA does not change the keys used in authenticator apps. If you wish to change the key
-        used in an authenticator app you should <a asp-page="./ResetAuthenticator">reset your authenticator keys.</a>
-    </p>
+    <div class="manage-form">
+        <!-- Warning Message -->
+        <div class="warning-message">
+            <div class="warning-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="warning-content">
+                <h4 class="warning-title">This action only disables 2FA</h4>
+                <p class="warning-description">
+                    Disabling 2FA does not change the keys used in authenticator apps. If you wish to change the key
+                    used in an authenticator app you should <a asp-page="./ResetAuthenticator">reset your authenticator keys</a>.
+                </p>
+            </div>
+        </div>
+
+        <!-- Disable Form -->
+        <form method="post" class="disable-form">
+            <div class="form-actions">
+                <button class="submit-btn danger" type="submit">
+                    <i class="fas fa-shield-alt"></i>
+                    Disable 2FA
+                </button>
+                <a asp-page="./TwoFactorAuthentication" class="cancel-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to 2FA Settings
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
 
-<div>
-    <form method="post">
-        <button class="btn btn-danger" type="submit">Disable 2FA</button>
-    </form>
-</div>
+<style>
+    .disable-2fa {
+        max-width: 600px;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 1.5rem;
+    }
+
+    .manage-form {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .warning-message {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        background: #fffbeb;
+        border: 1px solid #fcd34d;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .warning-icon {
+        flex-shrink: 0;
+        width: 2.5rem;
+        height: 2.5rem;
+        background: #f59e0b;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.25rem;
+    }
+
+    .warning-content {
+        flex: 1;
+    }
+
+    .warning-title {
+        font-weight: 600;
+        color: #92400e;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .warning-description {
+        color: #92400e;
+        line-height: 1.5;
+        margin: 0;
+    }
+
+        .warning-description a {
+            color: #92400e;
+            text-decoration: underline;
+            font-weight: 500;
+        }
+
+            .warning-description a:hover {
+                color: #78350f;
+            }
+
+    .disable-form {
+        margin-top: 1.5rem;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .submit-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: none;
+        font-size: 1rem;
+    }
+
+        .submit-btn.danger {
+            background: #dc2626;
+            color: white;
+        }
+
+            .submit-btn.danger:hover {
+                background: #b91c1c;
+                transform: translateY(-1px);
+            }
+
+    .cancel-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        text-decoration: none;
+        color: #6b7280;
+        background: #f9fafb;
+        border: 1px solid #d1d5db;
+        transition: all 0.2s ease;
+    }
+
+        .cancel-btn:hover {
+            background: #f3f4f6;
+            color: #374151;
+            text-decoration: none;
+        }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .manage-form {
+            padding: 1.5rem;
+        }
+
+        .warning-message {
+            flex-direction: column;
+            text-align: center;
+            gap: 0.75rem;
+        }
+
+        .form-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .submit-btn,
+        .cancel-btn {
+            justify-content: center;
+            text-align: center;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .manage-form {
+            padding: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+        }
+
+        .warning-message {
+            padding: 1rem;
+        }
+
+        .warning-icon {
+            width: 2rem;
+            height: 2rem;
+            font-size: 1rem;
+        }
+    }
+</style>

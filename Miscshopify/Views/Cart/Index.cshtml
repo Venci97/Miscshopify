@@ -4,132 +4,208 @@
     var totalPrice = ViewBag.TotalPrice;
     var totalQuantity = ViewBag.TotalQuantity;
 }
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <link rel="stylesheet" href="~/plugins/fontawesome-free-6.2.0-web/css/all.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shopping Cart - Modern Store</title>
     
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="~/css/cart.css" rel="stylesheet" />
 </head>
-<div class="container-fluid">
-    <div class="row px-xl-5">
-        <div class="col-lg-8 table-responsive mb-5">
-            <table class="table table-light table-borderless table-hover text-center mb-0">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>&nbsp;</th>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Total</th>
-                        <th>Remove</th>
-                    </tr>
-                </thead>
-                <tbody class="align-middle">
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td class="align-middle">
-                                <img src="~/@item.ImagePath" alt="" style="width: 50px;">
-                            </td>
-                            <td class="align-middle">@item.ProductName</td>
-                            <td class="align-middle">@item.Price BGN</td>
-                            <td class="align-middle">
-                                <div class="input-group quantity mx-auto" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-minus" type="button">
-                                            <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm bg-secondary border-0 text-center" data-id="@item.Id" value="@item.Quantity" readonly>
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-plus" type="button">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="align-middle">@totalPrice</td>
-                            <td class="align-middle">
-                                <a asp-action="RemoveFromCart" asp-controller="Cart" asp-route-id="@item.Id" class="btn btn-sm btn-danger">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-        <div class="col-lg-4">
-            <form class="mb-30" action="">
-                <div class="input-group">
-                    <input type="text" class="form-control border-0 p-4" placeholder="Coupon Code">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary">Apply Coupon</button>
-                    </div>
-                </div>
-            </form>
-            <h5 class="section-title position-relative text-uppercase mb-3">
-                <span class="bg-secondary pr-3">Cart Summary</span>
-            </h5>
-            <div class="bg-light p-30 mb-5">
-                <div class="border-bottom pb-2">
-                    <div class="d-flex justify-content-between mb-3">
-                        <h6>Subtotal</h6>
-                        <h6>@totalPrice BGN</h6>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <h6 class="font-weight-medium">Shipping</h6>
-                        <h6 class="font-weight-medium">0,00 BGN</h6>
-                    </div>
-                </div>
-                <div class="pt-2">
-                    <div class="d-flex justify-content-between mt-2">
-                        <h5>Total</h5>
-                        <h5>@(totalPrice) BGN</h5>
-                    </div>
-                    <a asp-action="Checkout" asp-controller="Cart" class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout</a>
-                </div>
+<body class="cart-page min-h-screen py-8">
+    <div class="container mx-auto px-4">
+        <div class="cart-container p-6">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+                    Shopping Cart
+                </h1>
+                <p class="text-xl text-gray-600">
+                    Review your items and proceed to checkout
+                </p>
             </div>
-            <a href="/Category/Index" class="btn btn-block btn-secondary">Continue Shopping</a>
+
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Cart Items -->
+                <div class="lg:w-2/3">
+                    @if (Model != null && Model.Any())
+                    {
+                        <div class="cart-table">
+                            <table class="w-full">
+                                <thead>
+                                    <tr>
+                                        <th class="text-left">Product</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Total</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr class="cart-item">
+                                            <td class="text-left">
+                                                <div class="flex items-center gap-4">
+                                                    <img src="~/@item.ImagePath" alt="@item.ProductName" 
+                                                         class="cart-item-image"
+                                                         onerror="this.src='https://images.unsplash.com/photo-1560769629-975ec94e6a86?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80'">
+                                                    <div>
+                                                        <div class="font-semibold text-gray-800">@item.ProductName</div>
+                                                        <div class="text-sm text-gray-500">SKU: @item.Id</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="font-semibold price-highlight">@item.Price BGN</td>
+                                            <td>
+                                                <div class="quantity-control">
+                                                    <button class="quantity-btn btn-minus" data-id="@item.Id">
+                                                        <i class="fas fa-minus"></i>
+                                                    </button>
+                                                    <input type="text" class="quantity-input" 
+                                                           data-id="@item.Id" value="@item.Quantity" readonly>
+                                                    <button class="quantity-btn btn-plus" data-id="@item.Id">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="font-bold text-gray-800">@(item.Price * item.Quantity) BGN</td>
+                                            <td>
+                                                <a asp-action="RemoveFromCart" asp-controller="Cart" 
+                                                   asp-route-id="@item.Id" class="remove-btn">
+                                                    <i class="fas fa-trash"></i>
+                                                    Remove
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="empty-cart">
+                            <div class="empty-cart-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">Your cart is empty</h3>
+                            <p class="text-gray-600 mb-6">Start shopping to add items to your cart</p>
+                            <a href="/Category/Index" class="continue-shopping inline-block w-auto px-8">
+                                Start Shopping
+                            </a>
+                        </div>
+                    }
+                </div>
+
+                <!-- Cart Summary -->
+                @if (Model != null && Model.Any())
+                {
+                    <div class="lg:w-1/3">
+                        <div class="cart-summary">
+                            <div class="summary-title">
+                                <h2 class="text-xl font-bold">Cart Summary</h2>
+                            </div>
+                            
+                            <div class="space-y-2 mb-6">
+                                <div class="summary-item">
+                                    <span class="text-gray-600">Items (@totalQuantity)</span>
+                                    <span class="font-semibold">@totalPrice BGN</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="text-gray-600">Shipping</span>
+                                    <span class="font-semibold">0.00 BGN</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="text-gray-600">Tax</span>
+                                    <span class="font-semibold">0.00 BGN</span>
+                                </div>
+                                <div class="summary-item border-t border-gray-200 pt-4">
+                                    <span class="summary-total">Total</span>
+                                    <span class="summary-total price-highlight">@totalPrice BGN</span>
+                                </div>
+                            </div>
+
+                            <a asp-action="Checkout" asp-controller="Cart" class="checkout-btn mb-4">
+                                <i class="fas fa-lock mr-2"></i>
+                                Proceed To Checkout
+                            </a>
+                            
+                            <a href="/Category/Index" class="continue-shopping">
+                                <i class="fas fa-arrow-left mr-2"></i>
+                                Continue Shopping
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
     </div>
-</div>
 
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('.btn-minus').click(function () {
-            var $input = $(this).closest('.input-group').find('input');
-            var value = parseInt($input.val());
-            if (value > 1) {
-                $input.val(value - 1);
-                updateQuantity($input.data('id'), value - 1);
-            }
-        });
-
-        $('.btn-plus').click(function () {
-            var $input = $(this).closest('.input-group').find('input');
-            var value = parseInt($input.val());
-            $input.val(value + 1);
-            updateQuantity($input.data('id'), value + 1);
-        });
-
-        function updateQuantity(id, quantity) {
-            $.ajax({
-                url: '@Url.Action("UpdateQuantity", "Cart")',
-                type: 'POST',
-                data: {
-                    id: id,
-                    quantity: quantity
-                },
-                success: function (response) {
-                    location.reload(); // Reload the page to reflect changes
-                },
-                error: function () {
-                    console.log('Error updating quantity');
-                }
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Quantity minus button
+            document.querySelectorAll('.btn-minus').forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.dataset.id;
+                    const input = this.parentNode.querySelector('input');
+                    let value = parseInt(input.value);
+                    if (value > 1) {
+                        value--;
+                        input.value = value;
+                        updateQuantity(id, value);
+                    }
+                });
             });
-        }
-    });
-</script>
+
+            // Quantity plus button
+            document.querySelectorAll('.btn-plus').forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.dataset.id;
+                    const input = this.parentNode.querySelector('input');
+                    let value = parseInt(input.value);
+                    value++;
+                    input.value = value;
+                    updateQuantity(id, value);
+                });
+            });
+
+            function updateQuantity(id, quantity) {
+                fetch('@Url.Action("UpdateQuantity", "Cart")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        id: id, 
+                        quantity: quantity 
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        console.error('Error updating quantity');
+                        alert('Error updating quantity. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error updating quantity. Please try again.');
+                });
+            }
+
+            // Add loading animation to cart items
+            const cartItems = document.querySelectorAll('.cart-item');
+            cartItems.forEach((item, index) => {
+                item.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+</body>
+</html>

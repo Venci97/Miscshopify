@@ -5,81 +5,246 @@
 @using Miscshopify.Infrastructure.Data.Models.Enums
 @model OrderViewModel
 
-<div class="col-sm-30 col-md-20 col-xl-15 mb-20" style="background: rgba(255, 255, 255, 1);">
-    <div class="item rounded-xl overflow-hidden shadow border">
-        <div class="px-3 pt-6">
-            <table class="table table-responsive-xl">
-                <thead>
-                    <tr>
-                        <th>&nbsp;</th>
-                        <th>Product Name</th>
-                        <th>Quantity</th>
-                        <th>Unit Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.Items)
-                    {
-                        <tr>
-                            <td>
-                                <img src="~/@item.ImagePath" style="border-radius: 50%;" width="50" height="50">
-                            </td>
-                            <td>@item.ProductName</td>
-                            <td>@item.Quantity</td>
-                            <td>@item.Price</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-            <hr>
-            <div class="wrap-input100">
-                <label class="form-label">Customer Name</label>
-                <span class="focus-input100">@Model.CustomerName</span>
-            </div>
-            <div class="wrap-input100">
-                <label class="form-label">Customer Email</label>
-                <span class="focus-input100">@Model.CustomerEmail</span>
-            </div>
-            <div class="wrap-input100">
-                <label class="form-label">Customer City</label>
-                <span class="focus-input100">@Model.CustomerCity</span>
-            </div>
-            <div class="wrap-input100">
-                <label class="form-label">Customer Address</label>
-                <span class="focus-input100">@Model.CustomerAddress</span>
-            </div>
-            <div class="wrap-input100">
-                <label class="form-label">Customer PostCode</label>
-                <span class="focus-input100">@Model.CustomerPostCode</span>
-            </div>
-            <div class="wrap-input100">
-                <label class="form-label">Customer Phone Number</label>
-                <span class="focus-input100">@Model.CustomerPhoneNumber</span>
-            </div>
-            <div class="wrap-input100">
-                <label class="form-label">Order Status</label>
-                <span class="focus-input100">@Model.OrderStatusDisplayName</span>
-            </div>
-            <div class="wrap-input100">
-                <label class="form-label">Payment Method</label>
-                <span class="focus-input100">@Model.PaymentMethodDisplayName</span>
-            </div>
-            <hr>
-            <form id="edit" method="post">
-                <input type="hidden" asp-for="PaymentMethod" value="@Model.PaymentMethod"/>
+<link href="~/css/admin/order-details.css" rel="stylesheet" />
 
-                <div class="btn-group" data-validate="Please select order status">
-                    <select asp-for="Status" asp-items="Html.GetEnumSelectList<OrderStatusEnum>()" class="btn btn-info">
-                        <option selected disabled value="">Please select order status</option>
-                    </select>
+<div class="order-details-section">
+    <div class="order-details-card">
+        <!-- Card Header -->
+        <div class="card-header">
+            <div class="order-title">
+                <h1 class="order-id">
+                    <i class="fas fa-receipt"></i>
+                    Order #@Model.Id
+                </h1>
+                @{
+                    var statusClass = "status-pending";
+                    var statusText = Model.Status.ToString();
+                    var displayText = statusText;
+
+                    switch (Model.Status)
+                    {
+                        case OrderStatusEnum.Pending:
+                            statusClass = "status-pending";
+                            displayText = "Pending";
+                            break;
+                        case OrderStatusEnum.OnTheWay:
+                            statusClass = "status-ontheway";
+                            displayText = "On the way";
+                            break;
+                        case OrderStatusEnum.Completed:
+                            statusClass = "status-completed";
+                            displayText = "Completed";
+                            break;
+                        default:
+                            statusClass = "status-pending";
+                            displayText = "Pending";
+                            break;
+                    }
+                }
+                <span class="order-status-badge @statusClass">
+                    <i class="fas fa-circle"></i>
+                    @displayText
+                </span>
+            </div>
+        </div>
+
+        <!-- Card Body -->
+        <div class="card-body">
+            <!-- Order Summary -->
+            <div class="order-summary">
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <div class="summary-value">@Model.Items.Sum(i => i.Quantity)</div>
+                        <div class="summary-label">Total Items</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-value">@Model.Items.Count</div>
+                        <div class="summary-label">Products</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-value">@Model.Items.Sum(i => i.Quantity * i.Price).ToString("C")</div>
+                        <div class="summary-label">Total Amount</div>
+                    </div>
                 </div>
-                <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
-                    <button type="submit" class="btn btn-primary glow mb-1 mb-sm-0 mr-0 mr-sm-1">
-                        Save changes
-                    </button>
-                    <button type="reset" class="btn btn-light">Cancel</button>
+            </div>
+
+            <!-- Products Table -->
+            <div class="products-table-container">
+                <h3 style="margin-bottom: 1rem;">
+                    <i class="fas fa-boxes"></i>
+                    Order Items
+                </h3>
+                <table class="products-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 80px;">Image</th>
+                            <th>Product Name</th>
+                            <th style="width: 100px;">Quantity</th>
+                            <th style="width: 120px;">Unit Price</th>
+                            <th style="width: 120px;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>
+                                    <img src="~/@item.ImagePath" class="product-image" alt="@item.ProductName"
+                                         onerror="this.src='https://via.placeholder.com/50?text=📦'">
+                                </td>
+                                <td>
+                                    <strong>@item.ProductName</strong>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark">@item.Quantity</span>
+                                </td>
+                                <td>@item.Price.ToString("C")</td>
+                                <td>
+                                    <strong>@((item.Quantity * item.Price).ToString("C"))</strong>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Customer Information -->
+            <div class="customer-info-grid">
+                <div class="info-card">
+                    <h4>
+                        <i class="fas fa-user"></i>
+                        Customer Information
+                    </h4>
+                    <div class="info-item">
+                        <span class="info-label">Name:</span>
+                        <span class="info-value highlight">@Model.CustomerName</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Email:</span>
+                        <span class="info-value">@Model.CustomerEmail</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Phone:</span>
+                        <span class="info-value">@Model.CustomerPhoneNumber</span>
+                    </div>
                 </div>
-            </form>
+
+                <div class="info-card">
+                    <h4>
+                        <i class="fas fa-map-marker-alt"></i>
+                        Shipping Address
+                    </h4>
+                    <div class="info-item">
+                        <span class="info-label">Address:</span>
+                        <span class="info-value">@Model.CustomerAddress</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">City:</span>
+                        <span class="info-value">@Model.CustomerCity</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Post Code:</span>
+                        <span class="info-value">@Model.CustomerPostCode</span>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h4>
+                        <i class="fas fa-info-circle"></i>
+                        Order Information
+                    </h4>
+                    <div class="info-item">
+                        <span class="info-label">Status:</span>
+                        <span class="info-value highlight">@Model.OrderStatusDisplayName</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Payment:</span>
+                        <span class="info-value">@Model.PaymentMethodDisplayName</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Update Form -->
+            <div class="status-form">
+                <h4 style="margin-bottom: 1.5rem;">
+                    <i class="fas fa-edit"></i>
+                    Update Order Status
+                </h4>
+                <form id="edit" method="post">
+                    <input type="hidden" asp-for="Id" value="@Model.Id" />
+                    <input type="hidden" asp-for="PaymentMethod" value="@Model.PaymentMethod" />
+
+                    <div class="form-group">
+                        <label class="form-label">Order Status</label>
+                        <select asp-for="Status" asp-items="Html.GetEnumSelectList<OrderStatusEnum>()" class="form-select">
+                            <option selected disabled value="">Please select order status</option>
+                        </select>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Save Changes
+                        </button>
+                        <a href="/Admin/Order/Index" class="btn btn-light">
+                            <i class="fas fa-arrow-left"></i>
+                            Back to Orders
+                        </a>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Enhanced form validation
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('edit');
+            const statusSelect = document.querySelector('select[name="Status"]');
+
+            // Add real-time validation
+            statusSelect.addEventListener('change', function() {
+                if (this.value) {
+                    this.classList.remove('is-invalid');
+                    this.classList.add('is-valid');
+                } else {
+                    this.classList.remove('is-valid');
+                    this.classList.add('is-invalid');
+                }
+            });
+
+            // Form submission enhancement
+            form.addEventListener('submit', function(e) {
+                const selectedStatus = statusSelect.value;
+                if (!selectedStatus) {
+                    e.preventDefault();
+                    alert('Please select an order status before saving.');
+                    statusSelect.focus();
+                    return;
+                }
+
+                // Show loading state
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+                submitBtn.disabled = true;
+
+                // Allow form to submit normally
+            });
+
+            // Add confirmation for status changes
+            statusSelect.addEventListener('change', function() {
+                const newStatus = this.options[this.selectedIndex].text;
+                if (newStatus && !newStatus.includes('Please select')) {
+                    console.log(`Order status will be changed to: ${newStatus}`);
+                    // You could add a confirmation dialog here if needed
+                }
+            });
+        });
+    </script>
+}

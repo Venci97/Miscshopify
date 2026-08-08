@@ -5,64 +5,347 @@
 
 @inject UserManager<ApplicationUser> UserManager
 @{
-
+    ViewData["Title"] = "User Management";
+    var totalUsers = Model.Count();
+    var activeUsers = Model.Count(u => u.IsActive);
+    var inactiveUsers = Model.Count(u => !u.IsActive);
+    var recentUsers = Model.Count(u => u.CreationDate >= DateTime.Now.AddDays(-30));
 }
-<head>
-	<link rel="stylesheet" href="~/plugins/fontawesome-free-6.2.0-web/css/all.min.css">
-</head>
-<div class="row">
-	<div class="col-12">
-		<section class="ftco-section">
-			<div class="container">
-				<div class="row justify-content-center">
-					<div class="col-md-6 text-center mb-5">
-						<h2 class="heading-section">Users List</h2>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-12">
-						<div class="table-wrap">
-							<table class="table table-responsive-xl">
-								<thead>
-									<tr>
-					    				<th>Name</th>
-										<th>Email</th>
-										<th>Phone Number</th>
-										<th>Gender</th>
-										<th>Creation Date</th>
-										<th>Is User Active</th>
-										<th>Actions</th>
-										<th>&nbsp;</th>
-									</tr>
-								</thead>
-								<tbody>
-									@foreach (var user in Model)
-									{
-										<tr>
-											<td>@user.Name</td>
-											<td>@user.Email</td>
-											<td>@user.PhoneNumber</td>
-											<td>@user.Gender</td>
-											<td>@user.CreationDate</td>
-											<td>@user.IsActive</td>	
-											<td>
-												<a asp-area="Admin" asp-action="Edit" asp-controller="User" asp-route-id="@user.Id" class="btn btn-block btn-outline-info btn-xs">
-													Edit
-													<i class="fa-solid fa-user-pen"></i>
-												</a>
-												<a asp-area="Admin" asp-action="Roles" asp-controller="User" asp-route-id="@user.Id" class="btn btn-block btn-outline-dark btn-xs">
-													Roles
-													<i class="fa-solid fa-user-gear"></i>
-												</a>
-											</td>
-										</tr>
-									}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>	
-		</section>
-	</div>
+
+<link href="~/css/admin/user-index.css" rel="stylesheet" />
+
+<div class="user-index-section">
+    <div class="user-header">
+        <h1 class="user-title">
+            <i class="fas fa-users"></i>
+            User Management
+        </h1>
+        <div class="user-stats">
+            <div class="stat-card highlight">
+                <div class="stat-number">@totalUsers</div>
+                <div class="stat-label">Total Users</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">@activeUsers</div>
+                <div class="stat-label">Active</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">@inactiveUsers</div>
+                <div class="stat-label">Inactive</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search and Filter Section -->
+    <div class="search-filter-section">
+        <div class="search-filter-grid">
+            <div class="search-group">
+                <label class="search-label">Search Users</label>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search by name or email...">
+            </div>
+            <div class="search-group">
+                <label class="search-label">Status</label>
+                <select class="filter-select" id="statusFilter">
+                    <option value="">All Statuses</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+            <div class="search-group">
+                <label class="search-label">Gender</label>
+                <select class="filter-select" id="genderFilter">
+                    <option value="">All Genders</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="search-group">
+                <label class="search-label">Sort By</label>
+                <select class="filter-select" id="sortFilter">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="name">Name A-Z</option>
+                    <option value="name-desc">Name Z-A</option>
+                    <option value="active">Active First</option>
+                </select>
+            </div>
+            <div class="search-group">
+                <button class="btn btn-primary" onclick="applyFilters()">
+                    <i class="fas fa-filter"></i>
+                    Apply Filters
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <button class="quick-action-btn active" data-filter="all">All Users</button>
+        <button class="quick-action-btn" data-filter="active">Active Users</button>
+        <button class="quick-action-btn" data-filter="recent">Recent Users</button>
+        <button class="quick-action-btn" data-filter="no-phone">No Phone</button>
+    </div>
+
+    <div class="user-card">
+        <div class="card-content">
+            <div class="table-container">
+                @if (Model.Any())
+                {
+                    <table class="user-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 200px;">User</th>
+                                <th>Email</th>
+                                <th style="width: 140px;">Phone</th>
+                                <th style="width: 100px;">Gender</th>
+                                <th style="width: 120px;">Joined</th>
+                                <th style="width: 100px;">Status</th>
+                                <th style="width: 200px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model)
+                            {
+                                var statusClass = user.IsActive ? "status-active" : "status-inactive";
+                                var statusText = user.IsActive ? "Active" : "Inactive";
+
+                                var genderClass = "gender-other";
+                                var genderText = user.Gender.ToString();
+
+                                switch (user.Gender.ToString().ToLower())
+                                {
+                                    case "male":
+                                        genderClass = "gender-male";
+                                        break;
+                                    case "female":
+                                        genderClass = "gender-female";
+                                        break;
+                                    default:
+                                        genderClass = "gender-other";
+                                        break;
+                                }
+
+                                <tr>
+                                    <td>
+                                        <div class="user-info">
+                                            <img src="~/@(user.ImagePath ?? "/images/avatars/default-avatar.png")"
+                                                 class="user-avatar" alt="@user.Name"
+                                                 onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIGZpbGw9IiNmNGY3ZmIiLz48dGV4dCB4PSIyMCIgeT0iMjAiIGZvbnQtc2l6ZT0iMTYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIiBmaWxsPSIjNmI3MjgwIj7wn5GkPC90ZXh0Pjwvc3ZnPg=='">
+                                            <div class="user-details">
+                                                <div class="user-name">@user.Name</div>
+                                                <div class="user-email">@user.Email</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="user-email">@user.Email</div>
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(user.PhoneNumber))
+                                        {
+                                            <div class="phone-number">@user.PhoneNumber</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="phone-empty">Not provided</div>
+                                        }
+                                    </td>
+                                    <td>
+                                        <span class="gender-badge @genderClass">
+                                            <i class="fas fa-user"></i>
+                                            @genderText
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="date-cell">
+                                            <div class="date-main">@user.CreationDate.ToString("MMM dd, yyyy")</div>
+                                            <div class="date-sub">@user.CreationDate.ToString("HH:mm")</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="status-badge @statusClass">
+                                            <i class="fas fa-circle"></i>
+                                            @statusText
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <a asp-area="Admin" asp-action="Edit" asp-controller="User"
+                                               asp-route-id="@user.Id" class="btn btn-outline-info btn-sm">
+                                                <i class="fas fa-edit"></i>
+                                                Edit
+                                            </a>
+                                            <a asp-area="Admin" asp-action="Roles" asp-controller="User"
+                                               asp-route-id="@user.Id" class="btn btn-outline-dark btn-sm">
+                                                <i class="fas fa-user-gear"></i>
+                                                Roles
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="empty-state">
+                        <i class="fas fa-users-slash"></i>
+                        <h3>No Users Found</h3>
+                        <p>There are no users in the system yet.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Search and filter functionality
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+            const genderFilter = document.getElementById('genderFilter').value;
+            const sortFilter = document.getElementById('sortFilter').value;
+
+            const rows = document.querySelectorAll('.user-table tbody tr');
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                const userName = row.querySelector('.user-name').textContent.toLowerCase();
+                const userEmail = row.querySelector('.user-email').textContent.toLowerCase();
+                const userStatus = row.querySelector('.status-badge').textContent.toLowerCase().trim();
+                const userGender = row.querySelector('.gender-badge').textContent.toLowerCase().trim();
+
+                let shouldShow = true;
+
+                // Search filter
+                if (searchTerm && !userName.includes(searchTerm) && !userEmail.includes(searchTerm)) {
+                    shouldShow = false;
+                }
+
+                // Status filter
+                if (statusFilter && shouldShow) {
+                    if (statusFilter === 'active' && userStatus !== 'active') shouldShow = false;
+                    if (statusFilter === 'inactive' && userStatus !== 'inactive') shouldShow = false;
+                }
+
+                // Gender filter
+                if (genderFilter && shouldShow) {
+                    if (genderFilter !== userGender) shouldShow = false;
+                }
+
+                row.style.display = shouldShow ? '' : 'none';
+                if (shouldShow) visibleCount++;
+            });
+
+            // Show message if no results
+            const emptyState = document.querySelector('.empty-state');
+            if (emptyState) {
+                emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+            }
+
+            console.log('Filters applied. Visible users:', visibleCount);
+        }
+
+        // Quick actions
+        document.querySelectorAll('.quick-action-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.quick-action-btn').forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+
+                const filter = this.getAttribute('data-filter');
+
+                // Apply quick filter
+                const rows = document.querySelectorAll('.user-table tbody tr');
+                rows.forEach(row => {
+                    const statusBadge = row.querySelector('.status-badge');
+                    const phoneElement = row.querySelector('.phone-number, .phone-empty');
+                    const creationDate = row.querySelector('.date-main').textContent;
+
+                    let shouldShow = true;
+
+                    switch (filter) {
+                        case 'active':
+                            shouldShow = statusBadge.textContent.toLowerCase().includes('active');
+                            break;
+                        case 'recent':
+                            // Simple recent filter - show users from current year
+                            shouldShow = creationDate.includes('2024'); // Update year as needed
+                            break;
+                        case 'no-phone':
+                            shouldShow = phoneElement.classList.contains('phone-empty');
+                            break;
+                        case 'all':
+                        default:
+                            shouldShow = true;
+                    }
+
+                    row.style.display = shouldShow ? '' : 'none';
+                });
+            });
+        });
+
+        // Real-time search
+        document.getElementById('searchInput').addEventListener('input', function() {
+            clearTimeout(this.searchTimeout);
+            this.searchTimeout = setTimeout(applyFilters, 300);
+        });
+
+        // Auto-apply filters when select changes
+        document.getElementById('statusFilter').addEventListener('change', applyFilters);
+        document.getElementById('genderFilter').addEventListener('change', applyFilters);
+        document.getElementById('sortFilter').addEventListener('change', applyFilters);
+
+        // Add interactive features
+        document.addEventListener('DOMContentLoaded', function() {
+            const rows = document.querySelectorAll('.user-table tbody tr');
+
+            rows.forEach((row, index) => {
+                // Add staggered animation
+                row.style.animationDelay = `${(index + 1) * 0.1}s`;
+
+                // Add click effect for the entire row
+                row.addEventListener('click', function(e) {
+                    if (!e.target.closest('a') && !e.target.closest('button')) {
+                        const editLink = this.querySelector('a[asp-action="Edit"]');
+                        if (editLink) {
+                            editLink.click();
+                        }
+                    }
+                });
+            });
+
+            // Initialize user avatars with fallback
+            document.querySelectorAll('.user-avatar').forEach(avatar => {
+                avatar.addEventListener('error', function() {
+                    // this.src = 'https://via.placeholder.com/40?text=👤';
+                });
+            });
+        });
+
+        // Export functionality
+        function exportUsers() {
+            console.log('Exporting users...');
+            alert('Export feature would download a CSV file of all users.');
+        }
+
+        // Print user list
+        function printUserList() {
+            window.print();
+        }
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + F to focus search
+            if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+        });
+    </script>
+}

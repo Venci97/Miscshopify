@@ -5,29 +5,71 @@
     var items = (List<SelectListItem>)ViewBag.RoleItems;
 }
 
-<div class="row">
-    <div class="col-4">
+<link href="~/css/admin/user-roles.css" rel="stylesheet" />
+
+<div class="user-roles-section">
+    <div class="user-roles-card">
+        <!-- User Header -->
+        <div class="user-header">
+            <h3 class="user-name">User: @Html.DisplayFor(m => m.Name)</h3>
+            <div class="user-id">ID: @Model.UserId</div>
+        </div>
+
         <form id="roles" method="post">
             <input type="hidden" name="UserId" value="@Model.UserId" />
             <input type="hidden" name="Name" value="@Model.Name" />
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating">
-                <h3>User: @Html.DisplayFor(m => m.Name)</h3>
-            </div>
-            <div class="form-floating">
-                <div class="form-group">
-                    <label>User Roles</label>
-                    <select asp-for="RoleNames" asp-items="@items" class="form-control" multiple></select>
+
+            <div class="form-group">
+                <label class="form-label">User Roles</label>
+                <select asp-for="RoleNames" asp-items="@items" class="form-control" multiple>
+                </select>
+                <div class="role-hint">
+                    <i class="fas fa-mouse"></i>
+                    Hold Ctrl/Cmd to select multiple roles
                 </div>
+                <span asp-validation-for="RoleNames" class="text-danger"></span>
             </div>
+
             <div class="row">&nbsp;</div>
+
             <div class="row">
-                <div class="col-4">
-                    <button id="login-submit" type="submit" class="btn btn-primary btn-block">Submit</button>
+                <div class="col-12">
+                    <button id="login-submit" type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        Submit
+                    </button>
                 </div>
             </div>
         </form>
     </div>
 </div>
 
-<script src="~/js/multiselect-dropdown.js"></script>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Basic form enhancement
+        document.getElementById('roles').addEventListener('submit', function(e) {
+            const submitButton = document.getElementById('login-submit');
+            const originalText = submitButton.innerHTML;
+
+            // Show loading state
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            submitButton.disabled = true;
+
+            // Allow form to submit normally
+            setTimeout(() => {
+                submitButton.innerHTML = originalText;
+                submitButton.disabled = false;
+            }, 2000);
+        });
+
+        // Add some interactivity to the multiselect
+        document.querySelector('select[multiple]').addEventListener('change', function() {
+            const selectedCount = this.selectedOptions.length;
+            console.log('Selected roles:', selectedCount);
+        });
+    </script>
+}

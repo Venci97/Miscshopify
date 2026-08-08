@@ -1,90 +1,233 @@
 ﻿@using Miscshopify.Core.Models;
 @model ProductViewModel
-@{
-}
 
 @{
     var cartMessage = TempData["CartMessage"] as string;
+    ViewData["Title"] = Model.Name + " - Modern Store";
 }
 
-<div id="content" class="p-5" style="background-color: white;">
-    <div>
-        <div class="container">
-            <div class="row">
-                <div class="col-12 mb-3"><h4>Product Details</h4></div>
-            </div>
-            
-            @if (!string.IsNullOrEmpty(cartMessage))
-            {
-                <div class="alert alert-success" role="alert">
-                    @cartMessage
-                </div>
-            }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@Model.Name - Modern Store</title>
 
-            <div class="view-content">
-                <div class="card-body">
-                    <div class="row my-2">
-                        <div class="col-12 col-md-7 d-flex align-items-center justify-content-center mb-2 mb-md-0">
-                            <div class="d-flex align-items-center justify-content-center">
-                                <img src="~/@Model.ImagePath" class="img-thumnail" alt="product image" width="100%" height="100%">
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-4">
-                            <h4>@Model.Name</h4>
-                            <div class="d-flex flex-wrap mt-1">
-                                <h4 class="text-primary mr-1">BGN @Model.Price</h4>
-                            </div>
-                            <p>Available - <span class="text-success">In stock</span></p>
-                            <ul class="product-features list-unstyled">
-                                <li>
-                                    <i class="fas fa-shopping-basket"></i>
-                                    <span>Free Shipping</span>
-                                </li>
-                                <li>
-                                    <i class="fas fa-money-bill-alt"></i>
-                                    <span>Cash on delivery</span>
-                                </li>
-                            </ul>
-                            <div class="d-flex flex-column flex-sm-row pt-1">
-                                <a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@Model.Id" class="btn btn-primary mr-0 mr-sm-2 mb-1 mb-sm-0">
-                                    <i class="fas fa-shopping-basket mr-2"></i>
-                                    <span>Add to cart</span>
-                                </a>
-                            </div>
-                            <div class="row text-center py-8">
-                                <hr>
-                                <label>Description</label>
-                                <p>
-                                    @Model.Description
-                                </p>
-                                <hr>
-                            </div>
-                        </div>
-                    </div>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="~/css/product-details.css" rel="stylesheet" />
+</head>
+<body class="product-details-page">
+    <div class="container">
+        <!-- Success Message -->
+        @if (!string.IsNullOrEmpty(cartMessage))
+        {
+            <div class="success-message" id="successMessage">
+                <div class="message-content">
+                    <i class="fas fa-check-circle"></i>
+                    <span>@cartMessage</span>
                 </div>
             </div>
 
-            <div class="row text-center py-8">
-                <div class="col-12 col-md-4 mb-4 mb-md-0">
-                    <div class="w-75 mx-auto">
-                        <i class="fas fa-medal text-primary font-size-40px"></i>
-                        <h4 class="mt-2 mb-1">100% Original</h4>
+            <script>
+                setTimeout(() => {
+                    const message = document.getElementById('successMessage');
+                    if (message) {
+                        message.style.opacity = '0';
+                        message.style.transform = 'translateX(100%)';
+                        setTimeout(() => message.remove(), 300);
+                    }
+                }, 4000);
+            </script>
+        }
+
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb-nav">
+            <ol class="breadcrumb-list">
+                <li>
+                    <a href="/">
+                        <i class="fas fa-home"></i>
+                        Home
+                    </a>
+                </li>
+                <li class="breadcrumb-separator">
+                    <i class="fas fa-chevron-right"></i>
+                </li>
+                <li>
+                    <a href="/Category/Index">Categories</a>
+                </li>
+                <li class="breadcrumb-separator">
+                    <i class="fas fa-chevron-right"></i>
+                </li>
+                <li class="breadcrumb-current">@Model.Name</li>
+            </ol>
+        </nav>
+
+        <!-- Product Section -->
+        <div class="product-main-card">
+            <div class="product-grid">
+                <!-- Product Images -->
+                <div class="product-images-section">
+                    <!-- Main Image -->
+                    <div class="main-image-container">
+                        <img src="~/@Model.ImagePath"
+                             alt="@Model.Name"
+                             class="main-product-image"
+                             onerror="this.onerror=null; this.src='/images/placeholder-product.jpg'">
+                    </div>
+
+                    <!-- Image Gallery -->
+                    <div class="image-gallery">
+                        <div class="gallery-thumbnail active">
+                            <img src="~/@Model.ImagePath"
+                                 alt="@Model.Name"
+                                 onerror="this.onerror=null; this.src='/images/placeholder-thumbnail.jpg'">
+                        </div>
                     </div>
                 </div>
 
-                <div class="col-12 col-md-4 mb-4 mb-md-0">
-                    <div class="w-75 mx-auto">
-                        <i class="fas fa-clock text-primary font-size-40px"></i>
-                        <h4 class="mt-2 mb-1">10 Day Replacement</h4>
+                <!-- Product Info -->
+                <div class="product-info-section">
+                    <!-- Header -->
+                    <div class="product-header">
+                        <h1 class="product-title">@Model.Name</h1>
+                        <div class="product-meta">
+                            <div class="rating">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <span class="rating-text">(4.5/5)</span>
+                            </div>
+                            <span class="stock-status">
+                                <i class="fas fa-check-circle"></i>
+                                In Stock
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="price-section">
+                        <span class="current-price">@Model.Price BGN</span>
+                        <span class="original-price">@(Model.Price * 1.2m) BGN</span>
+                        <span class="discount-badge">-20%</span>
+                    </div>
+
+                    <!-- Features -->
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-shipping-fast"></i>
+                            </div>
+                            <div class="feature-text">
+                                <p class="feature-title">Free Shipping</p>
+                                <p class="feature-desc">On orders over 50 BGN</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="feature-text">
+                                <p class="feature-title">Cash on Delivery</p>
+                                <p class="feature-desc">Pay when you receive</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-undo-alt"></i>
+                            </div>
+                            <div class="feature-text">
+                                <p class="feature-title">30-Day Returns</p>
+                                <p class="feature-desc">Easy return policy</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="feature-text">
+                                <p class="feature-title">2-Year Warranty</p>
+                                <p class="feature-desc">Full protection</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@Model.Id"
+                           class="btn-primary">
+                            <i class="fas fa-shopping-basket"></i>
+                            Add to Cart
+                        </a>
+                        <button class="btn-secondary">
+                            <i class="fas fa-bolt"></i>
+                            Buy Now
+                        </button>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number">500+</div>
+                            <div class="stat-label">Sold</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">4.5</div>
+                            <div class="stat-label">Rating</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">98%</div>
+                            <div class="stat-label">Recommended</div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-12 col-md-4 mb-4 mb-md-0">
-                    <div class="w-75 mx-auto">
-                        <i class="fas fa-shield-alt text-primary font-size-40px"></i>
-                        <h4 class="mt-2 mb-1">2 Year Warranty</h4>
+            </div>
+
+            <!-- Description Section -->
+            <div class="description-section">
+                <div class="description-content">
+                    <h2 class="description-title">
+                        <i class="fas fa-file-alt"></i>
+                        Product Description
+                    </h2>
+                    <div class="description-text">
+                        <p>@Model.Description</p>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Features Grid -->
+        <div class="features-showcase">
+            <div class="feature-card">
+                <div class="feature-card-icon">
+                    <i class="fas fa-medal"></i>
+                </div>
+                <h3 class="feature-card-title">100% Original</h3>
+                <p class="feature-card-desc">Guaranteed authentic products with quality assurance</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-card-icon">
+                    <i class="fas fa-sync-alt"></i>
+                </div>
+                <h3 class="feature-card-title">10-Day Replacement</h3>
+                <p class="feature-card-desc">Easy replacement policy for your peace of mind</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-card-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3 class="feature-card-title">2 Year Warranty</h3>
+                <p class="feature-card-desc">Comprehensive warranty coverage for long-term use</p>
+            </div>
+        </div>
     </div>
-</div>
+</body>
+</html>

@@ -27,7 +27,6 @@ namespace Miscshopify.Infrastructure.Data
         private List<IdentityRole> GetRoles()
         {
 
-            // Seed Roles
             var adminRole = new IdentityRole("Administrator");
             adminRole.NormalizedName = adminRole.Name!.ToUpper();
 
@@ -43,7 +42,6 @@ namespace Miscshopify.Infrastructure.Data
             string pwd = "Admin123.";
             var passwordHasher = new PasswordHasher<ApplicationUser>();
 
-            // Seed Users
             var adminUser = new ApplicationUser
             {
                 UserName = "admin@admin.com",
@@ -70,7 +68,6 @@ namespace Miscshopify.Infrastructure.Data
 
         private List<IdentityUserRole<string>> GetUserRoles(List<ApplicationUser> users, List<IdentityRole> roles)
         {
-            // Seed UserRoles
             List<IdentityUserRole<string>> userRoles = new List<IdentityUserRole<string>>();
 
             userRoles.Add(new IdentityUserRole<string>

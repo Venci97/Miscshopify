@@ -1,0 +1,123 @@
+﻿@using Miscshopify.Core.Models
+@model IEnumerable<CategoryViewModel>
+
+@{
+    var parentCategoryName = ViewBag.ParentCategoryName ?? "Category";
+    var parentCategoryId = ViewBag.ParentCategoryId;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@parentCategoryName - Subcategories</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="~/css/categories.css" rel="stylesheet" />
+</head>
+<body class="categories-page min-h-screen py-6">
+    <div class="container mx-auto px-4">
+        <!-- Header -->
+        <div class="categories-header text-center mb-8">
+            <a href="@Url.Action("Index", "Category")" class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 mb-4">
+                <i class="fas fa-arrow-left"></i>
+                Back to Categories
+            </a>
+            <h1 class="text-3xl md:text-5xl font-bold text-gray-900 mb-4">
+                @parentCategoryName
+            </h1>
+            <p class="text-lg text-gray-600">
+                Browse our subcategories
+            </p>
+        </div>
+
+        <!-- Subcategories Grid -->
+        @if (Model != null && Model.Any())
+        {
+            <div class="categories-grid">
+                @{
+                    int index = 0;
+                    foreach (var subcategory in Model)
+                    {
+                        <div class="category-card group" style="animation-delay: @(index * 0.1)s;">
+                            <a href="@Url.Action("GetProductsByCategory", "Product", new { id = subcategory.Id })" class="block h-full">
+                                <!-- Image/Icon Container -->
+                                <div class="category-media relative overflow-hidden rounded-xl">
+                                    @if (!string.IsNullOrEmpty(subcategory.ImagePath))
+                                    {
+                                        <img src="@Url.Content($"~/{subcategory.ImagePath}")"
+                                             class="category-image"
+                                             alt="@subcategory.Name"
+                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                        <div class="category-icon-container bg-gradient-to-br from-blue-500 to-purple-600" style="display: none;">
+                                            <div class="icon-wrapper">
+                                                <i class="fas fa-folder"></i>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="category-icon-container bg-gradient-to-br from-blue-500 to-purple-600">
+                                            <div class="icon-wrapper">
+                                                <i class="fas fa-folder"></i>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    <div class="category-overlay"></div>
+                                </div>
+
+                                <!-- Category Content -->
+                                <div class="category-content mt-4">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <div class="icon-circle bg-gray-100">
+                                            <i class="fas fa-folder text-gray-600"></i>
+                                        </div>
+                                        <h3 class="text-lg font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors">
+                                            @subcategory.Name
+                                        </h3>
+                                    </div>
+
+                                    <p class="text-gray-600 text-sm leading-relaxed mb-3">
+                                        @subcategory.Description
+                                    </p>
+
+                                    <div class="shop-btn transform group-hover:translate-x-1 transition-transform duration-300">
+                                        <div class="flex items-center justify-between text-indigo-600 font-medium text-sm">
+                                            <span>Discover Items</span>
+                                            <i class="fas fa-arrow-right transform group-hover:translate-x-1 transition-transform text-xs"></i>
+                                        </div>
+                                        <div class="progress-line"></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        index++;
+                    }
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <div class="empty-state-content text-center">
+                    <div class="empty-icon mb-4">
+                        <i class="fas fa-folder-open text-5xl text-gray-300"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">No Subcategories Available</h3>
+                    <p class="text-gray-600 mb-4 max-w-md mx-auto text-sm">
+                        There are no subcategories in this category yet.
+                    </p>
+                    <a href="@Url.Action("GetProductsByCategory", "Product", new { id = parentCategoryId })"
+                       class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105 text-sm">
+                        <i class="fas fa-boxes mr-2"></i>
+                        View Products in @parentCategoryName
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+</body>
+</html>

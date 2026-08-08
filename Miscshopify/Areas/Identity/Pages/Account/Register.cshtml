@@ -1,157 +1,302 @@
 ﻿@page
-@using Miscshopify.Infrastructure.Data.Models.Enums;
-@using(Html.BeginForm("Register", "Account", FormMethod.Post, new {  
-    @class = "form-horizontal", role = "form", enctype = "multipart/form-data"  
-})) 
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
     Layout = null;
 }
-@using(Html.BeginForm("Register", "Account", FormMethod.Post, new {  
-    @class = "form-horizontal", role = "form", enctype = "multipart/form-data"  
-})) {
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Register</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!--===============================================================================================-->
-	<link rel="icon" type="image/png" href="~/img/favicon-16x16.png" />
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="~/vendor/bootstrap/css/bootstrap.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="~/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="~/fonts/iconic/css/material-design-iconic-font.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="~/vendor/animate/animate.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="~/vendor/css-hamburgers/hamburgers.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="~/vendor/animsition/css/animsition.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="~/vendor/select2/select2.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="~/vendor/daterangepicker/daterangepicker.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="~/css/util.css">
-	<link rel="stylesheet" type="text/css" href="~/css/main.css">
-	<!--===============================================================================================-->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - Modern Store</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="min-h-screen bg-gradient-to-br from-green-50 to-teal-100 flex items-center justify-center p-4" style="font-family: 'Inter', sans-serif;">
+    <div class="max-w-2xl w-full">
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-user-plus text-green-600 text-2xl"></i>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">Create Account</h1>
+                <p class="text-gray-600">Join our modern store community</p>
+            </div>
 
-	<div class="limiter">
-		<div class="container-login100" style="background: url('../../../../img/bg-01.jpg') fixed; background-size: cover;">
-			<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
-				<form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data">
-					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-					<span class="login100-form-title p-b-49">
-						Register
-					</span>
+            <!-- Validation Summary -->
+            <div asp-validation-summary="ModelOnly" class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700"></div>
 
-					<div class="wrap-input100 validate-input m-b-23" data-validate="First name is reauired">
-						<label asp-for="Input.FirstName"></label>
-						<input asp-for="Input.FirstName" class="input100" autocomplete="First Name" aria-required="true" placeholder="Type your First Name" />
-						<span asp-validation-for="Input.FirstName" class="focus-input100" data-symbol="&#xf206;"></span>
-					</div>
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data" class="space-y-6">
+                <!-- Personal Information Section -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- First Name -->
+                    <div class="space-y-2">
+                        <label asp-for="Input.FirstName" class="block text-sm font-medium text-gray-700">
+                            <i class="fas fa-user mr-2 text-green-500"></i>First Name
+                        </label>
+                        <input asp-for="Input.FirstName"
+                               autocomplete="given-name"
+                               aria-required="true"
+                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-300"
+                               placeholder="Enter your first name" />
+                        <span asp-validation-for="Input.FirstName" class="text-red-600 text-sm"></span>
+                    </div>
 
-					<div class="wrap-input100 validate-input m-b-23" data-validate="Last name is reauired">
-						<label asp-for="Input.LastName"></label>
-						<input asp-for="Input.LastName" class="input100" autocomplete="Last Name" aria-required="true" placeholder="Type your Last Name" />
-						<span asp-validation-for="Input.LastName" class="focus-input100" data-symbol="&#xf206;"></span>
-					</div>
+                    <!-- Last Name -->
+                    <div class="space-y-2">
+                        <label asp-for="Input.LastName" class="block text-sm font-medium text-gray-700">
+                            <i class="fas fa-user mr-2 text-green-500"></i>Last Name
+                        </label>
+                        <input asp-for="Input.LastName"
+                               autocomplete="family-name"
+                               aria-required="true"
+                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-300"
+                               placeholder="Enter your last name" />
+                        <span asp-validation-for="Input.LastName" class="text-red-600 text-sm"></span>
+                    </div>
+                </div>
 
-					<div class="wrap-input100 validate-input m-b-23" data-validate="Email is reauired">
-						<label asp-for="Input.Email"></label>
-						<input asp-for="Input.Email" class="input100" autocomplete="username" aria-required="true" placeholder="Type your Email" />
-						<span asp-validation-for="Input.Email" class="focus-input100" data-symbol="&#xf206;"></span>
-					</div>
+                <!-- Email -->
+                <div class="space-y-2">
+                    <label asp-for="Input.Email" class="block text-sm font-medium text-gray-700">
+                        <i class="fas fa-envelope mr-2 text-green-500"></i>Email Address
+                    </label>
+                    <input asp-for="Input.Email"
+                           autocomplete="email"
+                           aria-required="true"
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-300"
+                           placeholder="Enter your email address" />
+                    <span asp-validation-for="Input.Email" class="text-red-600 text-sm"></span>
+                </div>
 
-					<div class="wrap-input100 validate-input m-b-23" data-validate="Password is required">
-						<label asp-for="Input.Password"></label>
-						<input asp-for="Input.Password" class="input100" autocomplete="new-password" aria-required="true" placeholder="Type your password" />
-						<span asp-validation-for="Input.Password" class="focus-input100" data-symbol="&#xf190;"></span>
-					</div>
+                <!-- Password Section -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Password -->
+                    <div class="space-y-2">
+                        <label asp-for="Input.Password" class="block text-sm font-medium text-gray-700">
+                            <i class="fas fa-lock mr-2 text-green-500"></i>Password
+                        </label>
+                        <input asp-for="Input.Password"
+                               autocomplete="new-password"
+                               aria-required="true"
+                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-300"
+                               placeholder="Create a password" />
+                        <span asp-validation-for="Input.Password" class="text-red-600 text-sm"></span>
+                    </div>
 
-					<div class="wrap-input100 validate-input m-b-23" data-validate="Confirm password is required">
-						<label asp-for="Input.ConfirmPassword"></label>
-						<input asp-for="Input.ConfirmPassword" class="input100" autocomplete="new-password" aria-required="true" placeholder="Confirm your password" />
-						<span asp-validation-for="Input.ConfirmPassword" class="focus-input100" data-symbol="&#xf190;"></span>
-					</div>
-					<div class="wrap-input100 validate-input m-b-23" data-validate="City is required">
-						<label asp-for="Input.City"></label>
-						<input asp-for="Input.City" class="input100" autocomplete="City" aria-required="true" placeholder="City" />
-						<span asp-validation-for="Input.City" class="focus-input100" data-symbol="&#xf190;"></span>
-					</div>
-					<div class="wrap-input100 validate-input m-b-23" data-validate="Address is required">
-						<label asp-for="Input.Address"></label>
-						<input asp-for="Input.Address" class="input100" autocomplete="Address" aria-required="true" placeholder="Address" />
-						<span asp-validation-for="Input.Address" class="focus-input100" data-symbol="&#xf190;"></span>
-					</div>
-					<div class="wrap-input100 validate-input m-b-23" data-validate="Postcode is required">
-						<label asp-for="Input.PostCode"></label>
-						<input asp-for="Input.PostCode" class="input100" autocomplete="Postcode" aria-required="true" placeholder="Postcode" />
-						<span asp-validation-for="Input.PostCode" class="focus-input100" data-symbol="&#xf190;"></span>
-					</div>
-					<div class="wrap-input100 validate-input m-b-23" data-validate="Phone number is reauired">
-						<label asp-for="Input.PhoneNumber"></label>
-						<input asp-for="Input.PhoneNumber" class="input100" autocomplete="Phone Number" aria-required="true" placeholder="Type your Phone number" />
-						<span asp-validation-for="Input.PhoneNumber" class="focus-input100" data-symbol="&#xf206;"></span>
-					</div>
+                    <!-- Confirm Password -->
+                    <div class="space-y-2">
+                        <label asp-for="Input.ConfirmPassword" class="block text-sm font-medium text-gray-700">
+                            <i class="fas fa-lock mr-2 text-green-500"></i>Confirm Password
+                        </label>
+                        <input asp-for="Input.ConfirmPassword"
+                               autocomplete="new-password"
+                               aria-required="true"
+                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-300"
+                               placeholder="Confirm your password" />
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-red-600 text-sm"></span>
+                    </div>
+                </div>
 
-					<div class="wrap-input100 validate-input m-b-23">
-						<label asp-for="Input.ImagePath"></label>
-						<input type="file" name="file" />
-						<span asp-validation-for="Input.ImagePath" class="focus-input100"></span>
-					</div>
+                <!-- Address Information Section -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- City -->
+                    <div class="space-y-2">
+                        <label asp-for="Input.City" class="block text-sm font-medium text-gray-700">
+                            <i class="fas fa-city mr-2 text-green-500"></i>City
+                        </label>
+                        <input asp-for="Input.City"
+                               autocomplete="address-level2"
+                               aria-required="true"
+                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-300"
+                               placeholder="Your city" />
+                        <span asp-validation-for="Input.City" class="text-red-600 text-sm"></span>
+                    </div>
 
-					<div class="btn-group" data-validate="Please select your gender">
-						<select asp-for="Input.Gender" asp-items="Html.GetEnumSelectList<GenderEnum>()" class="btn btn-info">
-							<option selected disabled value="">Please select your gender</option>
-						</select>
-					</div>
+                    <!-- Address -->
+                    <div class="space-y-2 md:col-span-2">
+                        <label asp-for="Input.Address" class="block text-sm font-medium text-gray-700">
+                            <i class="fas fa-home mr-2 text-green-500"></i>Address
+                        </label>
+                        <input asp-for="Input.Address"
+                               autocomplete="street-address"
+                               aria-required="true"
+                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-300"
+                               placeholder="Your full address" />
+                        <span asp-validation-for="Input.Address" class="text-red-600 text-sm"></span>
+                    </div>
+                </div>
 
-					<div class="text-right p-t-8 p-b-31">
-						<a href="./Login">
-							Already a member?
-						</a>
-					</div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Post Code -->
+                    <div class="space-y-2">
+                        <label asp-for="Input.PostCode" class="block text-sm font-medium text-gray-700">
+                            <i class="fas fa-mail-bulk mr-2 text-green-500"></i>Post Code
+                        </label>
+                        <input asp-for="Input.PostCode"
+                               autocomplete="postal-code"
+                               aria-required="true"
+                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-300"
+                               placeholder="Postal code" />
+                        <span asp-validation-for="Input.PostCode" class="text-red-600 text-sm"></span>
+                    </div>
 
-					<div class="container-login100-form-btn">
-						<div class="wrap-login100-form-btn">
-							<div class="login100-form-bgbtn"></div>
-							<button id="registerSubmit" type="submit" class="login100-form-btn">Register</button>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+                    <!-- Phone Number -->
+                    <div class="space-y-2">
+                        <label asp-for="Input.PhoneNumber" class="block text-sm font-medium text-gray-700">
+                            <i class="fas fa-phone mr-2 text-green-500"></i>Phone Number
+                        </label>
+                        <input asp-for="Input.PhoneNumber"
+                               autocomplete="tel"
+                               aria-required="true"
+                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-300"
+                               placeholder="Your phone number" />
+                        <span asp-validation-for="Input.PhoneNumber" class="text-red-600 text-sm"></span>
+                    </div>
+                </div>
 
+                <!-- Profile Picture & Gender Section -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Profile Picture -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-700">
+                            <i class="fas fa-camera mr-2 text-green-500"></i>Profile Picture
+                        </label>
+                        <div class="file-upload-container">
+                            <input type="file" name="file"
+                                   class="hidden"
+                                   id="fileInput"
+                                   accept=".jpg,.jpeg,.png,.gif" />
+                            <label for="fileInput"
+                                   class="flex items-center justify-center gap-2 w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-green-500 hover:bg-green-50 transition-all duration-300">
+                                <i class="fas fa-cloud-upload-alt text-gray-400"></i>
+                                <span class="text-gray-600" id="fileLabel">Choose profile image</span>
+                            </label>
+                        </div>
+                    </div>
 
-	<div id="dropDownSelect1"></div>
+                    <!-- Gender -->
+                    <div class="space-y-2">
+                        <label asp-for="Input.Gender" class="block text-sm font-medium text-gray-700">
+                            <i class="fas fa-venus-mars mr-2 text-green-500"></i>Gender
+                        </label>
+                        <select asp-for="Input.Gender"
+                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-300">
+                            <option value="">Select your gender</option>
+                            <option value="0">Male</option>
+                            <option value="1">Female</option>
+                            <option value="2">Other</option>
+                        </select>
+                        <span asp-validation-for="Input.Gender" class="text-red-600 text-sm"></span>
+                    </div>
+                </div>
 
-	<!--===============================================================================================-->
-	<script src="~/vendor/jquery/jquery-3.2.1.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="~/vendor/animsition/js/animsition.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="~/vendor/bootstrap/js/popper.js"></script>
-	<script src="~/vendor/bootstrap/js/bootstrap.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="~/vendor/select2/select2.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="~/vendor/daterangepicker/moment.min.js"></script>
-	<script src="~/vendor/daterangepicker/daterangepicker.js"></script>
-	<!--===============================================================================================-->
-	<script src="~/vendor/countdowntime/countdowntime.js"></script>
-	<!--===============================================================================================-->
-	<script src="~/js/main.js"></script>
-	<partial name="_ValidationScriptsPartial" />
+                <!-- Already a member link -->
+                <div class="text-center">
+                    <a asp-page="./Login"
+                       class="text-green-600 hover:text-green-700 font-medium inline-flex items-center gap-2 transition-colors">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Already have an account? Sign in
+                    </a>
+                </div>
 
+                <!-- Register Button -->
+                <button id="registerSubmit" type="submit"
+                        class="w-full bg-gradient-to-r from-green-600 to-teal-600 text-white py-3 px-4 rounded-lg font-semibold text-lg hover:from-green-700 hover:to-teal-700 transform hover:-translate-y-0.5 transition-all duration-300 shadow-lg hover:shadow-xl">
+                    <i class="fas fa-user-plus mr-2"></i>Create Account
+                </button>
+            </form>
+
+            <!-- Security Note -->
+            <div class="mt-6 pt-6 border-t border-gray-200 text-center">
+                <div class="flex items-center justify-center gap-2 text-xs text-gray-500">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Your information is securely encrypted</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <style>
+        .form-input {
+            transition: all 0.3s ease;
+        }
+
+            .form-input:focus {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(34, 197, 94, 0.1);
+            }
+
+        /* Animation for the user-plus icon */
+        @@keyframes bounce-user {
+            0%, 100% {
+                transform: scale(1) translateY(0);
+            }
+
+            50% {
+                transform: scale(1.05) translateY(-2px);
+            }
+        }
+
+        .fa-user-plus {
+            animation: bounce-user 2s ease-in-out infinite;
+        }
+
+        /* File upload hover effects */
+        .file-upload-container label:hover {
+            transform: translateY(-1px);
+        }
+
+        /* Select dropdown styling */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // File input change handler
+            const fileInput = document.getElementById('fileInput');
+            const fileLabel = document.getElementById('fileLabel');
+
+            if (fileInput) {
+                fileInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        fileLabel.textContent = `Selected: ${file.name}`;
+                        fileLabel.classList.add('text-green-600');
+                    } else {
+                        fileLabel.textContent = 'Choose profile image';
+                        fileLabel.classList.remove('text-green-600');
+                    }
+                });
+            }
+
+            // Form submission feedback
+            const registerForm = document.getElementById('registerForm');
+            const registerSubmit = document.getElementById('registerSubmit');
+
+            if (registerForm) {
+                registerForm.addEventListener('submit', function(e) {
+                    if (registerSubmit) {
+                        registerSubmit.disabled = true;
+                        registerSubmit.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Creating Account...';
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
-
-	}

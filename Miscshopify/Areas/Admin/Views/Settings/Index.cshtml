@@ -1,0 +1,243 @@
+﻿@model Miscshopify.Infrastructure.Data.Models.SiteSettings
+@{
+    ViewData["Title"] = "Site Settings";
+}
+
+<link href="~/css/admin/admin-modern.css" rel="stylesheet" />
+
+<div class="admin-container">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Site Settings</h1>
+        <div class="flex space-x-3">
+            <button type="button" id="toggleMaintenance"
+                    class="btn @(Model.ShowMaintenanceMessage ? "btn-danger" : "btn-secondary")">
+                <i class="fas fa-tools mr-2"></i>
+                @(Model.ShowMaintenanceMessage ? "Disable Maintenance" : "Enable Maintenance")
+            </button>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert-success mb-6">
+            <i class="fas fa-check-circle mr-2"></i>
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    <form method="post" enctype="multipart/form-data">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Left Column - Basic Settings -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Site Information -->
+                <div class="settings-section">
+                    <h2 class="section-title">Site Information</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label class="form-label">Site Name</label>
+                            <input type="text" class="form-input" asp-for="SiteName" />
+                            <span class="form-error" asp-validation-for="SiteName"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Contact Email</label>
+                            <input type="email" class="form-input" asp-for="ContactEmail" />
+                            <span class="form-error" asp-validation-for="ContactEmail"></span>
+                        </div>
+                        <div class="form-group md:col-span-2">
+                            <label class="form-label">Site Description</label>
+                            <textarea class="form-textarea" asp-for="SiteDescription" rows="3"></textarea>
+                            <span class="form-error" asp-validation-for="SiteDescription"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Contact Phone</label>
+                            <input type="text" class="form-input" asp-for="ContactPhone" />
+                            <span class="form-error" asp-validation-for="ContactPhone"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Homepage Settings -->
+                <div class="settings-section">
+                    <h2 class="section-title">Homepage Settings</h2>
+                    <div class="form-group">
+                        <label class="form-label">Hero Image</label>
+                        <div class="flex items-center space-x-4">
+                            @if (!string.IsNullOrEmpty(Model.HeroImagePath))
+                            {
+                                <img src="~/@Model.HeroImagePath" class="w-32 h-20 object-cover rounded-lg" alt="Hero Image" />
+                            }
+                            <input type="file" name="heroImage" class="form-input-file" accept="image/*" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Hero Title</label>
+                        <input type="text" class="form-input" asp-for="HeroTitle" />
+                        <span class="form-error" asp-validation-for="HeroTitle"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Hero Subtitle</label>
+                        <textarea class="form-textarea" asp-for="HeroSubtitle" rows="2"></textarea>
+                        <span class="form-error" asp-validation-for="HeroSubtitle"></span>
+                    </div>
+                </div>
+
+                <!-- Maintenance Settings -->
+                <div class="settings-section">
+                    <h2 class="section-title">Maintenance & Announcements</h2>
+                    <div class="form-group">
+                        <label class="form-label">Maintenance Message</label>
+                        <textarea class="form-textarea" asp-for="MaintenanceMessage" rows="3"
+                                  placeholder="Important announcement for users..."></textarea>
+                        <span class="form-error" asp-validation-for="MaintenanceMessage"></span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label class="form-label">Maintenance Start</label>
+                            <input type="datetime-local" class="form-input" asp-for="MaintenanceStart" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Maintenance End</label>
+                            <input type="datetime-local" class="form-input" asp-for="MaintenanceEnd" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Policies & SEO -->
+            <div class="space-y-6">
+                <!-- Policies -->
+                <div class="settings-section">
+                    <h2 class="section-title">Policies & Legal</h2>
+                    <div class="space-y-4">
+                        <div class="form-group">
+                            <label class="form-label">Privacy Policy</label>
+                            <textarea class="form-textarea" asp-for="PrivacyPolicy" rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Terms & Conditions</label>
+                            <textarea class="form-textarea" asp-for="TermsAndConditions" rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Return Policy</label>
+                            <textarea class="form-textarea" asp-for="ReturnPolicy" rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Shipping Information</label>
+                            <textarea class="form-textarea" asp-for="ShippingInformation" rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Warranty Information</label>
+                            <textarea class="form-textarea" asp-for="WarrantyInformation" rows="4"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social Media Settings -->
+                <div class="settings-section">
+                    <h2 class="section-title">Social Media</h2>
+                    <div class="space-y-4">
+                        <div class="form-group">
+                            <label class="form-label">Facebook URL</label>
+                            <input type="url" class="form-input" asp-for="FacebookUrl" placeholder="https://facebook.com/yourpage" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Instagram URL</label>
+                            <input type="url" class="form-input" asp-for="InstagramUrl" placeholder="https://instagram.com/yourpage" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Twitter URL</label>
+                            <input type="url" class="form-input" asp-for="TwitterUrl" placeholder="https://twitter.com/yourpage" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Settings -->
+                <div class="settings-section">
+                    <h2 class="section-title">Product Settings</h2>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <label class="form-label">Show Out of Stock Products</label>
+                            <input type="checkbox" class="form-checkbox" asp-for="ShowOutOfStockProducts" />
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <label class="form-label">Allow Purchasing Out of Stock</label>
+                            <input type="checkbox" class="form-checkbox" asp-for="AllowPurchasingOutOfStock" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Low Stock Threshold</label>
+                            <input type="number" class="form-input" asp-for="LowStockThreshold" min="0" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEO Settings -->
+                <div class="settings-section">
+                    <h2 class="section-title">SEO Settings</h2>
+                    <div class="form-group">
+                        <label class="form-label">Meta Keywords</label>
+                        <textarea class="form-textarea" asp-for="MetaKeywords" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Meta Description</label>
+                        <textarea class="form-textarea" asp-for="MetaDescription" rows="2"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="mt-8 flex justify-end">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save mr-2"></i>
+                Save Settings
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        // Toggle maintenance mode
+        document.getElementById('toggleMaintenance').addEventListener('click', function() {
+            const isEnabled = @Json.Serialize(Model.ShowMaintenanceMessage);
+
+            fetch('@Url.Action("ToggleMaintenance", "Settings")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(!isEnabled)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                }
+            });
+        });
+
+        // Real-time validation
+        document.querySelectorAll('.form-input, .form-textarea').forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.value.trim() === '') {
+                    this.classList.add('border-red-500');
+                } else {
+                    this.classList.remove('border-red-500');
+                }
+            });
+        });
+
+        // Add some interactivity
+        document.querySelectorAll('.settings-section').forEach(section => {
+            section.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+                this.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.1)';
+            });
+
+            section.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
+            });
+        });
+    </script>
+}

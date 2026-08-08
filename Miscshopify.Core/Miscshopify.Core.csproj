@@ -1,18 +1,26 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Miscshopify.Infrastructure\Miscshopify.Infrastructure.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Stripe.net" Version="44.11.0" />
-  </ItemGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Miscshopify.Api\Miscshopify.Api.csproj" />
+		<ProjectReference Include="..\Miscshopify.Infrastructure\Miscshopify.Infrastructure.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="coverlet.collector" Version="10.0.1">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.3.11" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.10" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="10.0.10" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+		<PackageReference Include="Stripe.net" Version="52.2.0" />
+	</ItemGroup>
+
 </Project>

@@ -7,45 +7,52 @@ namespace Miscshopify.Controllers
     [AllowAnonymous]
     public class ProductController : BaseController
     {
-        private readonly IProductService productService;
+        private readonly IProductService _productService;
 
-        public ProductController(IProductService _productService)
+        public ProductController(IProductService productService)
         {
-            productService = _productService;
+            _productService = productService;
         }
 
         public IActionResult Index()
         {
             return View();
         }
-        public async Task<IActionResult> GetProductsByCategory(Guid Id)
-        {
-            var product = await productService.GetProductsByCategory(Id);
 
-            return View(product);
-        }
-
-        public async Task<IActionResult> ProductDetails(Guid Id)
+        public async Task<IActionResult> GetProductsByCategory(Guid id, decimal? minPrice, decimal? maxPrice)
         {
-            var product = await productService.ProductDetails(Id);
-                
-            return View(product);
-        }
+            var products = await _productService.GetProductsByCategory(id);
 
-        public async Task<IActionResult> FilterProducts(decimal minPrice, decimal maxPrice, Guid Id)
-        {
-            var product = await productService.GetProductsByCategory(Id);
-            if (decimal.IsNegative(minPrice) || decimal.IsNegative(maxPrice) || minPrice == 0 || maxPrice == 0)
+            var allProducts = products.ToList();
+
+            string categoryName = "Products";
+            ViewBag.CategoryName = categoryName;
+
+            if (minPrice.HasValue && minPrice > 0)
             {
-                return View(product);
-            }
-            else
-            {
-                var filteredProduct = product.Where(p => p.Price >= minPrice && p.Price <= maxPrice);
-                return View(filteredProduct);
+                products = products.Where(p => p.Price >= minPrice.Value);
+                ViewBag.CategoryName = "Filtered Products";
             }
 
+            if (maxPrice.HasValue && maxPrice > 0)
+            {
+                products = products.Where(p => p.Price <= maxPrice.Value);
+                ViewBag.CategoryName = "Filtered Products";
+            }
+
+            if (minPrice.HasValue && maxPrice.HasValue && minPrice > 0 && maxPrice > 0)
+            {
+                products = allProducts.Where(p => p.Price >= minPrice.Value && p.Price <= maxPrice.Value);
+                ViewBag.CategoryName = "Filtered Products";
+            }
+
+            return View(products);
         }
 
+        public async Task<IActionResult> ProductDetails(Guid id)
+        {
+            var product = await _productService.ProductDetails(id);
+            return View(product);
+        }
     }
 }

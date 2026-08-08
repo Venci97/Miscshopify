@@ -5,23 +5,521 @@
     ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
 }
 
-<partial name="_StatusMessage" for="StatusMessage" />
-<h3>@ViewData["Title"]</h3>
-<div class="alert alert-warning" role="alert">
-    <p>
-        <span class="glyphicon glyphicon-warning-sign"></span>
-        <strong>Put these codes in a safe place.</strong>
-    </p>
-    <p>
-        If you lose your device and don't have the recovery codes you will lose access to your account.
-    </p>
-    <p>
-        Generating new recovery codes does not change the keys used in authenticator apps. If you wish to change the key
-        used in an authenticator app you should <a asp-page="./ResetAuthenticator">reset your authenticator keys.</a>
-    </p>
+<div class="generate-recovery-codes">
+    <h3 class="section-title">@ViewData["Title"]</h3>
+    <partial name="_StatusMessage" for="StatusMessage" />
+
+    <div class="manage-form">
+        <!-- Critical Warning Message -->
+        <div class="critical-warning">
+            <div class="warning-header">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h4 class="warning-title">Generate New Recovery Codes</h4>
+            </div>
+            <div class="warning-content">
+                <p class="warning-text">
+                    <strong>When you generate new recovery codes, your existing codes will no longer work.</strong>
+                </p>
+
+                <div class="warning-details">
+                    <p>Please note:</p>
+                    <ul class="warning-list">
+                        <li><i class="fas fa-sync-alt"></i> Existing recovery codes will be invalidated</li>
+                        <li><i class="fas fa-download"></i> You must save the new codes immediately</li>
+                        <li><i class="fas fa-mobile-alt"></i> Your authenticator app will continue to work</li>
+                        <li><i class="fas fa-key"></i> Authenticator keys remain unchanged</li>
+                    </ul>
+                </div>
+
+                <div class="additional-info">
+                    <p>
+                        <strong>Important:</strong> Generating new recovery codes does not change the keys used in authenticator apps.
+                        If you wish to change the key used in an authenticator app you should
+                        <a asp-page="./ResetAuthenticator">reset your authenticator keys</a>.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Reminder -->
+        <div class="security-reminder">
+            <div class="reminder-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <div class="reminder-content">
+                <h5>Security Reminder</h5>
+                <p>
+                    <strong>Put these codes in a safe place.</strong> If you lose your device and don't have the
+                    recovery codes, you will lose access to your account.
+                </p>
+                <div class="reminder-tips">
+                    <p><strong>Recommended storage methods:</strong></p>
+                    <ul class="tips-list">
+                        <li><i class="fas fa-print"></i> Print and store in a secure location</li>
+                        <li><i class="fas fa-lock"></i> Save in a password manager</li>
+                        <li><i class="fas fa-file-alt"></i> Store in an encrypted file</li>
+                        <li><i class="fas fa-envelope"></i> Email to yourself (less secure)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Generate Form -->
+        <form method="post" class="generate-form">
+            <div class="form-actions">
+                <button class="submit-btn warning" type="submit" id="generate-button">
+                    <i class="fas fa-key"></i>
+                    Generate New Recovery Codes
+                </button>
+                <a asp-page="./TwoFactorAuthentication" class="cancel-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to 2FA Settings
+                </a>
+            </div>
+        </form>
+
+        <!-- What Happens Next -->
+        <div class="next-steps">
+            <div class="steps-icon">
+                <i class="fas fa-list-alt"></i>
+            </div>
+            <div class="steps-content">
+                <h5>What Happens Next?</h5>
+                <ol class="steps-list">
+                    <li>
+                        <strong>New codes will be generated</strong>
+                        <span>Your current recovery codes will be invalidated immediately</span>
+                    </li>
+                    <li>
+                        <strong>You'll see your new codes</strong>
+                        <span>We'll show you the new recovery codes on the next page</span>
+                    </li>
+                    <li>
+                        <strong>Save them immediately</strong>
+                        <span>You must save the new codes in a secure location</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <form method="post">
-        <button class="btn btn-danger" type="submit">Generate Recovery Codes</button>
-    </form>
-</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const generateButton = document.getElementById('generate-button');
+            const generateForm = document.querySelector('.generate-form');
+
+            if (generateButton) {
+                generateButton.addEventListener('click', function(e) {
+                    if (!confirm('Are you sure you want to generate new recovery codes? Your existing recovery codes will no longer work.')) {
+                        e.preventDefault();
+                    } else {
+                        // Change button state to show loading
+                        this.disabled = true;
+                        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating Codes...';
+                    }
+                });
+            }
+        });
+    </script>
+}
+
+<style>
+    .generate-recovery-codes {
+        max-width: 800px;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 1.5rem;
+    }
+
+    .manage-form {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .critical-warning {
+        background: #fffbeb;
+        border: 2px solid #fcd34d;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+
+    .warning-header {
+        background: #d97706;
+        color: white;
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+        .warning-header i {
+            font-size: 1.5rem;
+        }
+
+    .warning-title {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .warning-content {
+        padding: 1.5rem;
+    }
+
+    .warning-text {
+        color: #92400e;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+    }
+
+    .warning-details {
+        color: #92400e;
+        margin-bottom: 1.5rem;
+    }
+
+        .warning-details p {
+            margin-bottom: 0.75rem;
+            font-weight: 500;
+        }
+
+    .warning-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+        .warning-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: #92400e;
+        }
+
+        .warning-list i {
+            color: #d97706;
+            margin-top: 0.125rem;
+            flex-shrink: 0;
+            width: 1rem;
+            text-align: center;
+        }
+
+    .additional-info {
+        background: #fef3c7;
+        padding: 1rem;
+        border-radius: 6px;
+        border-left: 4px solid #d97706;
+    }
+
+        .additional-info p {
+            color: #92400e;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .additional-info a {
+            color: #92400e;
+            text-decoration: underline;
+            font-weight: 500;
+        }
+
+            .additional-info a:hover {
+                color: #78350f;
+            }
+
+    .security-reminder {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        background: #f0f9ff;
+        border: 1px solid #bae6fd;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .reminder-icon {
+        flex-shrink: 0;
+        color: #0369a1;
+        font-size: 1.5rem;
+        margin-top: 0.125rem;
+    }
+
+    .reminder-content h5 {
+        color: #0369a1;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+    }
+
+    .reminder-content p {
+        color: #0369a1;
+        margin-bottom: 1rem;
+        line-height: 1.5;
+    }
+
+    .reminder-tips {
+        background: rgba(255, 255, 255, 0.7);
+        padding: 1rem;
+        border-radius: 6px;
+    }
+
+        .reminder-tips p {
+            margin-bottom: 0.75rem;
+            color: #0369a1;
+            font-weight: 600;
+        }
+
+    .tips-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+
+        .tips-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #0369a1;
+            font-size: 0.875rem;
+        }
+
+        .tips-list i {
+            color: #0369a1;
+            font-size: 0.75rem;
+            width: 1rem;
+            text-align: center;
+        }
+
+    .generate-form {
+        margin: 2rem 0;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .submit-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: none;
+        font-size: 1rem;
+    }
+
+        .submit-btn.warning {
+            background: #d97706;
+            color: white;
+        }
+
+            .submit-btn.warning:hover:not(:disabled) {
+                background: #b45309;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+            }
+
+        .submit-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+    .cancel-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        text-decoration: none;
+        color: #6b7280;
+        background: #f9fafb;
+        border: 1px solid #d1d5db;
+        transition: all 0.2s ease;
+    }
+
+        .cancel-btn:hover {
+            background: #f3f4f6;
+            color: #374151;
+            text-decoration: none;
+        }
+
+    .next-steps {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .steps-icon {
+        flex-shrink: 0;
+        color: #4f46e5;
+        font-size: 1.5rem;
+        margin-top: 0.125rem;
+    }
+
+    .steps-content h5 {
+        color: #4f46e5;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .steps-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        counter-reset: step-counter;
+    }
+
+        .steps-list li {
+            counter-increment: step-counter;
+            margin-bottom: 1.5rem;
+            padding-left: 2.5rem;
+            position: relative;
+        }
+
+            .steps-list li:last-child {
+                margin-bottom: 0;
+            }
+
+            .steps-list li::before {
+                content: counter(step-counter);
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 1.75rem;
+                height: 1.75rem;
+                background: #4f46e5;
+                color: white;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 0.875rem;
+                font-weight: 600;
+            }
+
+            .steps-list li strong {
+                display: block;
+                color: #1f2937;
+                margin-bottom: 0.25rem;
+            }
+
+            .steps-list li span {
+                color: #6b7280;
+                font-size: 0.875rem;
+                line-height: 1.4;
+            }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .manage-form
+
+    {
+        padding: 1.5rem;
+    }
+
+    .warning-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+        padding: 1rem;
+    }
+
+    .security-reminder {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.75rem;
+    }
+
+    .tips-list {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .submit-btn,
+    .cancel-btn {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .next-steps {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.75rem;
+    }
+
+    .steps-list li {
+        padding-left: 0;
+        padding-top: 2.5rem;
+        text-align: left;
+    }
+
+        .steps-list li::before {
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+        }
+
+    }
+
+    @@media (max-width: 480px) {
+        .manage-form
+
+    {
+        padding: 1rem;
+    }
+
+    .section-title {
+        font-size: 1.25rem;
+    }
+
+    .warning-title {
+        font-size: 1.1rem;
+    }
+
+    .warning-content {
+        padding: 1rem;
+    }
+
+    .security-reminder {
+        padding: 1rem;
+    }
+
+    .next-steps {
+        padding: 1rem;
+    }
+
+    }
+</style>

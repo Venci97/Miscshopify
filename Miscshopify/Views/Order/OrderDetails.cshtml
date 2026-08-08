@@ -4,64 +4,205 @@
 @using Miscshopify.Infrastructure.Data.Models;
 @using Miscshopify.Infrastructure.Data.Models.Enums;
 @model OrderViewModel
+@{
+    ViewData["Title"] = "Order Details";
+    Layout = null;
+}
 
-<div class="col-sm-30 col-md-20 col-xl-15 mb-20" style="background: rgba(255, 255, 255, 1);">
-	<div class="item rounded-xl overflow-hidden shadow border">
-		<div class="px-3 pt-6">
-			<table class="table table-responsive-xl">
-				<thead>
-					<tr>
-						<th>&nbsp;</th>
-						<th>Name</th>
-						<th>Description</th>
-						<th>Products</th>
-					</tr>
-				</thead>
-				<tbody>
-					@foreach (var item in Model.Items)
-					{
-						<tr>
-							<td>
-								<img src="~/@item.ImagePath" style="border-radius: 50%;" width="50" height="50">
-							</td>
-							<td>@item.ProductName</td>
-							<td>@item.Quantity</td>
-							<td>@item.Price</td>
-						</tr>
-					}
-				</tbody>
-			</table>
-			<hr>
-			<div class="wrap-input100">
-				<label class="form-label">Name</label>
-				<span class="focus-input100">@Model.CustomerName</span>
-			</div>
-			<div class="wrap-input100">
-				<label class="form-label">Email</label>
-				<span class="focus-input100">@Model.CustomerEmail</span>
-			</div>
-			<div class="wrap-input100">
-				<label class="form-label">City</label>
-				<span class="focus-input100">@Model.CustomerCity</span>
-			</div>
-			<div class="wrap-input100">
-				<label class="form-label">Address</label>
-				<span class="focus-input100">@Model.CustomerAddress</span>
-			</div>
-			<div class="wrap-input100">
-				<label class="form-label">Postcode</label>
-				<span class="focus-input100">@Model.CustomerPostCode</span>
-			</div>
-			<div class="wrap-input100">
-				<label class="form-label">Phone</label>
-				<span class="focus-input100">@Model.CustomerPhoneNumber</span>
-			</div>
-			<hr>
-			<div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
-				<a asp-action="MyOrders" asp-controller="Order" class="btn btn-primary glow mb-1 mb-sm-0 mr-0 mr-sm-1">
-				Back
-				</a>
-			</div>
-		</div>
-	</div>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Details - Modern Store</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="~/css/order-details.css" rel="stylesheet" />
+</head>
+<body class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-8" style="font-family: 'Inter', sans-serif;">
+    <div class="container mx-auto px-4 max-w-4xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-receipt text-blue-600 text-2xl"></i>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Order Details</h1>
+            <p class="text-gray-600">Review your order information</p>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <!-- Order Items Section -->
+            <div class="p-6 border-b border-gray-200">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="fas fa-shopping-basket text-blue-500"></i>
+                    Order Items (@Model.Items.Count)
+                </h2>
+
+                <div class="space-y-4">
+                    @foreach (var item in Model.Items)
+                    {
+                        <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                            <div class="flex-shrink-0">
+                                <img src="~/@item.ImagePath"
+                                     alt="@item.ProductName"
+                                     class="w-16 h-16 object-cover rounded-lg border border-gray-200"
+                                     onerror="this.src='https://images.unsplash.com/photo-1560769629-975ec94e6a86?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80'">
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="font-semibold text-gray-800 truncate">@item.ProductName</h3>
+                                <p class="text-sm text-gray-600">Quantity: @item.Quantity</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold text-blue-600">@(item.Price* item.Quantity) BGN</p>
+                                <p class="text-sm text-gray-500">@item.Price BGN each</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Order Summary -->
+                <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-gray-700">Total Items:</span>
+                        <span class="font-semibold">@Model.Items.Sum(i => i.Quantity)</span>
+                    </div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-gray-700">Subtotal:</span>
+                        <span class="font-semibold">@Model.Items.Sum(i => i.Price * i.Quantity) BGN</span>
+                    </div>
+                    <div class="flex justify-between items-center text-lg font-bold pt-2 border-t border-blue-200">
+                        <span class="text-gray-800">Total Amount:</span>
+                        <span class="text-blue-600">@Model.Items.Sum(i => i.Price * i.Quantity) BGN</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Information Section -->
+            <div class="p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="fas fa-user-circle text-green-500"></i>
+                    Customer Information
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Personal Info -->
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg">
+                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-user text-blue-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Full Name</p>
+                                <p class="font-semibold text-gray-800">@Model.CustomerName</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg">
+                            <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-envelope text-green-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Email Address</p>
+                                <p class="font-semibold text-gray-800">@Model.CustomerEmail</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg">
+                            <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-phone text-purple-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Phone Number</p>
+                                <p class="font-semibold text-gray-800">@Model.CustomerPhoneNumber</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shipping Info -->
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg">
+                            <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-city text-orange-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">City</p>
+                                <p class="font-semibold text-gray-800">@Model.CustomerCity</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg">
+                            <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-home text-red-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Address</p>
+                                <p class="font-semibold text-gray-800">@Model.CustomerAddress</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg">
+                            <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-mail-bulk text-indigo-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Post Code</p>
+                                <p class="font-semibold text-gray-800">@Model.CustomerPostCode</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="p-6 bg-gray-50 border-t border-gray-200">
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a asp-action="MyOrders" asp-controller="Order"
+                       class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transform hover:-translate-y-0.5 transition-all duration-300 shadow-lg hover:shadow-xl inline-flex items-center justify-center gap-2">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Back to My Orders
+                    </a>
+                    <a href="/"
+                       class="border-2 border-gray-300 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 transform hover:-translate-y-0.5 transition-all duration-300 inline-flex items-center justify-center gap-2">
+                        <i class="fas fa-home mr-2"></i>
+                        Go to Homepage
+                    </a>
+                    <button onclick="window.print()"
+                            class="border-2 border-gray-300 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:border-green-500 hover:text-green-600 hover:bg-green-50 transform hover:-translate-y-0.5 transition-all duration-300 inline-flex items-center justify-center gap-2">
+                        <i class="fas fa-print mr-2"></i>
+                        Print Receipt
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Info -->
+        <div class="mt-6 text-center">
+            <div class="flex items-center justify-center gap-2 text-sm text-gray-500">
+                <i class="fas fa-info-circle"></i>
+                <span>Need help with your order? Contact our support team</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add image error handling
+            document.querySelectorAll('img').forEach(img => {
+                img.addEventListener('error', function() {
+                    this.src = 'https://images.unsplash.com/photo-1560769629-975ec94e6a86?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80';
+                });
+            });
+
+            // Add some interactivity
+            const orderItems = document.querySelectorAll('.bg-gray-50');
+            orderItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    this.classList.toggle('bg-blue-50');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

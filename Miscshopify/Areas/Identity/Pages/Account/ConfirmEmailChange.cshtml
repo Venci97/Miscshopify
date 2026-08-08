@@ -4,5 +4,208 @@
     ViewData["Title"] = "Confirm email change";
 }
 
-<h1>@ViewData["Title"]</h1>
-<partial name="_StatusMessage" model="Model.StatusMessage" />
+<div class="confirm-email-change-page">
+    <div class="confirmation-container">
+        <div class="confirmation-icon">
+            <i class="fas fa-envelope-open-text"></i>
+        </div>
+
+        <div class="confirmation-content">
+            <h1 class="confirmation-title">Email Change Confirmed</h1>
+            <partial name="_StatusMessage" model="Model.StatusMessage" />
+
+            <div class="confirmation-details">
+                <div class="detail-item">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>Your email address has been successfully updated</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-bell"></i>
+                    <span>Future communications will be sent to your new email address</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-key"></i>
+                    <span>You can now sign in using your new email address</span>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a href="~/" class="action-btn primary">
+                    <i class="fas fa-home"></i>
+                    Go to Homepage
+                </a>
+                <a asp-page="./Login" class="action-btn secondary">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Sign In with New Email
+                </a>
+                <a asp-area="Identity" asp-page="/Account/Manage/Index" class="action-btn outline">
+                    <i class="fas fa-user-cog"></i>
+                    Manage Account
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .confirm-email-change-page {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        padding: 2rem;
+    }
+
+    .confirmation-container {
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        padding: 3rem;
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+        border-left: 4px solid #3b82f6;
+    }
+
+    .confirmation-icon {
+        font-size: 4rem;
+        color: #3b82f6;
+        margin-bottom: 1.5rem;
+    }
+
+    .confirmation-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 1.5rem;
+    }
+
+    .confirmation-details {
+        background: #eff6ff;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        text-align: left;
+    }
+
+    .detail-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+        .detail-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-item i {
+            color: #3b82f6;
+            margin-top: 0.125rem;
+            flex-shrink: 0;
+        }
+
+        .detail-item span {
+            color: #1e40af;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+    .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .action-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        border: none;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+
+        .action-btn.primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+            .action-btn.primary:hover {
+                background: #2563eb;
+                transform: translateY(-1px);
+            }
+
+        .action-btn.secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+            .action-btn.secondary:hover {
+                background: #e5e7eb;
+                transform: translateY(-1px);
+            }
+
+        .action-btn.outline {
+            background: transparent;
+            color: #3b82f6;
+            border: 1px solid #3b82f6;
+        }
+
+            .action-btn.outline:hover {
+                background: #eff6ff;
+                transform: translateY(-1px);
+            }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .confirm-email-change-page {
+            padding: 1rem;
+        }
+
+        .confirmation-container {
+            padding: 2rem;
+        }
+
+        .confirmation-title {
+            font-size: 1.5rem;
+        }
+
+        .confirmation-details {
+            padding: 1rem;
+        }
+
+        .detail-item {
+            flex-direction: column;
+            text-align: center;
+            gap: 0.5rem;
+        }
+
+        .action-buttons {
+            gap: 0.75rem;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .confirmation-container {
+            padding: 1.5rem;
+        }
+
+        .confirmation-icon {
+            font-size: 3rem;
+        }
+
+        .action-btn {
+            padding: 0.75rem 1rem;
+            font-size: 0.85rem;
+        }
+    }
+</style>

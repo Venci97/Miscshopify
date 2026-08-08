@@ -1,50 +1,251 @@
 ﻿@using Miscshopify.Core.Models;
+@using Miscshopify.Infrastructure.Data.Models.Enums;
 @model IEnumerable<OrderViewModel>
 @{
+    ViewData["Title"] = "New Orders";
+    var newOrdersCount = Model.Count();
+    var pendingOrders = Model.Count(o => o.Status == OrderStatusEnum.Pending);
+    var onTheWayOrders = Model.Count(o => o.Status == OrderStatusEnum.OnTheWay);
 }
-<head>
-	<link rel="stylesheet" href="~/plugins/fontawesome-free-6.2.0-web/css/all.min.css">
-</head>
-<div class="row">
-	<div class="col-12">
-		<section class="ftco-section">
-			<div class="container">
-				<div class="row justify-content-center">
-					<div class="col-md-6 text-center mb-5">
-						<h2 class="heading-section">New Orders</h2>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-12">
-						<div class="table-wrap">
-							<table class="table table-responsive-xl">
-								<thead>
-									<tr>
-										<th>Customer Name</th>
-										<th>Status</th>
-										<th>Action</th>
-										<th>&nbsp;</th>
-									</tr>
-								</thead>
-								<tbody>
-									@foreach (var order in Model)
-									{
-										<tr>
-											<td>@order.CustomerName</td>
-											<td>@order.Status</td>
-											<td>
-												<a asp-area="Admin" asp-action="OrderDetails" asp-controller="Order" asp-route-id="@order.Id" class="btn btn-block btn-outline-info btn-xs">
-													Details
-												</a>
-											</td>
-										</tr>
-									}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-	</div>
+
+<link href="~/css/admin/new-orders.css" rel="stylesheet" />
+
+<div class="new-orders-section">
+    <div class="new-orders-header">
+        <h1 class="new-orders-title">
+            <i class="fas fa-bell"></i>
+            New Orders
+            @if (newOrdersCount > 0)
+            {
+                <span class="badge bg-primary ms-2 new-order-highlight">@newOrdersCount</span>
+            }
+        </h1>
+        <div class="new-orders-stats">
+            <div class="stat-card highlight">
+                <div class="stat-number">@newOrdersCount</div>
+                <div class="stat-label">New Orders</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">@pendingOrders</div>
+                <div class="stat-label">Pending</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">@onTheWayOrders</div>
+                <div class="stat-label">On the way</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="orders-card">
+        <div class="card-content">
+            <div class="table-container">
+                @if (Model.Any())
+                {
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Status</th>
+                                <th>Priority</th>
+                                <th style="width: 200px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model)
+                            {
+                                var isUrgent = order.Status == OrderStatusEnum.Pending;
+                                <tr class="@(isUrgent ? "urgent-order" : "")">
+                                    <td>
+                                        <span class="order-id">#@order.Id</span>
+                                    </td>
+                                    <td>
+                                        <div class="customer-info">
+                                            <div class="customer-name">@order.CustomerName</div>
+                                            @if (!string.IsNullOrEmpty(order.CustomerEmail))
+                                            {
+                                                <div class="customer-email">@order.CustomerEmail</div>
+                                            }
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        @{
+                                            var statusClass = "status-pending";
+                                            var statusText = order.Status.ToString();
+                                            var displayText = statusText;
+
+                                            switch (order.Status)
+                                            {
+                                                case OrderStatusEnum.Pending:
+                                                    statusClass = "status-pending";
+                                                    displayText = "Pending";
+                                                    break;
+                                                case OrderStatusEnum.OnTheWay:
+                                                    statusClass = "status-ontheway";
+                                                    displayText = "On the way";
+                                                    break;
+                                                case OrderStatusEnum.Completed:
+                                                    statusClass = "status-completed";
+                                                    displayText = "Completed";
+                                                    break;
+                                                default:
+                                                    statusClass = "status-pending";
+                                                    displayText = "Pending";
+                                                    break;
+                                            }
+                                        }
+                                        <span class="status-badge @statusClass">
+                                            <i class="fas fa-circle"></i>
+                                            @displayText
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @if (order.Status == OrderStatusEnum.Pending)
+                                        {
+                                            <span class="badge bg-danger">
+                                                <i class="fas fa-exclamation-circle"></i>
+                                                Urgent
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning text-dark">
+                                                <i class="fas fa-clock"></i>
+                                                In Progress
+                                            </span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <a asp-area="Admin" asp-action="OrderDetails" asp-controller="Order"
+                                               asp-route-id="@order.Id" class="btn btn-outline-info btn-sm">
+                                                <i class="fas fa-eye"></i>
+                                                Details
+                                            </a>
+                                            @if (order.Status == OrderStatusEnum.Pending)
+                                            {
+                                                <a asp-area="Admin" asp-action="UpdateStatus" asp-controller="Order"
+                                                   asp-route-id="@order.Id" class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-check"></i>
+                                                    Process
+                                                </a>
+                                            }
+                                            else if (order.Status == OrderStatusEnum.OnTheWay)
+                                            {
+                                                <a asp-area="Admin" asp-action="UpdateStatus" asp-controller="Order"
+                                                   asp-route-id="@order.Id" class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-truck"></i>
+                                                    Deliver
+                                                </a>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="empty-state">
+                        <i class="fas fa-check-circle"></i>
+                        <h3>All Clear!</h3>
+                        <p>No new orders pending. All orders have been processed.</p>
+                        <a href="/Admin/Order/Index" class="btn btn-primary mt-2">
+                            <i class="fas fa-list"></i>
+                            View All Orders
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Add interactive features
+        document.addEventListener('DOMContentLoaded', function() {
+            const rows = document.querySelectorAll('.orders-table tbody tr');
+
+            rows.forEach((row, index) => {
+                // Add staggered animation
+                row.style.animationDelay = `${(index + 1) * 0.1}s`;
+
+                // Add click effect for the entire row
+                row.addEventListener('click', function(e) {
+                    if (!e.target.closest('a') && !e.target.closest('button')) {
+                        const detailsLink = this.querySelector('a[asp-action="OrderDetails"]');
+                        if (detailsLink) {
+                            detailsLink.click();
+                        }
+                    }
+                });
+            });
+
+            // Auto-refresh for new orders (every 30 seconds)
+            setInterval(() => {
+                console.log('Checking for new orders...');
+                // Uncomment the line below to enable auto-refresh
+                // window.location.reload();
+            }, 30000);
+
+            // Add notification for new orders
+            if (@newOrdersCount > 0) {
+                // Optional: Play notification sound or show browser notification
+                console.log('New orders waiting: ', @newOrdersCount);
+
+                // Flash the title if user is on another tab
+                let originalTitle = document.title;
+                let isFlashing = false;
+
+                function flashTitle() {
+                    if (!isFlashing) {
+                        isFlashing = true;
+                        let flashCount = 0;
+                        const flashInterval = setInterval(() => {
+                            document.title = (document.title === originalTitle)
+                                ? `(${@newOrdersCount}) New Orders!`
+                                : originalTitle;
+                            flashCount++;
+                            if (flashCount >= 6) { // Flash 3 times
+                                clearInterval(flashInterval);
+                                document.title = originalTitle;
+                                isFlashing = false;
+                            }
+                        }, 500);
+                    }
+                }
+
+                // Flash when page becomes visible
+                document.addEventListener('visibilitychange', function() {
+                    if (document.hidden) {
+                        flashTitle();
+                    }
+                });
+            }
+        });
+
+        // Quick status update
+        function quickUpdate(orderId, action) {
+            if (confirm(`Are you sure you want to mark this order as ${action}?`)) {
+                // In a real application, this would be an API call
+                console.log(`Updating order ${orderId} to ${action}`);
+                // Show loading state
+                const button = event.target;
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                button.disabled = true;
+
+                // Simulate API call
+                setTimeout(() => {
+                    button.innerHTML = '<i class="fas fa-check"></i> Done!';
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                }, 1500);
+            }
+        }
+    </script>
+}

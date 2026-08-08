@@ -22,6 +22,7 @@ namespace Miscshopify.Infrastructure.Data.Models
 
         public string ImagePath { get; set; }
 
+        [Range(0.01, double.MaxValue)]
         public decimal Price { get; set; }
 
         public virtual Order Order { get; set; }

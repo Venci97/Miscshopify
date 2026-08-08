@@ -15,7 +15,8 @@ namespace Miscshopify.Controllers
             orderService = _orderService;
         }
 
-        [HttpGet]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CompleteOrder(PaymentMethodEnum paymentMethod)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

@@ -2,28 +2,127 @@
 @model LoginWithRecoveryCodeModel
 @{
     ViewData["Title"] = "Recovery code verification";
+    Layout = null;
 }
 
-<h1>@ViewData["Title"]</h1>
-<hr />
-<p>
-    You have requested to log in with a recovery code. This login will not be remembered until you provide
-    an authenticator app code at log in or disable 2FA and log in again.
-</p>
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating">
-                <input asp-for="Input.RecoveryCode" class="form-control" autocomplete="off" />
-                <label asp-for="Input.RecoveryCode" class="form-label"></label>
-                <span asp-validation-for="Input.RecoveryCode" class="text-danger"></span>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recovery Code Verification - Modern Store</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-orange-50 to-amber-100 flex items-center justify-center p-4" style="font-family: 'Inter', sans-serif;">
+    <div class="max-w-md w-full">
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-key text-orange-600 text-2xl"></i>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">Recovery Access</h1>
+                <p class="text-gray-600">Use your recovery code to sign in</p>
             </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
-        </form>
-    </div>
-</div>
 
-@section Scripts {
+            <!-- Information Alert -->
+            <div class="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                <div class="flex items-start space-x-3">
+                    <i class="fas fa-info-circle text-amber-500 mt-0.5"></i>
+                    <div class="text-sm text-amber-800">
+                        <p class="font-medium mb-1">Important Notice</p>
+                        <p>This login will not be remembered until you provide an authenticator app code at login or disable 2FA and log in again.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Validation Summary -->
+            <div asp-validation-summary="ModelOnly" class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700"></div>
+
+            <form method="post" class="space-y-6">
+                <!-- Recovery Code -->
+                <div class="space-y-2">
+                    <label asp-for="Input.RecoveryCode" class="block text-sm font-medium text-gray-700">
+                        <i class="fas fa-shield-alt mr-2 text-orange-500"></i>Recovery Code
+                    </label>
+                    <input asp-for="Input.RecoveryCode"
+                           autocomplete="off"
+                           aria-required="true"
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300"
+                           placeholder="Enter your recovery code" />
+                    <span asp-validation-for="Input.RecoveryCode" class="text-red-600 text-sm"></span>
+                    <p class="text-xs text-gray-500 mt-1">
+                        <i class="fas fa-lightbulb mr-1"></i>
+                        Enter one of your recovery codes you saved during 2FA setup
+                    </p>
+                </div>
+
+                <!-- Login Button -->
+                <button type="submit"
+                        class="w-full bg-gradient-to-r from-orange-600 to-amber-600 text-white py-3 px-4 rounded-lg font-semibold text-lg hover:from-orange-700 hover:to-amber-700 transform hover:-translate-y-0.5 transition-all duration-300 shadow-lg hover:shadow-xl">
+                    <i class="fas fa-unlock-alt mr-2"></i>Recover Account
+                </button>
+            </form>
+
+            <!-- Back to 2FA Option -->
+            <div class="mt-6 pt-6 border-t border-gray-200 text-center">
+                <a asp-page="./LoginWith2fa"
+                   asp-route-returnUrl="@Model.ReturnUrl"
+                   class="text-blue-600 hover:text-blue-700 font-medium text-sm inline-flex items-center gap-2 transition-colors">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to authenticator app login
+                </a>
+            </div>
+
+            <!-- Help Section -->
+            <div class="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <div class="flex items-start space-x-3">
+                    <i class="fas fa-question-circle text-gray-500 mt-0.5"></i>
+                    <div class="text-sm text-gray-700">
+                        <p class="font-medium mb-1">Lost your recovery codes?</p>
+                        <p>If you've lost all recovery codes, you'll need to contact support to regain access to your account.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <partial name="_ValidationScriptsPartial" />
-}
+
+    <style>
+        .form-input {
+            transition: all 0.3s ease;
+        }
+
+            .form-input:focus {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(249, 115, 22, 0.1);
+            }
+
+        /* Animation for the key icon */
+        @@keyframes shake {
+            0%, 100%
+
+        {
+            transform: rotate(0deg);
+        }
+
+        25% {
+            transform: rotate(-10deg);
+        }
+
+        75% {
+            transform: rotate(10deg);
+        }
+
+        }
+
+        .fa-key {
+            animation: shake 3s ease-in-out infinite;
+        }
+    </style>
+</body>
+</html>

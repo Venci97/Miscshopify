@@ -1,25 +1,151 @@
 ﻿@model ErrorViewModel
 @{
     ViewData["Title"] = "Error";
+    Layout = null;
 }
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Error - Modern Store</title>
 
-@if (Model.ShowRequestId)
-{
-    <p>
-        <strong>Request ID:</strong> <code>@Model.RequestId</code>
-    </p>
-}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="~/css/error.css" rel="stylesheet" />
+</head>
+<body class="min-h-screen bg-gradient-to-br from-red-50 to-orange-100 flex items-center justify-center p-4" style="font-family: 'Inter', sans-serif;">
+    <div class="max-w-2xl w-full">
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 bg-red-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-exclamation-triangle text-red-600 text-3xl"></i>
+                </div>
+                <h1 class="text-3xl font-bold text-red-600 mb-2">Something Went Wrong</h1>
+                <p class="text-gray-600">We encountered an error while processing your request</p>
+            </div>
 
-<h3>Development Mode</h3>
-<p>
-    Swapping to <strong>Development</strong> environment will display more detailed information about the error that occurred.
-</p>
-<p>
-    <strong>The Development environment shouldn't be enabled for deployed applications.</strong>
-    It can result in displaying sensitive information from exceptions to end users.
-    For local debugging, enable the <strong>Development</strong> environment by setting the <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>
-    and restarting the app.
-</p>
+            <!-- Error Details -->
+            <div class="space-y-6">
+                <!-- Request ID -->
+                @if (Model.ShowRequestId)
+                {
+                    <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-bug text-gray-500"></i>
+                            <div>
+                                <p class="font-medium text-gray-700">Request ID</p>
+                                <p class="text-sm text-gray-600 font-mono">@Model.RequestId</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <!-- Error Message -->
+                <div class="p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <div class="flex items-start space-x-3">
+                        <i class="fas fa-times-circle text-red-500 mt-0.5"></i>
+                        <div>
+                            <p class="font-medium text-red-800">An error occurred while processing your request</p>
+                            <p class="text-sm text-red-600 mt-1">Our technical team has been notified and we're working to resolve it</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Development Mode Info -->
+                <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div class="flex items-start space-x-3">
+                        <i class="fas fa-code text-blue-500 mt-0.5"></i>
+                        <div class="text-sm text-blue-800">
+                            <p class="font-medium mb-2">Development Mode</p>
+                            <p class="mb-2">Swapping to <strong>Development</strong> environment will display more detailed information about the error that occurred.</p>
+                            <p class="mb-2">
+                                <strong>The Development environment shouldn't be enabled for deployed applications.</strong>
+                                It can result in displaying sensitive information from exceptions to end users.
+                            </p>
+                            <p>
+                                For local debugging, enable the <strong>Development</strong> environment by setting the <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>
+                                and restarting the app.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <a href="javascript:history.back()"
+                   class="bg-gray-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-gray-700 transform hover:-translate-y-0.5 transition-all duration-300 shadow-lg hover:shadow-xl inline-flex items-center justify-center gap-2">
+                    <i class="fas fa-arrow-left"></i>
+                    Go Back
+                </a>
+                <a href="/"
+                   class="bg-gradient-to-r from-red-600 to-orange-600 text-white py-3 px-4 rounded-lg font-semibold hover:from-red-700 hover:to-orange-700 transform hover:-translate-y-0.5 transition-all duration-300 shadow-lg hover:shadow-xl inline-flex items-center justify-center gap-2">
+                    <i class="fas fa-home"></i>
+                    Homepage
+                </a>
+            </div>
+
+            <!-- Support Information -->
+            <div class="mt-8 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <div class="flex items-start space-x-3">
+                    <i class="fas fa-life-ring text-gray-500 mt-0.5"></i>
+                    <div class="text-sm text-gray-700">
+                        <p class="font-medium mb-1">Need Immediate Assistance?</p>
+                        <p>If this error persists, please contact our support team with the Request ID above.</p>
+                        <a href="mailto:support@modernstore.com" class="text-red-600 hover:text-red-700 font-medium inline-flex items-center gap-1 mt-2">
+                            <i class="fas fa-envelope"></i>
+                            Contact Support
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Information -->
+            <div class="mt-6 text-center">
+                <div class="flex items-center justify-center gap-2 text-xs text-gray-500">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Error @(Model.ShowRequestId ? "500" : "404") - Something went wrong</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+       
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add some interactive elements
+            const requestIdElement = document.querySelector('.font-mono');
+            if (requestIdElement) {
+                requestIdElement.addEventListener('click', function() {
+                    navigator.clipboard.writeText(this.textContent).then(() => {
+                        const originalText = this.textContent;
+                        this.textContent = 'Copied to clipboard!';
+                        setTimeout(() => {
+                            this.textContent = originalText;
+                        }, 2000);
+                    });
+                });
+
+                requestIdElement.style.cursor = 'pointer';
+                requestIdElement.title = 'Click to copy Request ID';
+            }
+
+            // Auto-hide development info for non-local environments
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            if (!isLocalhost) {
+                const devInfo = document.querySelector('.bg-blue-50');
+                if (devInfo) {
+                    devInfo.style.display = 'none';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

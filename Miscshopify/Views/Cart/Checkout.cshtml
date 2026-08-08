@@ -1,95 +1,140 @@
-﻿@using Microsoft.AspNetCore.Identity;
-@using Miscshopify.Core.Models;
-@using System.Security.Claims;
-@using Miscshopify.Infrastructure.Data.Models;
-@model IEnumerable<CartItemViewModel>
-
-@inject UserManager<ApplicationUser> UserManager
+﻿@using Microsoft.AspNetCore.Identity
+@using Miscshopify.Core.Models
+@using System.Security.Claims
+@using Miscshopify.Infrastructure.Data.Models
+@model CheckoutViewModel
 
 @{
-    var user = UserManager.GetUserAsync(User).Result;
-    var totalPrice = ViewBag.TotalPrice;
-    var totalQuantity = ViewBag.TotalQuantity;
+    ViewData["Title"] = "Checkout";
 }
 
-<div class="col-sm-30 col-md-20 col-xl-15 mb-20" style="background: rgba(255, 255, 255, 1);">
-    <div class="item rounded-xl overflow-hidden shadow border">
-        <div class="px-3 pt-6">
-            <table class="table table-responsive-xl">
-                <thead>
-                    <tr>
-                        <th>&nbsp;</th>
-                        <th>Name</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>
-                                <img src="~/@item.ImagePath" style="border-radius: 50%;" width="50" height="50">
-                            </td>
-                            <td>@item.ProductName</td>
-                            <td>@item.Quantity</td>
-                            <td>@item.Price BGN</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-            <hr>
-            <label class="form-label">Quantity:</label>
-            <span class="focus-input100">@totalQuantity </span>
-            <label class="form-label">Total Price:</label>
-            <span class="focus-input100">@totalPrice BGN</span>
-            <hr>
-            <div class="wrap-input100">
-                <label class="form-label">Name</label>
-                <span class="focus-input100">@user.FirstName @user.LastName</span>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout - Modern Store</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="~/css/checkout.css" rel="stylesheet" />
+</head>
+<body class="checkout-page min-h-screen py-8">
+    <div class="container mx-auto px-4">
+        <div class="checkout-container p-6">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+                    Checkout
+                </h1>
+                <p class="text-xl text-gray-600">
+                    Complete your order
+                </p>
             </div>
-            <div class="wrap-input100">
-                <label class="form-label">Email</label>
-                <span class="focus-input100">@user.Email</span>
+
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Order Summary -->
+                <div class="lg:w-1/2">
+                    <div class="order-summary">
+                        <h2 class="text-2xl font-bold mb-4">Order Summary</h2>
+                        <div class="space-y-4">
+                            @foreach (var item in Model.Items)
+                            {
+                                <div class="flex items-center gap-4 p-4 bg-white rounded-lg shadow-sm">
+                                    <img src="~/@item.ImagePath" alt="@item.ProductName"
+                                         class="w-16 h-16 object-cover rounded-lg"
+                                         onerror="this.src='https://images.unsplash.com/photo-1560769629-975ec94e6a86?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80'">
+                                    <div class="flex-1">
+                                        <h3 class="font-semibold">@item.ProductName</h3>
+                                        <p class="text-gray-600">Quantity: @item.Quantity</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-bold">@(item.Price* item.Quantity) BGN</p>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                            <div class="flex justify-between mb-2">
+                                <span>Items (@Model.TotalQuantity)</span>
+                                <span>@Model.TotalPrice BGN</span>
+                            </div>
+                            <div class="flex justify-between mb-2">
+                                <span>Shipping</span>
+                                <span>0.00 BGN</span>
+                            </div>
+                            <div class="flex justify-between font-bold text-lg">
+                                <span>Total</span>
+                                <span>@Model.TotalPrice BGN</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shipping and Payment Information -->
+                <div class="lg:w-1/2">
+                    <div class="checkout-form">
+                        <h2 class="text-2xl font-bold mb-4">Shipping Information</h2>
+
+                        <div class="bg-white p-6 rounded-lg shadow-sm mb-6">
+                            <div class="mb-4">
+                                <label class="block text-gray-700 font-medium mb-2">Full Name</label>
+                                <p class="text-gray-900">@Model.UserName</p>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 font-medium mb-2">Email</label>
+                                <p class="text-gray-900">@Model.UserEmail</p>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 font-medium mb-2">Phone</label>
+                                <p class="text-gray-900">@Model.UserPhoneNumber</p>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 font-medium mb-2">Address</label>
+                                <p class="text-gray-900">@Model.UserAddress, @Model.UserCity, @Model.UserPostCode</p>
+                            </div>
+                        </div>
+
+                        <h2 class="text-2xl font-bold mb-4">Payment Method</h2>
+                        <div class="bg-white p-6 rounded-lg shadow-sm">
+                            <div class="mb-4">
+                                <label class="flex items-center">
+                                    <input type="radio" name="paymentMethod" value="cashOnDelivery" checked class="mr-2">
+                                    <i class="fa-solid fa-money-bill-1 mr-2"></i>
+                                    <span>Cash on Delivery</span>
+                                </label>
+                            </div>
+                            <div class="mb-4">
+                                <label class="flex items-center">
+                                    <input type="radio" name="paymentMethod" value="Card" class="mr-2">
+                                    <i class="fa-solid fa-credit-card mr-2"></i>
+                                    <span>Credit/Debit Card</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button id="confirmButton" class="w-full bg-green-600 text-white py-4 px-6 rounded-lg font-bold text-lg mt-6 hover:bg-green-700 transition-colors">
+                            Confirm Order
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="wrap-input100">
-                <label class="form-label">City</label>
-                <span class="focus-input100">@user.City</span>
-            </div>
-            <div class="wrap-input100">
-                <label class="form-label">Address</label>
-                <span class="focus-input100">@user.Address</span>
-            </div>
-            <div class="wrap-input100">
-                <label class="form-label">Postcode</label>
-                <span class="focus-input100">@user.PostCode</span>
-            </div>
-            <div class="wrap-input100">
-                <label class="form-label">Phone</label>
-                <span class="focus-input100">@user.PhoneNumber</span>
-            </div>
-            <hr>
-            <div>
-                <input type="radio" id="cashOnDelivery" name="paymentMethod" value="cashOnDelivery">
-                <i class="fa-solid fa-money-bill-1"></i>
-                <label class="form-label" for="cashOnDelivery">Cash on delivery</label>
-            </div>
-            <div>
-                <input type="radio" id="Card" name="paymentMethod" value="Card">
-                <i class="fa-solid fa-credit-card"></i>
-                <label class="form-label" for="creditCard">Credit/Debit Card</label>
-            </div>
-            <hr>
-            <button id="confirmButton" class="btn btn-sm btn-primary mr-25">Confirm</button>
         </div>
     </div>
-</div>
 
-@section Scripts {
     <script>
         document.getElementById('confirmButton').addEventListener('click', function () {
-            var paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-            var totalPrice = '@totalPrice';
+            var selectedPayment = document.querySelector('input[name="paymentMethod"]:checked');
+
+            if (!selectedPayment) {
+                alert('Please select a payment method');
+                return;
+            }
+
+            var paymentMethod = selectedPayment.value;
+            var totalPrice = '@Model.TotalPrice';
 
             if (paymentMethod === 'cashOnDelivery') {
                 window.location.href = '@Url.Action("CompleteOrder", "Order")' + '?paymentMethod=' + paymentMethod;
@@ -98,4 +143,5 @@
             }
         });
     </script>
-}
+</body>
+</html>

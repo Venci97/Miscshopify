@@ -19,5 +19,8 @@ namespace Miscshopify.Core.Contracts
         Task<bool> UpdateOrderDetails(OrderViewModel model);
         Task<bool> UpdatePaymentMethod(Guid id, PaymentMethodEnum paymentMethod);
         Task<IEnumerable<OrderViewModel>> GetMyOrders(string userId);
+        Task MarkOrderAsPaidAsync(string orderId);
+        Task<decimal> GetCartTotalAsync(string userId);
+        Task<IEnumerable<Order>> GetCompletedOrders();
     }
 }

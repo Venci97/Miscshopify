@@ -1,27 +1,225 @@
-﻿@using Miscshopify.Core.Models;
+﻿@using Miscshopify.Core.Models
+@using Miscshopify.Core.Contracts
+@inject ICategoryService CategoryService
 @model IEnumerable<CategoryViewModel>
 
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Category</title>
-    <link href="~/css/site.css" rel="stylesheet">
-</head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shop Categories - Modern Store</title>
 
-<div class="container">
-    <div class="card-deck">
-        @foreach (var category in Model)
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="~/css/categories.css" rel="stylesheet" />
+</head>
+<body class="categories-page min-h-screen py-6">
+    <div class="container mx-auto px-4">
+        <!-- Simplified Header -->
+        <div class="categories-header text-center mb-8">
+            <h1 class="text-3xl md:text-5xl font-bold text-gray-900 mb-4">
+                Discover Your Style
+            </h1>
+        </div>
+
+        <!-- Categories Grid -->
+        @if (Model != null && Model.Any())
         {
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <a href="@Url.Action("GetProductsByCategory", "Product", new { id = category.Id })">
-                        <img src="~/@category.ImagePath" class="card-img-top" alt="@category.Name">
-                        <h5 class="card-title">@category.Name</h5>
-                        <p class="card-text">@category.Description</p>
-                    </a>
-                    <div class="button-wrapper">
-                        <a href="@Url.Action("GetProductsByCategory", "Product", new { id = category.Id })" class="btn btn-primary">View Products</a>
+            <div class="categories-grid">
+                @{
+                    int index = 0;
+                    foreach (var category in Model)
+                    {
+                        string displayName = category.Name;
+                        string icon = "fas fa-sparkles";
+                        string description = "Discover premium selection";
+                        string gradient = "from-blue-500 to-purple-600";
+
+                        if (category.Name != null)
+                        {
+                            string lowerName = category.Name.ToLower();
+                            if (lowerName.Contains("men") || lowerName.Contains("man"))
+                            {
+                                displayName = "Men's Fashion";
+                                icon = "fas fa-person";
+                                description = "Modern & contemporary styles";
+                                gradient = "from-blue-600 to-indigo-700";
+                            }
+                            else if (lowerName.Contains("women") || lowerName.Contains("woman"))
+                            {
+                                displayName = "Women's Collection";
+                                icon = "fas fa-person-dress";
+                                description = "Elegant & sophisticated fashion";
+                                gradient = "from-pink-500 to-rose-600";
+                            }
+                            else if (lowerName.Contains("kid") || lowerName.Contains("child"))
+                            {
+                                displayName = "Kids & Youth";
+                                icon = "fas fa-child";
+                                description = "Fun & comfortable styles";
+                                gradient = "from-green-500 to-emerald-600";
+                            }
+                            else if (lowerName.Contains("sport") || lowerName.Contains("active"))
+                            {
+                                displayName = "Active Wear";
+                                icon = "fas fa-dumbbell";
+                                description = "Performance & sportswear";
+                                gradient = "from-orange-500 to-red-600";
+                            }
+                            else if (lowerName.Contains("accessory") || lowerName.Contains("jewelry"))
+                            {
+                                displayName = "Accessories";
+                                icon = "fas fa-gem";
+                                description = "Complete your look";
+                                gradient = "from-purple-500 to-indigo-600";
+                            }
+                            else if (lowerName.Contains("shoe") || lowerName.Contains("footwear"))
+                            {
+                                displayName = "Footwear";
+                                icon = "fas fa-shoe-prints";
+                                description = "Stylish shoes & boots";
+                                gradient = "from-amber-500 to-orange-600";
+                            }
+                        }
+
+                        var hasSubcategories = await CategoryService.HasSubcategories(category.Id);
+
+                        <div class="category-card group" style="animation-delay: @(index * 0.1)s;">
+                            <a href="@Url.Action(hasSubcategories ? "Subcategories" : "GetProductsByCategory", hasSubcategories ? "Category" : "Product", new { id = category.Id })" class="block h-full">
+                                <!-- Image/Icon Container with Gradient -->
+                                <div class="category-media relative overflow-hidden rounded-xl">
+                                    @if (!string.IsNullOrEmpty(category.ImagePath))
+                                    {
+                                        <img src="@Url.Content($"~/{category.ImagePath}")"
+                                             class="category-image"
+                                             alt="@category.Name"
+                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                        <div class="category-icon-container bg-gradient-to-br @gradient" style="display: none;">
+                                            <div class="icon-wrapper">
+                                                <i class="@icon"></i>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="category-icon-container bg-gradient-to-br @gradient">
+                                            <div class="icon-wrapper">
+                                                <i class="@icon"></i>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    <!-- Hover Overlay -->
+                                    <div class="category-overlay">
+                                    </div>
+                                </div>
+
+                                <!-- Category Content -->
+                                <div class="category-content mt-4">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <div class="icon-circle bg-gray-100">
+                                            <i class="@icon text-gray-600"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-lg font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors">
+                                                @displayName
+                                            </h3>
+                                            @if (hasSubcategories)
+                                            {
+                                                <span class="text-xs text-green-600 font-medium">Contains subcategories</span>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <p class="text-gray-600 text-sm leading-relaxed mb-3">
+                                        @description
+                                    </p>
+
+                                    <!-- Enhanced Animated Button -->
+                                    <div class="shop-btn transform group-hover:translate-x-1 transition-transform duration-300">
+                                        <div class="flex items-center justify-between text-indigo-600 font-medium text-sm">
+                                            <span>@(hasSubcategories ? "Browse Subcategories" : "Discover Items")</span>
+                                            <i class="fas fa-arrow-right transform group-hover:translate-x-1 transition-transform text-xs"></i>
+                                        </div>
+                                        <div class="progress-line"></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                        index++;
+                    }
+                }
+            </div>
+        }
+        else
+        {
+            <!-- Enhanced Empty State -->
+            <div class="empty-state">
+                <div class="empty-state-content text-center">
+                    <div class="empty-icon mb-4">
+                        <i class="fas fa-box-open text-5xl text-gray-300"></i>
                     </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Collections Coming Soon</h3>
+                    <p class="text-gray-600 mb-4 max-w-md mx-auto text-sm">
+                        We're curating something special for you. New collections will be available shortly!
+                    </p>
+                    <button onclick="location.reload()"
+                            class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105 text-sm">
+                        <i class="fas fa-sync-alt mr-2"></i>
+                        Check Again
+                    </button>
                 </div>
             </div>
         }
+
+        <!-- Featured Banner -->
+        <div class="featured-banner mt-12">
+            <div class="banner-content text-center">
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Can't Find What You're Looking For?</h3>
+                <p class="text-gray-600 mb-3 text-sm">Contact our style advisors for personalized recommendations</p>
+                <a href="/Home/Contact" class="inline-flex items-center gap-2 text-indigo-600 font-medium hover:text-indigo-700 transition-colors text-sm">
+                    <i class="fas fa-headset text-xs"></i>
+                    Get Style Advice
+                </a>
+            </div>
+        </div>
     </div>
-</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Enhanced error handling for images
+            document.querySelectorAll('.category-image').forEach(img => {
+                img.addEventListener('error', function() {
+                    this.style.display = 'none';
+                    const placeholder = this.nextElementSibling;
+                    if (placeholder) {
+                        placeholder.style.display = 'flex';
+                    }
+                });
+            });
+
+            // Add intersection observer for scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-in');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all category cards
+            document.querySelectorAll('.category-card').forEach(card => {
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>

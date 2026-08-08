@@ -1,0 +1,30 @@
+﻿/* Smooth animations */
+.fa-shield-alt {
+    animation: bounceGentle 2s ease-in-out infinite;
+}
+
+@@keyframes bounceGentle {
+    0%, 100% {
+        transform: scale(1) translateY(0);
+    }
+
+    50% {
+        transform: scale(1.05) translateY(-2px);
+    }
+}
+
+/* Hover effects for cards */
+.bg-gray-50:hover {
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+/* Prose styling for better readability */
+.prose h2 {
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 0.5rem;
+}
+
+.prose p {
+    line-height: 1.7;
+}

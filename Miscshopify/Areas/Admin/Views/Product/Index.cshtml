@@ -1,57 +1,300 @@
 ﻿@using Miscshopify.Core.Models;
 @model IEnumerable<ProductViewModel>
 @{
+    ViewData["Title"] = "Product Management";
+    var totalProducts = Model.Count();
+    var totalValue = Model.Sum(p => p.Price);
+    var averagePrice = totalProducts > 0 ? totalValue / totalProducts : 0;
 }
-<head>
-	<link rel="stylesheet" href="~/plugins/fontawesome-free-6.2.0-web/css/all.min.css">
-</head>
-<div class="row">
-	<div class="col-12">
-		<section class="ftco-section">
-			<div class="container">
-				<div class="row justify-content-center">
-					<div class="col-md-6 text-center mb-5">
-						<h2 class="heading-section">Product List</h2>
-						<a href="/Admin/Category/Index" class="btn btn-sm btn-primary mr-25">Add product by selecting category</a>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-12">
-						<div class="table-wrap">
-							<table class="table table-responsive-xl">
-								<thead>
-									<tr>
-										<th>&nbsp;</th>
-										<th>Name</th>
-										<th>Description</th>
-										<th>Price</th>
-										<th>&nbsp;</th>
-									</tr>
-								</thead>
-								<tbody>
-									@foreach (var product in Model)
-									{
-										<tr>
-											<td>
-												<img src="~/@product.ImagePath" style="border-radius: 50%;" width="50" height="50">
-											</td>
-											<td>@product.Name</td>
-											<td>@product.Description</td>
-											<td>@product.Price</td>
-											<td>
-												<a asp-area="Admin" asp-action="Edit" asp-controller="Product" asp-route-id="@product.Id" class="btn btn-block btn-outline-info btn-xs">
-													Edit
-													<i class="fa-solid fa-pen-to-square"></i>
-												</a>
-											</td>
-										</tr>
-									}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-	</div>
+
+<link href="~/css/admin/product-index.css" rel="stylesheet" />
+
+<div class="product-index-section">
+    <div class="product-header">
+        <h1 class="product-title">
+            <i class="fas fa-boxes"></i>
+            Product Management
+        </h1>
+        <div class="product-actions">
+            <a href="/Admin/Category/Index" class="btn btn-primary">
+                <i class="fas fa-folder-plus"></i>
+                Add Product via Category
+            </a>
+        </div>
+    </div>
+
+    <!-- Product Statistics -->
+    <div class="product-stats">
+        <div class="stat-card highlight">
+            <div class="stat-number">@totalProducts</div>
+            <div class="stat-label">Total Products</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">@totalValue.ToString("C")</div>
+            <div class="stat-label">Total Value</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">@averagePrice.ToString("C")</div>
+            <div class="stat-label">Average Price</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">@Model.Count(p => p.Price > 0)</div>
+            <div class="stat-label">Active Products</div>
+        </div>
+    </div>
+
+    <!-- Search and Filter Section -->
+    <div class="search-filter-section">
+        <div class="search-filter-grid">
+            <div class="search-group">
+                <label class="search-label">Search Products</label>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search by name or description...">
+            </div>
+            <div class="search-group">
+                <label class="search-label">Price Range</label>
+                <select class="filter-select" id="priceFilter">
+                    <option value="">All Prices</option>
+                    <option value="0-50">$0 - $50</option>
+                    <option value="50-100">$50 - $100</option>
+                    <option value="100-500">$100 - $500</option>
+                    <option value="500+">$500+</option>
+                </select>
+            </div>
+            <div class="search-group">
+                <label class="search-label">Sort By</label>
+                <select class="filter-select" id="sortFilter">
+                    <option value="name">Name A-Z</option>
+                    <option value="name-desc">Name Z-A</option>
+                    <option value="price">Price Low-High</option>
+                    <option value="price-desc">Price High-Low</option>
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                </select>
+            </div>
+            <div class="search-group">
+                <button class="btn btn-primary" onclick="applyFilters()">
+                    <i class="fas fa-filter"></i>
+                    Apply Filters
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <button class="quick-action-btn active" data-filter="all">All Products</button>
+        <button class="quick-action-btn" data-filter="featured">Featured</button>
+        <button class="quick-action-btn" data-filter="bestsellers">Bestsellers</button>
+        <button class="quick-action-btn" data-filter="new">New Arrivals</button>
+    </div>
+
+    <div class="product-card">
+        <div class="card-content">
+            <div class="table-container">
+                @if (Model.Any())
+                {
+                    <table class="product-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 80px;">Image</th>
+                                <th>Product Name</th>
+                                <th>Description</th>
+                                <th style="width: 120px;">Price</th>
+                                <th style="width: 100px;">Status</th>
+                                <th style="width: 150px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var product in Model)
+                            {
+                                var stockStatus = "instock"; // You can add stock logic here
+                                var statusClass = $"status-{stockStatus}";
+                                var statusText = stockStatus == "instock" ? "In Stock" :
+                                stockStatus == "lowstock" ? "Low Stock" : "Out of Stock";
+
+                                <tr>
+                                    <td>
+                                        <img src="~/@product.ImagePath" class="product-image" alt="@product.Name" />
+                                             @* onerror="this.src='https://via.placeholder.com/50?text=📦'"> *@
+                                    </td>
+                                    <td>
+                                        <div class="product-name">@product.Name</div>
+                                    </td>
+                                    <td>
+                                        <div class="product-description" title="@product.Description">
+                                            @product.Description
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="product-price">@product.Price.ToString("C")</div>
+                                    </td>
+                                    <td>
+                                        <span class="status-badge @statusClass">
+                                            <i class="fas fa-circle"></i>
+                                            @statusText
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <a asp-area="Admin" asp-action="Edit" asp-controller="Product"
+                                               asp-route-id="@product.Id" class="btn btn-outline-info btn-sm">
+                                                <i class="fas fa-edit"></i>
+                                                Edit
+                                            </a>
+                                            <a asp-area="" asp-action="ProductDetails" asp-controller="Product"
+                                               asp-route-id="@product.Id" class="btn btn-outline-info btn-sm">
+                                                <i class="fas fa-eye"></i>
+                                                View
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="empty-state">
+                        <i class="fas fa-box-open"></i>
+                        <h3>No Products Found</h3>
+                        <p>Get started by adding your first product to the catalog.</p>
+                        <div class="mt-3">
+                            <a href="/Admin/Category/Index" class="btn btn-primary">
+                                <i class="fas fa-plus-circle"></i>
+                                Add First Product
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Search and filter functionality
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const priceFilter = document.getElementById('priceFilter').value;
+            const sortFilter = document.getElementById('sortFilter').value;
+
+            const rows = document.querySelectorAll('.product-table tbody tr');
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                const productName = row.querySelector('.product-name').textContent.toLowerCase();
+                const productDescription = row.querySelector('.product-description').textContent.toLowerCase();
+                const productPrice = parseFloat(row.querySelector('.product-price').textContent.replace(/[^0-9.-]+/g, ""));
+
+                let shouldShow = true;
+
+                // Search filter
+                if (searchTerm && !productName.includes(searchTerm) && !productDescription.includes(searchTerm)) {
+                    shouldShow = false;
+                }
+
+                // Price filter
+                if (priceFilter && shouldShow) {
+                    if (priceFilter === '0-50' && (productPrice < 0 || productPrice > 50)) shouldShow = false;
+                    else if (priceFilter === '50-100' && (productPrice < 50 || productPrice > 100)) shouldShow = false;
+                    else if (priceFilter === '100-500' && (productPrice < 100 || productPrice > 500)) shouldShow = false;
+                    else if (priceFilter === '500+' && productPrice < 500) shouldShow = false;
+                }
+
+                row.style.display = shouldShow ? '' : 'none';
+                if (shouldShow) visibleCount++;
+            });
+
+            // Show message if no results
+            const emptyState = document.querySelector('.empty-state');
+            if (emptyState) {
+                emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+            }
+
+            console.log('Filters applied. Visible products:', visibleCount);
+        }
+
+        // Quick actions
+        document.querySelectorAll('.quick-action-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.quick-action-btn').forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+
+                const filter = this.getAttribute('data-filter');
+                console.log('Quick filter applied:', filter);
+                // Implement quick filter logic here
+            });
+        });
+
+        // Real-time search
+        document.getElementById('searchInput').addEventListener('input', function() {
+            clearTimeout(this.searchTimeout);
+            this.searchTimeout = setTimeout(applyFilters, 300);
+        });
+
+        // Auto-apply filters when select changes
+        document.getElementById('priceFilter').addEventListener('change', applyFilters);
+        document.getElementById('sortFilter').addEventListener('change', applyFilters);
+
+        // Add interactive features
+        document.addEventListener('DOMContentLoaded', function() {
+            const rows = document.querySelectorAll('.product-table tbody tr');
+
+            rows.forEach((row, index) => {
+                // Add staggered animation
+                row.style.animationDelay = `${(index + 1) * 0.1}s`;
+
+                // Add click effect for the entire row
+                row.addEventListener('click', function(e) {
+                    if (!e.target.closest('a') && !e.target.closest('button')) {
+                        const viewLink = this.querySelector('a[asp-action="ProductDetails"]');
+                        if (viewLink) {
+                            viewLink.click();
+                        }
+                    }
+                });
+            });
+
+            // Initialize tooltips for truncated descriptions
+            document.querySelectorAll('.product-description').forEach(desc => {
+                const fullText = desc.getAttribute('title');
+                if (fullText && fullText.length > 50) {
+                    desc.addEventListener('mouseenter', function() {
+                        this.setAttribute('data-original-title', fullText);
+                    });
+                }
+            });
+        });
+
+        // Export functionality (optional)
+        function exportProducts() {
+            console.log('Exporting products...');
+            // Implement export logic here
+            alert('Export feature would be implemented here.');
+        }
+
+        // Print product list
+        function printProductList() {
+            window.print();
+        }
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + F to focus search
+            if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+
+            // Ctrl/Cmd + N to add new product
+            if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+                e.preventDefault();
+                window.location.href = '/Admin/Category/Index';
+            }
+        });
+    </script>
+}

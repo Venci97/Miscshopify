@@ -1,0 +1,38 @@
+﻿/* Animation for the warning icon */
+@keyframes pulseWarning {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+.fa-exclamation-triangle {
+    animation: pulseWarning 2s ease-in-out infinite;
+}
+
+/* Fade in animation for the card */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.bg-white {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Button hover effects */
+a {
+    transition: all 0.3s ease;
+}

@@ -1,126 +1,318 @@
-﻿@* @using Miscshopify.Core.Models;
+﻿@using Miscshopify.Core.Models;
 @model IEnumerable<ProductViewModel>
 
 @{
     var cartMessage = TempData["CartMessage"] as string;
+    var categoryName = ViewBag.CategoryName ?? "Products";
+    var minPrice = Context.Request.Query["minPrice"];
+    var maxPrice = Context.Request.Query["maxPrice"];
 }
 
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Products</title>
-    <link href="~/css/site.css" rel="stylesheet">
-</head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@categoryName - Modern Store</title>
 
-<div class="container">
-    <div class="card-deck">
-        @foreach (var product in Model)
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="~/css/products.css" rel="stylesheet" />
+</head>
+<body class="products-page min-h-screen py-8">
+    <div class="container mx-auto px-4">
+        <!-- Header with Filter Toggle on Right -->
+        <div class="products-header flex justify-between items-center mb-8 relative">
+            <div class="text-left">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-1">
+                    @categoryName
+                </h1>
+                <p class="text-lg text-gray-600">
+                    Discover our premium collection
+                </p>
+            </div>
+
+            <!-- Filter Toggle Button -->
+            <div class="relative">
+                <button id="filterToggle" class="filter-toggle-btn bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition-all duration-300 flex items-center gap-2">
+                    <i class="fas fa-filter"></i>
+                    Filter
+                </button>
+
+                <!-- Filter Popover -->
+                <div id="filterPopover" class="filter-popover hidden">
+                    <div class="popover-arrow"></div>
+                    <div class="popover-content">
+                        <div class="filter-header">
+                            <h3 class="filter-title">Filter by Price</h3>
+                        </div>
+                        <!-- ПРОМЕНА ТУК: метод GET и правилно action -->
+                        <form method="get" action="@Url.Action("GetProductsByCategory", "Product")" class="filter-form">
+                            <input type="hidden" name="id" value="@ViewContext.RouteData.Values["id"]" />
+                            <div class="filter-input-group">
+                                <label for="minPrice" class="filter-label">Min Price (BGN)</label>
+                                <input type="number" id="minPrice" name="minPrice" min="0" 
+                                       value="@minPrice" class="filter-input" placeholder="0">
+                            </div>
+                            <div class="filter-input-group">
+                                <label for="maxPrice" class="filter-label">Max Price (BGN)</label>
+                                <input type="number" id="maxPrice" name="maxPrice" 
+                                       value="@maxPrice" class="filter-input" placeholder="1000">
+                            </div>
+                            <div class="filter-actions">
+                                <button type="submit" class="apply-filter-btn">
+                                    <i class="fas fa-check mr-2"></i>
+                                    Apply
+                                </button>
+                                <a href="@Url.Action("GetProductsByCategory", "Product", new { id = ViewContext.RouteData.Values["id"] })" 
+                                   class="cancel-filter-btn">
+                                    Clear
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Filters -->
+        @if (!string.IsNullOrEmpty(minPrice) || !string.IsNullOrEmpty(maxPrice))
         {
-            <div class="card-body card mb-3 col-md-3">
-                <a href="@Url.Action("ProductDetails", "Product", new { id = product.Id })">
-                    <img src="~/@product.ImagePath" class="card-img-top" alt="@product.Name">
-                    <h5 class="card-title">@product.Name</h5>
-                    <p class="card-text">@product.Price BGN</p>
-                </a>
-                <div class="d-flex flex-column flex-sm-row pt-1 center">
-                    <a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@product.Id" class="btn btn-primary mr-0 mr-sm-2 mb-1 mb-sm-0">
-                        <i class="fas fa-shopping-basket mr-2"></i>
-                        <span>Add to cart</span>
+            <div class="active-filters bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <span class="text-blue-800 font-semibold">Active Filters:</span>
+                        @if (!string.IsNullOrEmpty(minPrice))
+                        {
+                            <span class="filter-tag bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                                Min: @minPrice BGN
+                                <a href="@Url.Action("GetProductsByCategory", "Product", new { 
+                                    id = ViewContext.RouteData.Values["id"],
+                                    maxPrice = maxPrice
+                                })" class="ml-1 text-blue-600 hover:text-blue-800">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </span>
+                        }
+                        @if (!string.IsNullOrEmpty(maxPrice))
+                        {
+                            <span class="filter-tag bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                                Max: @maxPrice BGN
+                                <a href="@Url.Action("GetProductsByCategory", "Product", new { 
+                                    id = ViewContext.RouteData.Values["id"],
+                                    minPrice = minPrice
+                                })" class="ml-1 text-blue-600 hover:text-blue-800">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </span>
+                        }
+                    </div>
+                    <a href="@Url.Action("GetProductsByCategory", "Product", new { id = ViewContext.RouteData.Values["id"] })" 
+                       class="text-blue-600 hover:text-blue-800 font-semibold text-sm">
+                        Clear All
                     </a>
                 </div>
             </div>
         }
 
-        @if (!string.IsNullOrEmpty(cartMessage))
+        <!-- Products Grid -->
+        @if (Model != null && Model.Any())
         {
-            <div class="alert alert-success" role="alert">
-                @cartMessage
+            <div class="products-grid">
+                @{
+                    int index = 0;
+                    foreach (var product in Model)
+                    {
+                        <div class="product-card group" style="animation-delay: @(index * 0.1)s;">
+                            <div class="product-image-container">
+                                <a href="@Url.Action("ProductDetails", "Product", new { id = product.Id })" class="block">
+                                    <img src="~/@product.ImagePath"
+                                         class="product-image"
+                                         alt="@product.Name"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div class="product-placeholder" style="display: none;">
+                                        <i class="fas fa-image text-gray-400 text-3xl"></i>
+                                    </div>
+
+                                    <!-- Hover Overlay -->
+                                    <div class="product-overlay">
+                                        <div class="overlay-content">
+                                            <i class="fas fa-eye text-xl mb-1"></i>
+                                            <span class="font-semibold text-sm">View Details</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="product-content mt-4">
+                                <a href="@Url.Action("ProductDetails", "Product", new { id = product.Id })" class="block">
+                                    <h3 class="product-name text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition-colors mb-2 line-clamp-2">
+                                        @product.Name
+                                    </h3>
+                                </a>
+
+                                <div class="product-price flex items-center justify-between mb-4">
+                                    <span class="price text-xl font-bold text-indigo-600">
+                                        @product.Price BGN
+                                    </span>
+                                </div>
+
+                                <div class="product-actions">
+                                    <a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@product.Id"
+                                       class="add-to-cart-btn w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-indigo-700 transition-all duration-300 flex items-center justify-center gap-2">
+                                        <i class="fas fa-shopping-basket"></i>
+                                        Add to Cart
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        index++;
+                    }
+                }
+            </div>
+
+            <!-- Results Count -->
+            <div class="results-count text-center mt-8 text-gray-600">
+                Showing @Model.Count() products
+                @if (!string.IsNullOrEmpty(minPrice) || !string.IsNullOrEmpty(maxPrice))
+                {
+                    <span>with applied filters</span>
+                }
             </div>
         }
-
-    </div>
-</div> *@
-
-@using Miscshopify.Core.Models;
-@model IEnumerable<ProductViewModel>
-
-@{
-    var cartMessage = TempData["CartMessage"] as string;
-}
-
-<head>
-    <title>Products</title>
-    <link href="~/css/site.css" rel="stylesheet">
-</head>
-
-<div class="container">
-    <form method="post" action="@Url.Action("FilterProducts", "Product")">
-        <label for="minPrice">Minimum Price (BGN):</label>
-        <input type="number" id="minPrice" name="minPrice" min="0">
-
-        <label for="maxPrice">Maximum Price (BGN):</label>
-        <input type="number" id="maxPrice" name="maxPrice">
-
-        <button type="submit" class="btn btn-primary">Filter</button>
-    </form>
-
-    <div class="card-deck">
-        @foreach (var product in Model)
+        else
         {
-            <div class="card-body card mb-3 col-md-3">
-                <a href="@Url.Action("ProductDetails", "Product", new { id = product.Id })">
-                    <img src="~/@product.ImagePath" class="card-img-top" alt="@product.Name">
-                    <h5 class="card-title">@product.Name</h5>
-                    <p class="card-text">@product.Price BGN</p>
-                </a>
-                <div class="d-flex flex-column flex-sm-row pt-1 center">
-                    <a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@product.Id" class="btn btn-primary mr-0 mr-sm-2 mb-1 mb-sm-0">
-                        <i class="fas fa-shopping-basket mr-2"></i>
-                        <span>Add to cart</span>
+            <!-- Empty State -->
+            <div class="empty-products text-center py-12">
+                <div class="empty-icon mb-4">
+                    <i class="fas fa-search text-5xl text-gray-300"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-3">No Products Found</h3>
+                <p class="text-gray-600 mb-6 max-w-md mx-auto">
+                    @if (!string.IsNullOrEmpty(minPrice) || !string.IsNullOrEmpty(maxPrice))
+                    {
+                        <span>No products match your current filters. Try adjusting your price range.</span>
+                    }
+                    else
+                    {
+                        <span>No products available in this category at the moment.</span>
+                    }
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    @if (!string.IsNullOrEmpty(minPrice) || !string.IsNullOrEmpty(maxPrice))
+                    {
+                        <a href="@Url.Action("GetProductsByCategory", "Product", new { id = ViewContext.RouteData.Values["id"] })" 
+                           class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-all duration-300 inline-flex items-center justify-center gap-2">
+                            <i class="fas fa-times"></i>
+                            Clear Filters
+                        </a>
+                    }
+                    <a href="/Category/Index"
+                       class="bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 transition-all duration-300 inline-flex items-center justify-center gap-2">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Categories
                     </a>
                 </div>
             </div>
         }
 
+        <!-- Success Message -->
         @if (!string.IsNullOrEmpty(cartMessage))
         {
-            <div class="alert alert-success" role="alert">
-                @cartMessage
+            <div class="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-3 rounded-lg shadow-lg transform transition-transform duration-300" id="cartMessage">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-check-circle"></i>
+                    <span>@cartMessage</span>
+                </div>
             </div>
+
+            <script>
+                setTimeout(() => {
+                    const message = document.getElementById('cartMessage');
+                    if (message) {
+                        message.style.transform = 'translateX(100%)';
+                        setTimeout(() => message.remove(), 300);
+                    }
+                }, 4000);
+            </script>
         }
     </div>
-</div>
 
-<script>
-    function filterProducts() {
-        const minPrice = document.getElementById("minPrice").value;
-        const maxPrice = document.getElementById("maxPrice").value;
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter popover functionality
+            const filterToggle = document.getElementById('filterToggle');
+            const filterPopover = document.getElementById('filterPopover');
 
-        // Handle empty input fields (optional)
-        if (minPrice === "" || maxPrice === "") {
-            alert("Please enter both minimum and maximum price values.");
-            return; // Exit the function if both fields are empty
-        }
-
-        try {
-            const minPriceValue = Convert.ToDecimal(minPrice);
-            const maxPriceValue = Convert.ToDecimal(maxPrice);
-
-            // Ensure minPriceValue is less than or equal to maxPriceValue (optional)
-            if (minPriceValue > maxPriceValue) {
-                alert("Minimum price cannot be greater than maximum price.");
-                return; // Exit the function if min price is higher than max price
+            if (filterToggle) {
+                filterToggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    filterPopover.classList.toggle('hidden');
+                    filterPopover.classList.toggle('active');
+                });
             }
 
-            const filteredProducts = Model.Where(p => p.Price >= minPriceValue && p.Price <= maxPriceValue);
+            function closePopover() {
+                filterPopover.classList.add('hidden');
+                filterPopover.classList.remove('active');
+            }
 
-            // Update the view based on filteredProducts (implementation needed)
-            console.log("Filtered products:", filteredProducts); // For debugging
+            // Close popover when clicking outside
+            document.addEventListener('click', function(e) {
+                if (filterPopover && !filterPopover.contains(e.target) && e.target !== filterToggle) {
+                    closePopover();
+                }
+            });
 
-        } catch (error) {
-            console.error("Error converting price values:", error);
-            // Handle conversion errors (optional)
-        }
-    }
+            // Enhanced error handling for images
+            document.querySelectorAll('.product-image').forEach(img => {
+                img.addEventListener('error', function() {
+                    this.style.display = 'none';
+                    const placeholder = this.nextElementSibling;
+                    if (placeholder) {
+                        placeholder.style.display = 'flex';
+                    }
+                });
+            });
 
-    // Attach event handler to the submit button (or form submission event)
-    document.getElementById("submitButton").addEventListener("click", filterProducts);
-</script>
+            // Add intersection observer for scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-in');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all product cards
+            document.querySelectorAll('.product-card').forEach(card => {
+                observer.observe(card);
+            });
+
+            // Price validation
+            const minPriceInput = document.getElementById('minPrice');
+            const maxPriceInput = document.getElementById('maxPrice');
+            const filterForm = document.querySelector('.filter-form');
+
+            if (filterForm) {
+                filterForm.addEventListener('submit', function(e) {
+                    const minPrice = minPriceInput.value ? parseFloat(minPriceInput.value) : null;
+                    const maxPrice = maxPriceInput.value ? parseFloat(maxPriceInput.value) : null;
+
+                    if (minPrice && maxPrice && minPrice > maxPrice) {
+                        e.preventDefault();
+                        alert('Minimum price cannot be greater than maximum price.');
+                        return false;
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

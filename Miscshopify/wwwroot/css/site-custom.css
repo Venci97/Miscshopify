@@ -1,0 +1,81 @@
+﻿/* site-custom.css */
+
+/* Navbar стил */
+.main-header.navbar {
+    background-color: #1f2937; /* по-светло тъмно синьо */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.navbar-nav .nav-link {
+    color: #cbd5e1; /* светло сиво */
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+    .navbar-nav .nav-link:hover {
+        color: #3b82f6; /* ярко синьо при ховър */
+    }
+
+.brand-image {
+    border-radius: 10px;
+    transition: opacity 0.3s ease;
+    opacity: 0.85;
+}
+
+    .brand-image:hover {
+        opacity: 1;
+    }
+
+/* Иконата за търсене */
+.navbar-nav.ml-auto .nav-link i {
+    font-size: 1.2rem;
+    color: #cbd5e1;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav.ml-auto .nav-link:hover i {
+    color: #3b82f6;
+}
+
+/* Footer стилове */
+.container-fluid.bg-dark {
+    background-color: #111827 !important; /* по-тъмен графитен фон */
+    color: #9ca3af !important; /* по-светло сиво */
+}
+
+    .container-fluid.bg-dark a.text-primary {
+        color: #3b82f6 !important;
+        transition: color 0.3s ease;
+    }
+
+        .container-fluid.bg-dark a.text-primary:hover {
+            color: #60a5fa !important;
+        }
+
+    /* Бутоните в newsletter */
+    .container-fluid.bg-dark .btn-primary {
+        background-color: #3b82f6;
+        border-color: #3b82f6;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+        .container-fluid.bg-dark .btn-primary:hover {
+            background-color: #2563eb;
+            border-color: #2563eb;
+        }
+
+    /* Форми */
+    .container-fluid.bg-dark input.form-control {
+        background-color: #1f2937;
+        border: none;
+        color: #e5e7eb;
+    }
+
+        .container-fluid.bg-dark input.form-control::placeholder {
+            color: #9ca3af;
+        }
+
+/* Общи настройки */
+body.hold-transition {
+    font-family: 'Poppins', 'Source Sans Pro', sans-serif;
+}

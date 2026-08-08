@@ -4,30 +4,392 @@
     ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
-<h2 id="external-login-title">Associate your @Model.ProviderDisplayName account.</h2>
-<hr />
-
-<p id="external-login-description" class="text-info">
-    You've successfully authenticated with <strong>@Model.ProviderDisplayName</strong>.
-    Please enter an email address for this site below and click the Register button to finish
-    logging in.
-</p>
-
-<div class="row">
-    <div class="col-md-4">
-        <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating">
-                <input asp-for="Input.Email" class="form-control" autocomplete="email" />
-                <label asp-for="Input.Email" class="form-label"></label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
+<div class="external-login-page">
+    <div class="login-container">
+        <div class="login-header">
+            <div class="provider-icon">
+                @switch (Model.ProviderDisplayName.ToLower())
+                {
+                    case "google":
+                        <i class="fab fa-google"></i>
+                        break;
+                    case "facebook":
+                        <i class="fab fa-facebook-f"></i>
+                        break;
+                    case "microsoft":
+                        <i class="fab fa-microsoft"></i>
+                        break;
+                    case "twitter":
+                        <i class="fab fa-twitter"></i>
+                        break;
+                    case "github":
+                        <i class="fab fa-github"></i>
+                        break;
+                    default:
+                        <i class="fas fa-external-link-alt"></i>
+                        break;
+                }
             </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </form>
+            <h1 class="page-title">@ViewData["Title"]</h1>
+            <h2 class="provider-title">Associate your @Model.ProviderDisplayName account</h2>
+        </div>
+
+        <div class="info-message">
+            <i class="fas fa-info-circle"></i>
+            <div>
+                <p>
+                    You've successfully authenticated with <strong>@Model.ProviderDisplayName</strong>.
+                    Please enter an email address for this site below and click the Register button to finish
+                    logging in.
+                </p>
+            </div>
+        </div>
+
+        <div class="login-form-container">
+            <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="login-form">
+                <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Email" class="form-label">Email Address</label>
+                    <input asp-for="Input.Email" class="form-input" autocomplete="email"
+                           placeholder="Enter your email address" />
+                    <span asp-validation-for="Input.Email" class="validation-error"></span>
+                </div>
+
+                <button type="submit" class="submit-btn primary">
+                    <i class="fas fa-user-plus"></i>
+                    Complete Registration
+                </button>
+            </form>
+        </div>
+
+        <div class="additional-info">
+            <div class="info-item">
+                <i class="fas fa-shield-alt"></i>
+                <div>
+                    <strong>Secure Connection</strong>
+                    <span>Your @Model.ProviderDisplayName account is securely connected</span>
+                </div>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-envelope"></i>
+                <div>
+                    <strong>Email Verification</strong>
+                    <span>We'll use this email for account communications</span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const emailInput = document.querySelector('input[name="Input.Email"]');
+
+            if (emailInput) {
+                emailInput.addEventListener('focus', function() {
+                    if (this.value === '') {
+                        this.removeAttribute('placeholder');
+                    }
+                });
+
+                emailInput.addEventListener('blur', function() {
+                    if (this.value === '') {
+                        this.setAttribute('placeholder', 'Enter your email address');
+                    }
+                });
+            }
+
+            // Form submission feedback
+            const form = document.querySelector('.login-form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    const button = this.querySelector('button[type="submit"]');
+                    if (button) {
+                        button.disabled = true;
+                        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+                    }
+                });
+            }
+        });
+    </script>
 }
+
+<style>
+    .external-login-page {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        padding: 2rem;
+    }
+
+    .login-container {
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        padding: 3rem;
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .login-header {
+        margin-bottom: 2rem;
+    }
+
+    .provider-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Provider-specific icon colors */
+    .fa-google {
+        color: #DB4437;
+    }
+
+    .fa-facebook-f {
+        color: #4267B2;
+    }
+
+    .fa-microsoft {
+        color: #00A4EF;
+    }
+
+    .fa-twitter {
+        color: #1DA1F2;
+    }
+
+    .fa-github {
+        color: #333;
+    }
+
+    .fa-external-link-alt {
+        color: #6b7280;
+    }
+
+    .page-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+    }
+
+    .provider-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #6b7280;
+        margin-bottom: 0;
+    }
+
+    .info-message {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        background: #f0f9ff;
+        border: 1px solid #bae6fd;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        text-align: left;
+    }
+
+        .info-message i {
+            color: #0369a1;
+            font-size: 1.25rem;
+            margin-top: 0.125rem;
+            flex-shrink: 0;
+        }
+
+        .info-message p {
+            color: #0369a1;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+    .login-form-container {
+        margin-bottom: 2rem;
+    }
+
+    .login-form {
+        text-align: left;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-input {
+        padding: 0.75rem 1rem;
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+    }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #9ca3af;
+            font-style: italic;
+        }
+
+    .submit-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        width: 100%;
+    }
+
+        .submit-btn.primary {
+            background: #4f46e5;
+            color: white;
+        }
+
+            .submit-btn.primary:hover:not(:disabled) {
+                background: #4338ca;
+                transform: translateY(-1px);
+            }
+
+        .submit-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+    .additional-info {
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+    }
+
+    .info-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-item i {
+            color: #4f46e5;
+            margin-top: 0.125rem;
+            flex-shrink: 0;
+        }
+
+        .info-item div {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            text-align: left;
+        }
+
+        .info-item strong {
+            color: #374151;
+            font-size: 0.9rem;
+        }
+
+        .info-item span {
+            color: #6b7280;
+            font-size: 0.875rem;
+            line-height: 1.4;
+        }
+
+    .validation-summary {
+        color: #dc2626;
+        background: #fef2f2;
+        padding: 1rem;
+        border-radius: 8px;
+        border: 1px solid #fecaca;
+        margin-bottom: 1.5rem;
+    }
+
+    .validation-error {
+        color: #dc2626;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .external-login-page {
+            padding: 1rem;
+        }
+
+        .login-container {
+            padding: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+        }
+
+        .provider-title {
+            font-size: 1.1rem;
+        }
+
+        .info-message {
+            flex-direction: column;
+            text-align: center;
+            gap: 0.75rem;
+        }
+
+        .info-item {
+            flex-direction: column;
+            text-align: center;
+            gap: 0.5rem;
+        }
+
+            .info-item div {
+                text-align: center;
+            }
+    }
+
+    @@media (max-width: 480px) {
+        .login-container {
+            padding: 1.5rem;
+        }
+
+        .provider-icon {
+            font-size: 2.5rem;
+        }
+
+        .info-message {
+            padding: 1rem;
+        }
+
+        .additional-info {
+            padding: 1rem;
+        }
+    }
+</style>

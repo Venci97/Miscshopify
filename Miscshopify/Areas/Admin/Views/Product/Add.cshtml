@@ -1,17 +1,21 @@
 ﻿@using Miscshopify.Core.Models;
 @model ProductViewModel
 @{
+    ViewData["Title"] = "Add New Product";
 }
 
-<div class="content-body">
-    <section class="users-edit">
-        <div class="card">
+<link href="~/css/admin/product-add.css" rel="stylesheet" />
+
+<div class="product-add-section">
+    <section class="product-add-section">
+        <div class="product-add-card">
             <div class="card-content">
                 <div class="card-body">
-                    <ul class="nav nav-tabs mb-2" role="tablist">
+                    <ul class="nav-tabs" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center active" id="account-tab" data-toggle="tab" href="#account" aria-controls="account" role="tab" aria-selected="true">
-                                <i class="ft-user mr-25"></i><span class="d-none d-sm-block">Add Product</span>
+                            <a class="nav-link active" id="account-tab" data-toggle="tab" href="#account" aria-controls="account" role="tab" aria-selected="true">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>Add New Product</span>
                             </a>
                         </li>
                     </ul>
@@ -19,36 +23,102 @@
                         <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
                             <form id="add" method="post" enctype="multipart/form-data">
                                 <div class="row">
-                                    <div class="col-12 col-sm-6">
+                                    <div class="col-12 col-md-8 col-lg-6">
                                         <input type="hidden" name="Id" value="@Model.Id" />
                                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                        <div class="form-floating">
-                                            <label asp-for="Name" class="form-label"></label>
-                                            <input asp-for="Name" class="form-control" aria-required="true" />
+
+                                        <div class="form-group">
+                                            <label asp-for="Name" class="form-label">Product Name *</label>
+                                            <input asp-for="Name" class="form-control" aria-required="true"
+                                                   placeholder="Enter product name" />
                                             <span asp-validation-for="Name" class="text-danger"></span>
                                         </div>
-                                        <div class="form-floating">
-                                            <label asp-for="Description" class="form-label"></label>
-                                            <input asp-for="Description" class="form-control" aria-required="true" />
+
+                                        <div class="form-group">
+                                            <label asp-for="Description" class="form-label">Description *</label>
+                                            <textarea asp-for="Description" class="form-control" aria-required="true"
+                                                      rows="4" placeholder="Enter product description"
+                                                      maxlength="500"></textarea>
+                                            <div class="char-counter" id="descriptionCounter">0/500 characters</div>
                                             <span asp-validation-for="Description" class="text-danger"></span>
                                         </div>
-                                        <div class="form-floating">
-                                            <label asp-for="Price" class="form-label"></label>
-                                            <input asp-for="Price" class="form-control" aria-required="true" />
+
+                                        <div class="form-group">
+                                            <label asp-for="Price" class="form-label">Price *</label>
+                                            <div class="price-input-container">
+                                                <span class="price-prefix">$</span>
+                                                <input asp-for="Price" class="form-control price-input"
+                                                       aria-required="true" type="number" step="0.01" min="0"
+                                                       placeholder="0.00" />
+                                            </div>
                                             <span asp-validation-for="Price" class="text-danger"></span>
                                         </div>
-                                        <div class="custom-file">
-                                            <label asp-for="ImagePath"></label>
-                                            <input type="file" name="file" />
-                                            <span asp-validation-for="ImagePath" class="focus-input100"></span>
+
+                                        <!-- Category Selection (if available in your model) -->
+                                        @if (ViewBag.Categories != null)
+                                        {
+                                            <div class="form-group">
+                                                <label class="form-label">Category *</label>
+                                                <select class="category-select" name="CategoryId" required>
+                                                    <option value="">Select a category</option>
+                                                    @foreach (var category in ViewBag.Categories)
+                                                    {
+                                                        <option value="@category.Id">@category.Name</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        }
+
+                                        <div class="form-group">
+                                            <div class="file-upload-container">
+                                                <label class="file-upload-label">Product Image *</label>
+                                                <div class="file-upload-wrapper">
+                                                    <input type="file" name="file" id="fileInput" class="file-upload-input"
+                                                           accept="image/*" required />
+                                                    <label for="fileInput" class="file-upload-button" id="fileUploadButton">
+                                                        <i class="fas fa-cloud-upload-alt"></i>
+                                                        <span>Choose Product Image</span>
+                                                    </label>
+                                                </div>
+                                                <div class="file-name" id="fileName" style="display: none;">
+                                                    <i class="fas fa-check-circle"></i>
+                                                    <span></span>
+                                                </div>
+                                                <span asp-validation-for="ImagePath" class="text-danger"></span>
+                                            </div>
+
+                                            <!-- Image Preview -->
+                                            <div class="image-preview-container">
+                                                <img id="imagePreview" class="image-preview"
+                                                     alt="Product image preview" />
+                                            </div>
+                                        </div>
+
+                                        <!-- Additional Product Fields (if needed) -->
+                                        <div class="form-group">
+                                            <label class="form-label">Stock Quantity</label>
+                                            <input type="number" class="form-control" name="StockQuantity"
+                                                   min="0" value="0" placeholder="Enter stock quantity" />
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="form-label">SKU (Stock Keeping Unit)</label>
+                                            <input type="text" class="form-control" name="SKU"
+                                                   placeholder="Enter product SKU" />
                                         </div>
                                     </div>
-                                    <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
-                                        <button type="submit" class="btn btn-primary glow mb-1 mb-sm-0 mr-0 mr-sm-1">
-                                            Save
-                                            changes
-                                        </button>
-                                        <button type="reset" class="btn btn-light">Cancel</button>
+
+                                    <div class="col-12">
+                                        <div class="form-actions">
+                                            <button type="submit" class="btn btn-primary" id="submitButton">
+                                                <i class="fas fa-save"></i>
+                                                Add Product
+                                            </button>
+                                            <a href="/Admin/Product/Index" class="btn btn-light">
+                                                <i class="fas fa-times"></i>
+                                                Cancel
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
@@ -61,5 +131,130 @@
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptspartial" />
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // File upload handling
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const fileNameElement = document.getElementById('fileName');
+            const fileUploadButton = document.getElementById('fileUploadButton');
+            const imagePreview = document.getElementById('imagePreview');
+
+            if (file) {
+                // Show file name
+                fileNameElement.style.display = 'flex';
+                fileNameElement.querySelector('span').textContent = file.name;
+
+                // Update button style
+                fileUploadButton.classList.add('has-file');
+                fileUploadButton.innerHTML = '<i class="fas fa-check"></i><span>Change Image</span>';
+
+                // Show image preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.classList.add('visible');
+                }
+                reader.readAsDataURL(file);
+            } else {
+                // Reset file upload
+                fileNameElement.style.display = 'none';
+                fileUploadButton.classList.remove('has-file');
+                fileUploadButton.innerHTML = '<i class="fas fa-cloud-upload-alt"></i><span>Choose Product Image</span>';
+                imagePreview.classList.remove('visible');
+            }
+        });
+
+        // Description character counter
+        const descriptionTextarea = document.querySelector('textarea[name="Description"]');
+        const charCounter = document.getElementById('descriptionCounter');
+
+        descriptionTextarea.addEventListener('input', function() {
+            const length = this.value.length;
+            charCounter.textContent = `${length}/500 characters`;
+
+            if (length > 450) {
+                charCounter.classList.add('warning');
+                charCounter.classList.remove('error');
+            } else if (length > 490) {
+                charCounter.classList.remove('warning');
+                charCounter.classList.add('error');
+            } else {
+                charCounter.classList.remove('warning', 'error');
+            }
+        });
+
+        // Form submission enhancement
+        document.getElementById('add').addEventListener('submit', function(e) {
+            const submitButton = document.getElementById('submitButton');
+            const originalText = submitButton.innerHTML;
+
+            // Show loading state
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding Product...';
+            submitButton.disabled = true;
+
+            // Validate file upload
+            const fileInput = document.getElementById('fileInput');
+            if (!fileInput.files.length) {
+                e.preventDefault();
+                alert('Please select a product image.');
+                submitButton.innerHTML = originalText;
+                submitButton.disabled = false;
+                fileInput.focus();
+                return;
+            }
+
+            // Validate price
+            const priceInput = document.querySelector('input[name="Price"]');
+            if (!priceInput.value || parseFloat(priceInput.value) <= 0) {
+                e.preventDefault();
+                alert('Please enter a valid price greater than 0.');
+                submitButton.innerHTML = originalText;
+                submitButton.disabled = false;
+                priceInput.focus();
+                return;
+            }
+
+            // Allow form to submit normally
+            console.log('Form submitted successfully');
+        });
+
+        // Price input formatting
+        document.querySelector('input[name="Price"]').addEventListener('blur', function() {
+            if (this.value) {
+                const value = parseFloat(this.value).toFixed(2);
+                this.value = value;
+            }
+        });
+
+        // Auto-generate SKU from product name (optional)
+        document.querySelector('input[name="Name"]').addEventListener('blur', function() {
+            const skuInput = document.querySelector('input[name="SKU"]');
+            if (!skuInput.value && this.value) {
+                // Generate simple SKU from product name
+                const sku = this.value.toUpperCase()
+                    .replace(/[^A-Z0-9]/g, '')
+                    .substring(0, 8) + Math.floor(Math.random() * 1000);
+                skuInput.value = sku;
+            }
+        });
+
+        // Add input validation styling
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.value.trim() !== '') {
+                    this.classList.add('filled');
+                } else {
+                    this.classList.remove('filled');
+                }
+            });
+
+            input.addEventListener('input', function() {
+                if (this.checkValidity()) {
+                    this.classList.remove('input-validation-error');
+                }
+            });
+        });
+    </script>
 }

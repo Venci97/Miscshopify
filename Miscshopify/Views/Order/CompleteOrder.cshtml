@@ -1,10 +1,103 @@
-﻿<div class="text-center order-details">
-    <div class="d-flex justify-content-center mb-5 flex-column align-items-center"> 
-        <span class="check1">
-            <i class="fa fa-check"></i>
-        </span> 
-        <span class="font-weight-bold">Order Confirmed</span> 
-        <small class="mt-2">Your order is registered and we will send it to you soon</small>
-    </div> 
-        <button href="/" class="btn btn-danger btn-block order-button">Go to your Order</button>
-</div>
+﻿@{
+    ViewData["Title"] = "Order Confirmed";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Confirmed - Modern Store</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="~/css/complete-order.css" rel="stylesheet" />
+</head>
+<body class="complete-order-page min-h-screen py-8">
+    <div class="container mx-auto px-4">
+        <div class="order-confirmed-container p-6">
+            <!-- Success Animation -->
+            <div class="text-center mb-8">
+                <div class="success-animation mx-auto mb-6">
+                    <div class="success-circle">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="success-pulse"></div>
+                </div>
+
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+                    Order Confirmed!
+                </h1>
+                <p class="text-xl text-gray-600 max-w-md mx-auto">
+                    Your order is registered and we'll deliver it to you soon
+                </p>
+            </div>
+
+            <!-- Order Info Cards -->
+            <div class="max-w-2xl mx-auto mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Delivery Info -->
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                        <h3 class="info-title">Delivery Status</h3>
+                        <p class="info-text">Preparing your order</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 25%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Info -->
+                    <div class="info-card">
+                        <div class="info-icon payment">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <h3 class="info-title">Payment Method</h3>
+                        <p class="info-text">Cash on Delivery</p>
+                        <span class="status-badge">Pay when delivered</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Next Steps -->
+            <div class="max-w-md mx-auto">
+                <div class="next-steps bg-gray-50 rounded-lg p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4 text-center">
+                        What's Next?
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="step-number">1</div>
+                            <span class="text-gray-700">Order confirmation email sent</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="step-number">2</div>
+                            <span class="text-gray-700">We'll prepare your items</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="step-number">3</div>
+                            <span class="text-gray-700">Delivery in 2-3 business days</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons grid grid-cols-1 gap-4">
+                    <a href="@Url.Action("MyOrders", "Order")"
+                       class="order-button bg-indigo-600 text-white py-4 px-6 rounded-lg font-semibold hover:bg-indigo-700 transition-all duration-300 text-center">
+                        <i class="fas fa-list-alt mr-3"></i>
+                        View Your Orders
+                    </a>
+                    <a href="/Category/Index"
+                       class="continue-button bg-gray-600 text-white py-4 px-6 rounded-lg font-semibold hover:bg-gray-700 transition-all duration-300 text-center">
+                        <i class="fas fa-shopping-bag mr-3"></i>
+                        Continue Shopping
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

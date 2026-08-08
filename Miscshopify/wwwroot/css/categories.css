@@ -1,0 +1,308 @@
+﻿.categories-page {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    font-family: 'Inter', sans-serif;
+}
+
+/* Enhanced Header */
+.categories-header {
+    position: relative;
+}
+
+.header-badge {
+    display: inline-block;
+}
+
+.badge-text {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Enhanced Categories Grid - ПРОМЕНЕНО */
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.2rem;
+    margin-bottom: 2.5rem;
+}
+
+.category-card {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.6s ease forwards;
+    max-width: 100%;
+}
+
+    .category-card.animate-in {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Category Media - ПРОМЕНЕНО */
+.category-media {
+    position: relative;
+    height: 160px; /* Още по-малка височина */
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+}
+
+.category-card:hover .category-media {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.category-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.category-card:hover .category-image {
+    transform: scale(1.04);
+}
+
+.category-icon-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-wrapper {
+    text-align: center;
+}
+
+    .icon-wrapper i {
+        font-size: 1.75rem; /* По-малки икони */
+        color: white;
+        opacity: 0.9;
+    }
+
+/* Hover Overlay */
+.category-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.category-card:hover .category-overlay {
+    opacity: 1;
+}
+
+.overlay-content {
+    text-align: center;
+    color: white;
+    transform: translateY(12px);
+    transition: transform 0.3s ease;
+}
+
+.category-card:hover .overlay-content {
+    transform: translateY(0);
+}
+
+.overlay-content i {
+    margin-bottom: 6px;
+}
+
+/* Category Content - ПРОМЕНЕНО */
+.category-content {
+    padding: 0 0.2rem;
+    margin-top: 0.8rem;
+}
+
+.icon-circle {
+    width: 32px; /* По-малък кръг */
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.category-card:hover .icon-circle {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    transform: scale(1.05);
+}
+
+    .category-card:hover .icon-circle i {
+        color: white;
+    }
+
+.category-content h3 {
+    font-size: 1rem; /* По-малък шрифт */
+    font-weight: 600;
+}
+
+.category-content p {
+    font-size: 0.85rem; /* По-малък шрифт */
+    margin-bottom: 0.8rem;
+}
+
+/* Enhanced Shop Button - ПРОМЕНЕНО */
+.shop-btn {
+    position: relative;
+    padding: 6px 0;
+    border-bottom: 1px solid #e5e7eb;
+    transition: all 0.3s ease;
+}
+
+    .shop-btn div {
+        font-size: 0.85rem; /* По-малък шрифт */
+    }
+
+.progress-line {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    transition: width 0.3s ease;
+}
+
+.category-card:hover .progress-line {
+    width: 100%;
+}
+
+/* Enhanced Empty State */
+.empty-state {
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+}
+
+.empty-icon {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+/* Featured Banner - ПРОМЕНЕНО */
+.featured-banner {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 1.5rem 1.2rem;
+    text-align: center;
+}
+
+    .featured-banner h3 {
+        font-size: 1.2rem;
+    }
+
+    .featured-banner p {
+        font-size: 0.9rem;
+    }
+
+/* Focus styles for accessibility */
+.category-card a:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 3px;
+    border-radius: 10px;
+}
+
+/* Responsive Design - ПРОМЕНЕНО */
+@media (max-width: 768px) {
+    .categories-grid {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+    }
+
+    .category-media {
+        height: 140px;
+    }
+
+    .categories-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .categories-page {
+        padding-top: 0.8rem;
+        padding-bottom: 0.8rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .categories-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 0.8rem;
+    }
+
+    .category-media {
+        height: 120px;
+    }
+
+    .category-content h3 {
+        font-size: 0.9rem;
+    }
+
+    .category-content p {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .categories-grid {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+
+    .category-media {
+        height: 110px;
+    }
+
+    .icon-wrapper i {
+        font-size: 1.5rem;
+    }
+
+    .icon-circle {
+        width: 28px;
+        height: 28px;
+    }
+
+        .icon-circle i {
+            font-size: 0.9rem;
+        }
+}
+
+/* Допълнителни стилове за по-добра визуализация */
+.container {
+    max-width: 1200px;
+}
+
+.categories-header h1 {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+}

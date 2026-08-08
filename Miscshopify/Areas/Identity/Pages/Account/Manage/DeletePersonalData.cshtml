@@ -5,29 +5,449 @@
     ViewData["ActivePage"] = ManageNavPages.PersonalData;
 }
 
-<h3>@ViewData["Title"]</h3>
+<div class="delete-personal-data">
+    <h3 class="section-title">@ViewData["Title"]</h3>
 
-<div class="alert alert-warning" role="alert">
-    <p>
-        <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
-    </p>
-</div>
-
-<div>
-    <form id="delete-user" method="post">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        @if (Model.RequirePassword)
-        {
-            <div class="form-floating">
-                <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" />
-                <label asp-for="Input.Password" class="form-label"></label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
+    <div class="manage-form">
+        <!-- Critical Warning Message -->
+        <div class="critical-warning">
+            <div class="warning-header">
+                <i class="fas fa-skull-crossbones"></i>
+                <h4 class="warning-title">Permanent Account Deletion</h4>
             </div>
-        }
-        <button class="w-100 btn btn-lg btn-danger" type="submit">Delete data and close my account</button>
-    </form>
+            <div class="warning-content">
+                <p class="warning-text">
+                    <strong>Deleting your data will permanently remove your account, and this cannot be recovered.</strong>
+                </p>
+                <div class="warning-details">
+                    <p>This action will:</p>
+                    <ul class="warning-list">
+                        <li><i class="fas fa-trash-alt"></i> Permanently delete all your personal data</li>
+                        <li><i class="fas fa-user-slash"></i> Remove your account from our system</li>
+                        <li><i class="fas fa-history"></i> Delete your account history and activity</li>
+                        <li><i class="fas fa-ban"></i> Prevent you from accessing any services</li>
+                    </ul>
+                    <p class="critical-note">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>This action is irreversible and cannot be undone.</strong>
+                        Please be certain before proceeding.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Form -->
+        <form id="delete-user" method="post" class="delete-form">
+            <div asp-validation-summary="ModelOnly" class="validation-summary" style="@(ViewData.ModelState.IsValid ? "display:none;" : "")"></div>
+
+            @if (Model.RequirePassword)
+            {
+                <div class="form-group">
+                    <label asp-for="Input.Password" class="form-label">Confirm Password</label>
+                    <input asp-for="Input.Password" class="form-input" autocomplete="current-password" aria-required="true"
+                           placeholder="Enter your password to confirm" />
+                    <span asp-validation-for="Input.Password" class="validation-error"></span>
+                </div>
+            }
+
+            <div class="form-actions">
+                <button class="submit-btn extreme-danger" type="submit" id="delete-button">
+                    <i class="fas fa-trash-alt"></i>
+                    Delete Data and Close My Account
+                </button>
+                <a asp-page="./PersonalData" class="cancel-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Data Management
+                </a>
+            </div>
+        </form>
+
+        <!-- Alternative Options -->
+        <div class="alternative-options">
+            <div class="options-icon">
+                <i class="fas fa-life-ring"></i>
+            </div>
+            <div class="options-content">
+                <h5>Not Sure About Deleting?</h5>
+                <p>
+                    If you're experiencing issues, consider these alternatives first:
+                </p>
+                <div class="options-links">
+                    <a asp-page="./Index" class="option-link">
+                        <i class="fas fa-user-edit"></i>
+                        Update Profile Information
+                    </a>
+                    <a asp-page="./Email" class="option-link">
+                        <i class="fas fa-envelope"></i>
+                        Change Email Address
+                    </a>
+                    <a asp-page="./ChangePassword" class="option-link">
+                        <i class="fas fa-key"></i>
+                        Change Password
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteButton = document.getElementById('delete-button');
+            const deleteForm = document.getElementById('delete-user');
+
+            if (deleteButton) {
+                deleteButton.addEventListener('click', function(e) {
+                    if (!confirm('Are you absolutely sure you want to delete your account and all personal data? This action cannot be undone.')) {
+                        e.preventDefault();
+                    }
+                });
+            }
+
+            // Add focus behavior for password input
+            const passwordInput = document.querySelector('input[name="Input.Password"]');
+            if (passwordInput) {
+                passwordInput.addEventListener('focus', function() {
+                    if (this.value === '') {
+                        this.removeAttribute('placeholder');
+                    }
+                });
+
+                passwordInput.addEventListener('blur', function() {
+                    if (this.value === '') {
+                        this.setAttribute('placeholder', 'Enter your password to confirm');
+                    }
+                });
+            }
+        });
+    </script>
 }
+
+<style>
+    .delete-personal-data {
+        max-width: 700px;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 1.5rem;
+    }
+
+    .manage-form {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .critical-warning {
+        background: #fef2f2;
+        border: 2px solid #fecaca;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+
+    .warning-header {
+        background: #dc2626;
+        color: white;
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+        .warning-header i {
+            font-size: 1.5rem;
+        }
+
+    .warning-title {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .warning-content {
+        padding: 1.5rem;
+    }
+
+    .warning-text {
+        color: #dc2626;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+    }
+
+    .warning-details {
+        color: #7f1d1d;
+    }
+
+        .warning-details p {
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+    .warning-list {
+        list-style: none;
+        padding: 0;
+        margin: 1rem 0 1.5rem 0;
+    }
+
+        .warning-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: #7f1d1d;
+        }
+
+        .warning-list i {
+            color: #dc2626;
+            margin-top: 0.125rem;
+            flex-shrink: 0;
+            width: 1rem;
+            text-align: center;
+        }
+
+    .critical-note {
+        background: #fecaca;
+        padding: 1rem;
+        border-radius: 6px;
+        border-left: 4px solid #dc2626;
+        margin: 1.5rem 0 0 0;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+        .critical-note i {
+            color: #7f1d1d;
+            font-size: 1.25rem;
+            margin-top: 0.125rem;
+        }
+
+    .delete-form {
+        margin: 2rem 0;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-input {
+        padding: 0.75rem 1rem;
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+    }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #9ca3af;
+            font-style: italic;
+        }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .submit-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: none;
+        font-size: 1rem;
+    }
+
+        .submit-btn.extreme-danger {
+            background: #dc2626;
+            color: white;
+            border: 2px solid #dc2626;
+        }
+
+            .submit-btn.extreme-danger:hover {
+                background: #b91c1c;
+                border-color: #b91c1c;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+            }
+
+    .cancel-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        text-decoration: none;
+        color: #6b7280;
+        background: #f9fafb;
+        border: 1px solid #d1d5db;
+        transition: all 0.2s ease;
+    }
+
+        .cancel-btn:hover {
+            background: #f3f4f6;
+            color: #374151;
+            text-decoration: none;
+        }
+
+    .alternative-options {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        background: #f0f9ff;
+        border: 1px solid #bae6fd;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .options-icon {
+        flex-shrink: 0;
+        color: #0369a1;
+        font-size: 1.5rem;
+        margin-top: 0.125rem;
+    }
+
+    .options-content h5 {
+        color: #0369a1;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+    }
+
+    .options-content p {
+        color: #0369a1;
+        margin-bottom: 1rem;
+        line-height: 1.5;
+    }
+
+    .options-links {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .option-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #0369a1;
+        text-decoration: none;
+        font-weight: 500;
+        padding: 0.5rem 0.75rem;
+        background: rgba(255, 255, 255, 0.7);
+        border-radius: 6px;
+        transition: all 0.2s;
+        font-size: 0.9rem;
+    }
+
+        .option-link:hover {
+            background: white;
+            text-decoration: none;
+            color: #0369a1;
+        }
+
+    .validation-summary {
+        color: #dc2626;
+        background: #fef2f2;
+        padding: 1rem;
+        border-radius: 8px;
+        border: 1px solid #fecaca;
+        margin-bottom: 1.5rem;
+    }
+
+    .validation-error {
+        color: #dc2626;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .manage-form {
+            padding: 1.5rem;
+        }
+
+        .warning-header {
+            flex-direction: column;
+            text-align: center;
+            gap: 0.5rem;
+            padding: 1rem;
+        }
+
+        .form-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .submit-btn,
+        .cancel-btn {
+            justify-content: center;
+            text-align: center;
+        }
+
+        .alternative-options {
+            flex-direction: column;
+            text-align: center;
+            gap: 0.75rem;
+        }
+
+        .critical-note {
+            flex-direction: column;
+            gap: 0.5rem;
+            text-align: center;
+        }
+
+        .options-links {
+            align-items: center;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .manage-form {
+            padding: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+        }
+
+        .warning-title {
+            font-size: 1.1rem;
+        }
+
+        .warning-content {
+            padding: 1rem;
+        }
+    }
+</style>

@@ -24,7 +24,25 @@ namespace Miscshopify.Controllers
             return View(category);
         }
 
+        public IActionResult Contact()
+        {
+            return View();
+        }
+        public IActionResult ReturnsRefunds()
+        {
+            return View();
+        }
+        public IActionResult ShippingInfo()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public IActionResult Terms()
         {
             return View();
         }

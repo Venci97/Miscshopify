@@ -6,44 +6,357 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-@{
-}
-
-<ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item">
-        <a class="nav-link" href="/Cart/Index" title="Cart">
-            <i class="fa-solid fa-cart-shopping"></i>
+    var user = await UserManager.GetUserAsync(User);
+    var userImagePath = !string.IsNullOrEmpty(user?.ImagePath)
+        ? $"{user.ImagePath}?v={DateTime.Now.Ticks}"
+        : "/images/default-avatar.png";
+
+    <div class="user-menu-container">
+        <!-- Cart Icon (Always visible) -->
+        <a href="/Cart/Index" class="nav-icon-btn" title="Shopping Cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="nav-icon-label">Cart</span>
         </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-grey" href="/Order/MyOrders" title="Cart">
-            My Orders
-        </a>
-    </li>
-    <li>
-        <img src="~/@UserManager.GetUserAsync(User).Result?.ImagePath" class="img-circle elevation-2" style="border-radius: 50%;" width="40" height="40" alt="User Image">
-    </li>
-    <li class="nav-item">
-        <a id="manage" class="nav-link text-grey" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-            @*<img src="~/@UserManager.GetUserAsync(User).Result?.ImagePath" class="brand-image img-circle elevation-3" style="opacity: .8">*@
-            @UserManager.GetUserAsync(User).Result?.FirstName
-        </a>
-    </li>
-    <li class="nav-item">
-        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button id="logout" type="submit" class="nav-link btn btn-link text-grey">Logout</button>
-        </form>
-    </li>
+
+        <!-- User Dropdown -->
+        <div class="user-dropdown">
+            <button class="user-trigger" id="userDropdownTrigger" type="button">
+                <img src="@Url.Content(userImagePath)"
+                     class="user-avatar"
+                     alt="User Image"
+                     onerror="handleAvatarError(this)">
+                <span class="user-name">@user?.FirstName</span>
+                <i class="fas fa-chevron-down dropdown-arrow" id="dropdownArrow"></i>
+            </button>
+
+            <div class="dropdown-menu hidden" id="userDropdownMenu">
+                <div class="dropdown-arrow-top"></div>
+                <div class="dropdown-content">
+                    <a href="/Order/MyOrders" class="dropdown-item">
+                        <i class="fas fa-clipboard-list"></i>
+                        <span>My Orders</span>
+                    </a>
+                    <a asp-area="Identity" asp-page="/Account/Manage/Index" class="dropdown-item">
+                        <i class="fas fa-user-cog"></i>
+                        <span>Account Settings</span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button type="submit" class="dropdown-item logout-btn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 }
 else
 {
-    <li class="nav-item">
-        <a class="nav-link text-grey" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-grey" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
+    <div class="auth-buttons">
+        <a class="auth-btn login-btn" id="login" asp-area="Identity" asp-page="/Account/Login">
+            <i class="fas fa-sign-in-alt"></i>
+            Login
+        </a>
+        <a class="auth-btn register-btn" id="register" asp-area="Identity" asp-page="/Account/Register">
+            <i class="fas fa-user-plus"></i>
+            Register
+        </a>
+    </div>
 }
-</ul>
+
+<style>
+    .user-menu-container {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .nav-icon-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        color: #374151;
+        text-decoration: none;
+        border-radius: 0.5rem;
+        transition: all 0.2s ease;
+    }
+
+        .nav-icon-btn:hover {
+            background: #f3f4f6;
+            color: #4f46e5;
+        }
+
+    .nav-icon-label {
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .user-dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .user-trigger {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.5rem 1rem;
+        background: white;
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: inherit;
+        font-size: inherit;
+    }
+
+        .user-trigger:hover {
+            border-color: #4f46e5;
+            background: #f8fafc;
+        }
+
+    .user-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #e5e7eb;
+    }
+
+    .user-name {
+        font-weight: 500;
+        color: #374151;
+        font-size: 0.875rem;
+    }
+
+    .dropdown-arrow {
+        font-size: 0.75rem;
+        color: #6b7280;
+        transition: transform 0.2s ease;
+    }
+
+    .rotate-180 {
+        transform: rotate(180deg);
+    }
+
+    /* FIXED DROPDOWN STYLES */
+    .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        margin-top: 0.5rem;
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.75rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        min-width: 200px;
+        z-index: 9999; /* Increased z-index */
+        opacity: 1; /* Ensure it's visible */
+        visibility: visible; /* Ensure it's visible */
+        transform: translateY(0); /* Reset any transforms */
+    }
+
+        .dropdown-menu.hidden {
+            display: none !important;
+        }
+
+        .dropdown-menu:not(.hidden) {
+            display: block !important;
+        }
+
+    .dropdown-arrow-top {
+        position: absolute;
+        top: -6px;
+        right: 20px;
+        width: 12px;
+        height: 12px;
+        background: white;
+        border-top: 1px solid #e5e7eb;
+        border-left: 1px solid #e5e7eb;
+        transform: rotate(45deg);
+    }
+
+    .dropdown-content {
+        padding: 0.5rem;
+        position: relative;
+        z-index: 10000;
+        background: white;
+        border-radius: 0.75rem;
+    }
+
+    .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        color: #374151;
+        text-decoration: none;
+        border-radius: 0.5rem;
+        transition: all 0.2s ease;
+        width: 100%;
+        border: none;
+        background: none;
+        font-size: 0.875rem;
+        cursor: pointer;
+        font-family: inherit;
+        text-align: left;
+    }
+
+        .dropdown-item:hover {
+            background: #f3f4f6;
+            color: #4f46e5;
+        }
+
+    .logout-btn {
+        color: #ef4444;
+    }
+
+        .logout-btn:hover {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+    .dropdown-divider {
+        height: 1px;
+        background: #e5e7eb;
+        margin: 0.5rem 0;
+    }
+
+    .auth-buttons {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .auth-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.875rem;
+        transition: all 0.2s ease;
+    }
+
+    .login-btn {
+        color: #374151;
+        border: 1px solid #d1d5db;
+    }
+
+        .login-btn:hover {
+            background: #f9fafb;
+            border-color: #9ca3af;
+        }
+
+    .register-btn {
+        background: #4f46e5;
+        color: white;
+    }
+
+        .register-btn:hover {
+            background: #4338ca;
+        }
+</style>
+
+<script>
+    // Global avatar error handler
+    function handleAvatarError(img) {
+        console.log('Avatar image failed to load:', img.src);
+        img.onerror = null;
+        img.src = '/images/default-avatar.png?v=' + Date.now();
+    }
+
+    // Dropdown functionality with protection against multiple initializations
+    (function() {
+        let dropdownInitialized = false;
+
+        function initializeDropdown() {
+            if (dropdownInitialized) {
+                console.log('Dropdown already initialized, skipping...');
+                return;
+            }
+
+            const trigger = document.getElementById('userDropdownTrigger');
+            const menu = document.getElementById('userDropdownMenu');
+            const arrow = document.getElementById('dropdownArrow');
+
+            console.log('Initializing dropdown...', {
+                trigger: !!trigger,
+                menu: !!menu,
+                arrow: !!arrow
+            });
+
+            if (trigger && menu && arrow) {
+                dropdownInitialized = true;
+
+                // Remove any existing event listeners first
+                const newTrigger = trigger.cloneNode(true);
+                trigger.parentNode.replaceChild(newTrigger, trigger);
+
+                // Toggle dropdown on button click
+                newTrigger.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    console.log('Dropdown clicked - toggling');
+
+                    const isHidden = menu.classList.contains('hidden');
+                    console.log('Menu hidden:', isHidden);
+
+                    if (isHidden) {
+                        menu.classList.remove('hidden');
+                        arrow.classList.add('rotate-180');
+                        console.log('Menu shown');
+                    } else {
+                        menu.classList.add('hidden');
+                        arrow.classList.remove('rotate-180');
+                        console.log('Menu hidden');
+                    }
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!newTrigger.contains(e.target) && !menu.contains(e.target)) {
+                        menu.classList.add('hidden');
+                        arrow.classList.remove('rotate-180');
+                    }
+                });
+
+                // Close dropdown when clicking on menu items
+                const menuItems = menu.querySelectorAll('.dropdown-item');
+                menuItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        menu.classList.add('hidden');
+                        arrow.classList.remove('rotate-180');
+                    });
+                });
+
+                console.log('Dropdown initialized successfully');
+            } else {
+                console.error('Dropdown elements not found');
+            }
+        }
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeDropdown);
+        } else {
+            initializeDropdown();
+        }
+
+        // Apply avatar error handlers
+        document.addEventListener('DOMContentLoaded', function() {
+            const avatars = document.querySelectorAll('.user-avatar');
+            avatars.forEach(avatar => {
+                avatar.onerror = function() {
+                    handleAvatarError(this);
+                };
+            });
+        });
+    })();
+</script>

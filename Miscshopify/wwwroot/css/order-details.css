@@ -1,0 +1,43 @@
+﻿/* Smooth animations */
+.fa-receipt {
+    animation: bounceGentle 2s ease-in-out infinite;
+}
+
+@@keyframes bounceGentle {
+    0%, 100% {
+        transform: scale(1) translateY(0);
+    }
+
+    50% {
+        transform: scale(1.05) translateY(-2px);
+    }
+}
+
+/* Card hover effects */
+.bg-gray-50:hover {
+    transform: translateY(-1px);
+    transition: all 0.3s ease;
+}
+
+/* Print styles */
+@@media print {
+    body {
+        background: white !important;
+    }
+
+    .bg-gradient-to-br {
+        background: white !important;
+    }
+
+    .shadow-xl {
+        box-shadow: none !important;
+    }
+
+    .bg-blue-50, .bg-gray-50 {
+        background: #f8fafc !important;
+    }
+
+    button {
+        display: none !important;
+    }
+}

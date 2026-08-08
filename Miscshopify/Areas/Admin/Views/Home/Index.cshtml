@@ -1,74 +1,290 @@
-﻿@{
+﻿@model Miscshopify.Areas.Admin.Controllers.DashboardViewModel
+@{
     ViewData["Title"] = "Admin Panel";
 }
+<link href="~/css/admin/dashboard.css" rel="stylesheet" />
 
-<div class="row">
-    <div class="col-lg-3 col-6">
-        <div class="small-box bg-info">
-            <div class="inner">
-                <h3>New Orders</h3>
+<div class="admin-dashboard">
+    <!-- Welcome Header -->
+    <div class="welcome-header mb-8">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Welcome to Admin Panel</h1>
+                <p class="text-gray-600 mt-2">Manage your store efficiently and effectively</p>
             </div>
-            <div class="icon">
-                <i class="fa-solid fa-bag-shopping"></i>
+            <div class="text-right">
+                <p class="text-sm text-gray-500">Today is</p>
+                <p class="text-lg font-semibold text-gray-800" id="currentDate"></p>
             </div>
-            <a href="/Admin/Order/NewOrders" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
-    <div class="col-lg-3 col-6">
-        <div class="small-box bg-success">
-            <div class="inner">
-                <h3>On The Way</h3>
+
+    <!-- Stats Overview -->
+    <div class="stats-overview grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Total Orders -->
+        <div class="stats-card bg-gradient-to-r from-blue-500 to-blue-600">
+            <div class="stats-icon">
+                <i class="fas fa-shopping-cart"></i>
             </div>
-            <div class="icon">
-                <i class="fa-solid fa-truck-fast"></i>
+            <div class="stats-content">
+                <h3 class="stats-value">@Model.TotalOrders.ToString("N0")</h3>
+                <p class="stats-label">Total Orders</p>
+                <span class="stats-trend @(Model.OrdersPercentageChange >= 0 ? "positive" : "negative")">
+                    @(Model.OrdersPercentageChange >= 0 ? "+" : "")@Model.OrdersPercentageChange%
+                </span>
             </div>
-            <a href="/Admin/Order/OrdersOnTheWay" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+
+        <!-- Total Revenue -->
+        <div class="stats-card bg-gradient-to-r from-green-500 to-green-600">
+            <div class="stats-icon">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="stats-content">
+                <h3 class="stats-value">$@Model.TotalRevenue.ToString("N0")</h3>
+                <p class="stats-label">Total Revenue</p>
+                <span class="stats-trend @(Model.RevenuePercentageChange >= 0 ? "positive" : "negative")">
+                    @(Model.RevenuePercentageChange >= 0 ? "+" : "")@Model.RevenuePercentageChange%
+                </span>
+            </div>
+        </div>
+
+        <!-- Total Customers -->
+        <div class="stats-card bg-gradient-to-r from-purple-500 to-purple-600">
+            <div class="stats-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stats-content">
+                <h3 class="stats-value">@Model.TotalCustomers.ToString("N0")</h3>
+                <p class="stats-label">Total Customers</p>
+                <span class="stats-trend @(Model.CustomersPercentageChange >= 0 ? "positive" : "negative")">
+                    @(Model.CustomersPercentageChange >= 0 ? "+" : "")@Model.CustomersPercentageChange%
+                </span>
+            </div>
+        </div>
+
+        <!-- Products -->
+        <div class="stats-card bg-gradient-to-r from-orange-500 to-orange-600">
+            <div class="stats-icon">
+                <i class="fas fa-box"></i>
+            </div>
+            <div class="stats-content">
+                <h3 class="stats-value">@Model.TotalProducts.ToString("N0")</h3>
+                <p class="stats-label">Total Products</p>
+                <span class="stats-trend @(Model.ProductsPercentageChange >= 0 ? "positive" : "negative")">
+                    @(Model.ProductsPercentageChange >= 0 ? "+" : "")@Model.ProductsPercentageChange%
+                </span>
+            </div>
         </div>
     </div>
-    <div class="col-lg-3 col-6">
-        <div class="small-box bg-info">
-            <div class="inner">
-                <h3>All Orders</h3>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions-section mb-8">
+        <h2 class="section-title">Quick Actions</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <!-- Orders -->
+            <a href="/Admin/Order/NewOrders" class="action-card group">
+                <div class="action-icon bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="action-content">
+                    <h3 class="action-title">New Orders</h3>
+                    <p class="action-count">@ViewData["NewOrders"] pending</p>
+                </div>
+                <div class="action-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </a>
+
+            <a href="/Admin/Order/OrdersOnTheWay" class="action-card group">
+                <div class="action-icon bg-green-100 text-green-600 group-hover:bg-green-600 group-hover:text-white">
+                    <i class="fas fa-truck-fast"></i>
+                </div>
+                <div class="action-content">
+                    <h3 class="action-title">On The Way</h3>
+                    <p class="action-count">@ViewData["OrdersOnTheWay"] shipping</p>
+                </div>
+                <div class="action-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </a>
+
+            <a href="/Admin/Order/Index" class="action-card group">
+                <div class="action-icon bg-purple-100 text-purple-600 group-hover:bg-purple-600 group-hover:text-white">
+                    <i class="fas fa-list-alt"></i>
+                </div>
+                <div class="action-content">
+                    <h3 class="action-title">All Orders</h3>
+                    <p class="action-count">@ViewData["AllOrders"] total</p>
+                </div>
+                <div class="action-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </a>
+
+            <!-- Users -->
+            <a href="/Admin/User/Index" class="action-card group">
+                <div class="action-icon bg-yellow-100 text-yellow-600 group-hover:bg-yellow-600 group-hover:text-white">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="action-content">
+                    <h3 class="action-title">Users</h3>
+                    <p class="action-count">@ViewData["TotalUsers"] registered</p>
+                </div>
+                <div class="action-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </a>
+
+            <!-- Categories -->
+            <a href="/Admin/Category/Index" class="action-card group">
+                <div class="action-icon bg-red-100 text-red-600 group-hover:bg-red-600 group-hover:text-white">
+                    <i class="fas fa-list"></i>
+                </div>
+                <div class="action-content">
+                    <h3 class="action-title">Categories</h3>
+                    <p class="action-count">@ViewData["TotalCategories"] categories</p>
+                </div>
+                <div class="action-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </a>
+
+            <!-- Products -->
+            <a href="/Admin/Product/Index" class="action-card group">
+                <div class="action-icon bg-indigo-100 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white">
+                    <i class="fas fa-basket-shopping"></i>
+                </div>
+                <div class="action-content">
+                    <h3 class="action-title">Products</h3>
+                    <p class="action-count">@ViewData["TotalProducts"] items</p>
+                </div>
+                <div class="action-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </a>
+
+            <!-- Add Product -->
+            <a href="/Admin/Product/Add" class="action-card group">
+                <div class="action-icon bg-pink-100 text-pink-600 group-hover:bg-pink-600 group-hover:text-white">
+                    <i class="fas fa-plus-circle"></i>
+                </div>
+                <div class="action-content">
+                    <h3 class="action-title">Add Product</h3>
+                    <p class="action-count">Create new</p>
+                </div>
+                <div class="action-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </a>
+
+            <!-- Add Category -->
+            <a href="/Admin/Category/Add" class="action-card group">
+                <div class="action-icon bg-teal-100 text-teal-600 group-hover:bg-teal-600 group-hover:text-white">
+                    <i class="fas fa-folder-plus"></i>
+                </div>
+                <div class="action-content">
+                    <h3 class="action-title">Add Category</h3>
+                    <p class="action-count">Create new</p>
+                </div>
+                <div class="action-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Recent Activity & Charts Row -->
+    <div class="dashboard-row grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Recent Activity -->
+        <div class="recent-activity">
+            <div class="section-header">
+                <h2 class="section-title">Recent Activity</h2>
+                <a href="#" class="view-all-link">View All</a>
             </div>
-            <div class="icon">
-                <i class="fa-solid fa-bag-shopping"></i>
+            <div class="activity-list">
+                @foreach (var activity in Model.RecentActivities)
+                {
+                    <div class="activity-item">
+                        <div class="activity-icon @activity.IconColor.Replace("text-", "bg-") @activity.IconColor">
+                            <i class="@activity.Icon"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p class="activity-text">@Html.Raw(activity.Description)</p>
+                            <p class="activity-time">@activity.TimeAgo</p>
+                        </div>
+                    </div>
+                }
             </div>
-            <a href="/Admin/Order/Index" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+
+        <!-- Performance Chart -->
+        <div class="performance-chart">
+            <div class="section-header">
+                <h2 class="section-title">Performance</h2>
+                <div class="chart-legend">
+                    <span class="legend-item">
+                        <span class="legend-color bg-blue-500"></span>
+                        Orders
+                    </span>
+                    <span class="legend-item">
+                        <span class="legend-color bg-green-500"></span>
+                        Revenue
+                    </span>
+                </div>
+            </div>
+            <div class="chart-placeholder">
+                <div class="chart-container">
+                    <!-- Simple bar chart representation -->
+                    <div class="chart-bars">
+                        <div class="chart-bar-group">
+                            <div class="chart-bar bg-blue-500" style="height: 80%"></div>
+                            <div class="chart-bar bg-green-500" style="height: 65%"></div>
+                            <span class="chart-label">Mon</span>
+                        </div>
+                        <div class="chart-bar-group">
+                            <div class="chart-bar bg-blue-500" style="height: 60%"></div>
+                            <div class="chart-bar bg-green-500" style="height: 75%"></div>
+                            <span class="chart-label">Tue</span>
+                        </div>
+                        <div class="chart-bar-group">
+                            <div class="chart-bar bg-blue-500" style="height: 90%"></div>
+                            <div class="chart-bar bg-green-500" style="height: 85%"></div>
+                            <span class="chart-label">Wed</span>
+                        </div>
+                        <div class="chart-bar-group">
+                            <div class="chart-bar bg-blue-500" style="height: 70%"></div>
+                            <div class="chart-bar bg-green-500" style="height: 80%"></div>
+                            <span class="chart-label">Thu</span>
+                        </div>
+                        <div class="chart-bar-group">
+                            <div class="chart-bar bg-blue-500" style="height: 95%"></div>
+                            <div class="chart-bar bg-green-500" style="height: 90%"></div>
+                            <span class="chart-label">Fri</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-lg-3 col-6">
-        <div class="small-box bg-warning">
-            <div class="inner">
-                <h3>Users</h3>
-            </div>
-            <div class="icon">
-                <i class="fa-solid fa-user"></i>
-            </div>
-            <a href="/Admin/User/Index" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
-    <div class="col-lg-3 col-6">
-        <div class="small-box bg-danger">
-            <div class="inner">
-                <h3>Categories</h3>
-            </div>
-            <div class="icon">
-                <i class="fa-solid fa-list"></i>
-            </div>
-            <a href="/Admin/Category/Index" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
-    <div class="col-lg-3 col-6">
-        <div class="small-box bg-success">
-            <div class="inner">
-                <h3>Products</h3>
-            </div>
-            <div class="icon">
-                <i class="fa-solid fa-basket-shopping"></i>
-            </div>
-            <a href="/Admin/Product/Index" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
-</div>
+
+<script>
+    // Set current date
+    document.addEventListener('DOMContentLoaded', function() {
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', options);
+
+        // Add some interactivity to stats cards
+        document.querySelectorAll('.stats-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    });
+</script>

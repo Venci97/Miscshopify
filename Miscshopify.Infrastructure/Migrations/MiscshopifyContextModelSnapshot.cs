@@ -51,7 +51,7 @@ namespace Miscshopify.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "6608f09f-5112-4e35-8451-07bf78b97af5",
+                            Id = "e3097a6a-a73d-4ee4-890c-1620940944fd",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -148,8 +148,8 @@ namespace Miscshopify.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "87a3d0b8-01be-488f-a903-2e424de4b10b",
-                            RoleId = "6608f09f-5112-4e35-8451-07bf78b97af5"
+                            UserId = "055cc4ff-e9a4-426b-be06-b36304783962",
+                            RoleId = "e3097a6a-a73d-4ee4-890c-1620940944fd"
                         });
                 });
 
@@ -280,12 +280,12 @@ namespace Miscshopify.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "87a3d0b8-01be-488f-a903-2e424de4b10b",
+                            Id = "055cc4ff-e9a4-426b-be06-b36304783962",
                             AccessFailedCount = 0,
                             Address = "Admin",
                             City = "Admin",
-                            ConcurrencyStamp = "9df58699-55da-478f-9752-a89a5f195c86",
-                            CreationDate = new DateTime(2024, 6, 12, 18, 55, 38, 369, DateTimeKind.Local).AddTicks(7828),
+                            ConcurrencyStamp = "0d942b7a-50c2-4b22-bacc-eb9504608ab0",
+                            CreationDate = new DateTime(2025, 11, 11, 23, 49, 34, 955, DateTimeKind.Local).AddTicks(7079),
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -296,11 +296,11 @@ namespace Miscshopify.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMdauLlame1rJ5wIHi7nwmKWBRH1Gkyp0LA+BYPzwdZYbfJzhfdR408GnJvjSr4Ibg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHa73lBzipKXRzlHaA13tFWy9EGe9cOx/ir8RxPqTzQhekdgdzAwv/7/OLjbRlxLbw==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
                             PostCode = "1234",
-                            SecurityStamp = "09efc767-4ea2-4001-b66e-90c7796cd424",
+                            SecurityStamp = "53ba82eb-b163-450c-a17d-2c4661475a06",
                             TwoFactorEnabled = false,
                             UserName = "admin@admin.com"
                         });
@@ -379,7 +379,12 @@ namespace Miscshopify.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
 
                     b.ToTable("Categories");
 
@@ -432,11 +437,48 @@ namespace Miscshopify.Infrastructure.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("OrderCustomerAddress")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("OrderCustomerCity")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("OrderCustomerEmail")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("OrderCustomerPhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("OrderCustomerPostCode")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("PaymentDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("PaymentMethod")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -496,6 +538,9 @@ namespace Miscshopify.Infrastructure.Migrations
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(500)
@@ -526,6 +571,7 @@ namespace Miscshopify.Infrastructure.Migrations
                         {
                             Id = new Guid("ab40e33a-24d3-47d4-b570-08dadfcc0e2c"),
                             CategoryId = new Guid("266a6cbb-56cd-4500-efd8-08dadfcbf404"),
+                            CreatedDate = new DateTime(2025, 11, 11, 21, 49, 34, 948, DateTimeKind.Utc).AddTicks(8282),
                             Description = "8GB RAM 256GB ROM. 108MP Triple camera.CPU: Qualcomm® Kryo™ 660,Octa-core,up to 2.2HzGPU: Qualcomm® Adreno™ 619. 5000 mAh Battery.",
                             ImagePath = "uploads/productImg/54a276f14b3c44e6ae7f51d02ba7e1af.webp",
                             IsActive = true,
@@ -536,6 +582,7 @@ namespace Miscshopify.Infrastructure.Migrations
                         {
                             Id = new Guid("8747cde3-f434-45ee-389f-08dadfe174ee"),
                             CategoryId = new Guid("266a6cbb-56cd-4500-efd8-08dadfcbf404"),
+                            CreatedDate = new DateTime(2025, 11, 11, 21, 49, 34, 948, DateTimeKind.Utc).AddTicks(8761),
                             Description = "8GB RAM 128GB ROM.",
                             ImagePath = "uploads/productImg/0007a5a4edb44fe4a91dcc59d1f0410e.jpg",
                             IsActive = true,
@@ -546,6 +593,7 @@ namespace Miscshopify.Infrastructure.Migrations
                         {
                             Id = new Guid("b4b4eaf9-0a08-45c8-d150-08dae03a344b"),
                             CategoryId = new Guid("be2ed17b-0c49-4a87-4db8-08dae039c34b"),
+                            CreatedDate = new DateTime(2025, 11, 11, 21, 49, 34, 948, DateTimeKind.Utc).AddTicks(8947),
                             Description = "Notebook with AMD FX-7500 Radeon R7, 10 Compute Cores 4C + 6G, 2.10Ghz with 3.30Ghz in turbo mode with 2GB Dedicated videocard - Radeon R5 m260DX",
                             ImagePath = "uploads/productImg/930aef3d621b4f7ebc6a59a248ef0db9.jpg",
                             IsActive = true,
@@ -556,6 +604,7 @@ namespace Miscshopify.Infrastructure.Migrations
                         {
                             Id = new Guid("d4796ccb-b909-468b-135a-08dae0fd13bc"),
                             CategoryId = new Guid("be2ed17b-0c49-4a87-4db8-08dae039c34b"),
+                            CreatedDate = new DateTime(2025, 11, 11, 21, 49, 34, 948, DateTimeKind.Utc).AddTicks(9156),
                             Description = "Intel Pentium T4400 (2.20GHz, 1MB L2 cache, 800MHz FSB). RAM 4GB (2x2048MB) DDR 2 800Mhz. ROM 500GB SATA 5400 rpm",
                             ImagePath = "uploads/productImg/36adca4afd4b4368bcf590774f5b5660.jpg",
                             IsActive = true,
@@ -566,6 +615,7 @@ namespace Miscshopify.Infrastructure.Migrations
                         {
                             Id = new Guid("3b188390-8db6-4783-135b-08dae0fd13bc"),
                             CategoryId = new Guid("cf06817a-292e-458d-4db9-08dae039c34b"),
+                            CreatedDate = new DateTime(2025, 11, 11, 21, 49, 34, 948, DateTimeKind.Utc).AddTicks(9356),
                             Description = "Finding is better than searching. So customise your Android TV home screen to show you exactly the apps, films, and shows you want to watch. Now you can continue watching movies after interruptions, start new episodes or jump to another show without having to go back and forth. Everything is really easy with your go-to app.",
                             ImagePath = "uploads/productImg/dac30fa37ac348a893f97c94b74f2bcb.webp",
                             IsActive = true,
@@ -576,6 +626,7 @@ namespace Miscshopify.Infrastructure.Migrations
                         {
                             Id = new Guid("9086399c-0be5-42ff-135c-08dae0fd13bc"),
                             CategoryId = new Guid("cf06817a-292e-458d-4db9-08dae039c34b"),
+                            CreatedDate = new DateTime(2025, 11, 11, 21, 49, 34, 948, DateTimeKind.Utc).AddTicks(9612),
                             Description = "Choosing your next TV just got easy. When you're looking for superb picture and sound, easy connectivity and responsive, hassle-free gaming—you're looking for The One. Plus you get Ambilight for an immersive experience like no other.",
                             ImagePath = "uploads/productImg/4660f20a482942a28ab64fd2295ce8eb.jpg",
                             IsActive = true,
@@ -586,6 +637,7 @@ namespace Miscshopify.Infrastructure.Migrations
                         {
                             Id = new Guid("ceac6396-3da0-4944-135d-08dae0fd13bc"),
                             CategoryId = new Guid("a7d777ad-9b16-48be-4dba-08dae039c34b"),
+                            CreatedDate = new DateTime(2025, 11, 11, 21, 49, 34, 948, DateTimeKind.Utc).AddTicks(9873),
                             Description = "AMD Ryzen 9 3900X 3.8GHz, RTX 3090 24GB, 32GB 3600mhz RGB Memory, 1TB Gen4 SSD, 360mm AIO",
                             ImagePath = "CEAC6396-3DA0-4944-135D-08DAE0FD13BC",
                             IsActive = true,
@@ -596,6 +648,7 @@ namespace Miscshopify.Infrastructure.Migrations
                         {
                             Id = new Guid("5709db41-e129-490b-135e-08dae0fd13bc"),
                             CategoryId = new Guid("a7d777ad-9b16-48be-4dba-08dae039c34b"),
+                            CreatedDate = new DateTime(2025, 11, 11, 21, 49, 34, 949, DateTimeKind.Utc).AddTicks(62),
                             Description = "I7-3770 3.4GHz,GTX 1050TI 4GB GPU,16GB DDR3 RAM,256GB NVME M.2 SSD,1TB HDD,500W PSU,LEGEND ARGB CASE,600Mbps WiFi,Windows 10",
                             ImagePath = "uploads/productImg/cd047469af474a5887904f8f2b99a8d8.jpg",
                             IsActive = true,
@@ -606,6 +659,7 @@ namespace Miscshopify.Infrastructure.Migrations
                         {
                             Id = new Guid("8355a0dd-a683-42ae-135f-08dae0fd13bc"),
                             CategoryId = new Guid("0a681278-e942-47f9-0c19-08dae1128df6"),
+                            CreatedDate = new DateTime(2025, 11, 11, 21, 49, 34, 949, DateTimeKind.Utc).AddTicks(269),
                             Description = "T-Shirt with cool graffity",
                             ImagePath = "uploads/productImg/dd5ff5b4634448cd9f519045bdcdd49e.jpeg",
                             IsActive = true,
@@ -616,6 +670,7 @@ namespace Miscshopify.Infrastructure.Migrations
                         {
                             Id = new Guid("df12aeb6-18be-4385-1360-08dae0fd13bc"),
                             CategoryId = new Guid("0a681278-e942-47f9-0c19-08dae1128df6"),
+                            CreatedDate = new DateTime(2025, 11, 11, 21, 49, 34, 949, DateTimeKind.Utc).AddTicks(459),
                             Description = "Cool Shirt",
                             ImagePath = "uploads/productImg/6f21e499fabd46a8bf30072cc91a2c82.webp",
                             IsActive = true,
@@ -626,6 +681,7 @@ namespace Miscshopify.Infrastructure.Migrations
                         {
                             Id = new Guid("56532f98-112b-474a-1361-08dae0fd13bc"),
                             CategoryId = new Guid("0a681278-e942-47f9-0c19-08dae1128df6"),
+                            CreatedDate = new DateTime(2025, 11, 11, 21, 49, 34, 949, DateTimeKind.Utc).AddTicks(649),
                             Description = "Cool black Jeans",
                             ImagePath = "uploads/productImg/e5ed61b227b246aab73c600bcd4229f5.gif",
                             IsActive = true,
@@ -636,12 +692,124 @@ namespace Miscshopify.Infrastructure.Migrations
                         {
                             Id = new Guid("6468f6ad-5de5-4a34-1362-08dae0fd13bc"),
                             CategoryId = new Guid("0a681278-e942-47f9-0c19-08dae1128df6"),
+                            CreatedDate = new DateTime(2025, 11, 11, 21, 49, 34, 949, DateTimeKind.Utc).AddTicks(839),
                             Description = "Cool Green Shoes",
                             ImagePath = "uploads/productImg/05dd0ffaa4304479829228080a078ad2.jpg",
                             IsActive = true,
                             Name = "Green Shoes",
                             Price = 57.99m
                         });
+                });
+
+            modelBuilder.Entity("Miscshopify.Infrastructure.Data.Models.SiteSettings", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("AllowPurchasingOutOfStock")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ContactEmail")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ContactPhone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FacebookUrl")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("HeroImagePath")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("HeroSubtitle")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("HeroTitle")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("InstagramUrl")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("LowStockThreshold")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("MaintenanceEnd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MaintenanceMessage")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime?>("MaintenanceStart")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MetaDescription")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("MetaKeywords")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("PrivacyPolicy")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.Property<string>("ReturnPolicy")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.Property<string>("ShippingInformation")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.Property<bool>("ShowMaintenanceMessage")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ShowOutOfStockProducts")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SiteDescription")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("SiteName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("TermsAndConditions")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.Property<string>("TikTokUrl")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("TwitterUrl")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("WarrantyInformation")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SiteSettings");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -702,6 +870,15 @@ namespace Miscshopify.Infrastructure.Migrations
                         .HasForeignKey("CartId");
                 });
 
+            modelBuilder.Entity("Miscshopify.Infrastructure.Data.Models.Category", b =>
+                {
+                    b.HasOne("Miscshopify.Infrastructure.Data.Models.Category", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId");
+
+                    b.Navigation("Parent");
+                });
+
             modelBuilder.Entity("Miscshopify.Infrastructure.Data.Models.Order", b =>
                 {
                     b.HasOne("Miscshopify.Infrastructure.Data.Models.ApplicationUser", "User")
@@ -742,6 +919,8 @@ namespace Miscshopify.Infrastructure.Migrations
 
             modelBuilder.Entity("Miscshopify.Infrastructure.Data.Models.Category", b =>
                 {
+                    b.Navigation("Children");
+
                     b.Navigation("Products");
                 });
 

@@ -1,0 +1,127 @@
+﻿@{
+    ViewData["Title"] = "Payment Successful";
+    var orderId = ViewBag.OrderId;
+    var amount = ViewBag.Amount;
+    var paymentMethod = ViewBag.PaymentMethod;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment Successful - Modern Store</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="~/css/payment-success.css" rel="stylesheet" />
+</head>
+<body class="payment-success-page min-h-screen py-8">
+    <div class="container mx-auto px-4">
+        <div class="success-container p-6">
+            <!-- Success Animation -->
+            <div class="text-center mb-8">
+                <div class="success-animation mx-auto mb-6">
+                    <div class="success-circle">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <div class="success-pulse"></div>
+                </div>
+
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+                    Payment Successful!
+                </h1>
+                <p class="text-xl text-gray-600">
+                    Thank you for your purchase
+                </p>
+            </div>
+
+            <!-- Payment Details -->
+            <div class="max-w-2xl mx-auto">
+                <div class="payment-details bg-white rounded-lg shadow-sm p-6 mb-8">
+                    <h2 class="text-2xl font-bold mb-6 text-center">Payment Confirmed</h2>
+
+                    <div class="space-y-4">
+                        <div class="detail-row">
+                            <div class="detail-icon">
+                                <i class="fas fa-receipt"></i>
+                            </div>
+                            <div class="detail-content">
+                                <span class="detail-label">Order ID:</span>
+                                <span class="detail-value">@orderId</span>
+                            </div>
+                        </div>
+
+                        <div class="detail-row">
+                            <div class="detail-icon">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="detail-content">
+                                <span class="detail-label">Amount Paid:</span>
+                                <span class="detail-value price-highlight">@amount BGN</span>
+                            </div>
+                        </div>
+
+                        <div class="detail-row">
+                            <div class="detail-icon">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <div class="detail-content">
+                                <span class="detail-label">Payment Method:</span>
+                                <span class="detail-value">@paymentMethod</span>
+                            </div>
+                        </div>
+
+                        <div class="detail-row">
+                            <div class="detail-icon">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div class="detail-content">
+                                <span class="detail-label">Payment Date:</span>
+                                <span class="detail-value">@DateTime.Now.ToString("dd MMM yyyy, HH:mm")</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Next Steps -->
+                <div class="next-steps bg-green-50 rounded-lg p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4 text-center">
+                        <i class="fas fa-shipping-fast mr-2"></i>
+                        What Happens Next?
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="step-number completed">✓</div>
+                            <span class="text-gray-700">Payment processed successfully</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="step-number">2</div>
+                            <span class="text-gray-700">Order confirmation on its way</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="step-number">3</div>
+                            <span class="text-gray-700">Items will be shipped soon</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <a href="/Category/Index"
+                       class="continue-shopping-btn bg-indigo-600 text-white py-4 px-6 rounded-lg font-semibold hover:bg-indigo-700 transition-all duration-300 text-center">
+                        <i class="fas fa-shopping-bag mr-3"></i>
+                        Continue Shopping
+                    </a>
+                    <a href="@Url.Action("MyOrders", "Order")"
+                       class="view-orders-btn bg-gray-600 text-white py-4 px-6 rounded-lg font-semibold hover:bg-gray-700 transition-all duration-300 text-center">
+                        <i class="fas fa-list-alt mr-3"></i>
+                        View My Orders
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

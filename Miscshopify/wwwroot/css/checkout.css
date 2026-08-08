@@ -1,0 +1,62 @@
+﻿/* Checkout Page Styles */
+.checkout-page {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.checkout-container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.order-summary, .checkout-form {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+    .order-summary h2, .checkout-form h2 {
+        color: #1f2937;
+        border-bottom: 2px solid #e5e7eb;
+        padding-bottom: 0.5rem;
+    }
+
+    .checkout-form label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: #374151;
+    }
+
+    .checkout-form input[type="radio"] {
+        margin-right: 0.5rem;
+    }
+
+    .checkout-form .flex.items-center {
+        margin-bottom: 1rem;
+    }
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .checkout-container {
+        padding: 1rem;
+    }
+
+    .order-summary, .checkout-form {
+        padding: 1.5rem;
+    }
+
+    .flex.flex-col.lg\:flex-row {
+        flex-direction: column;
+    }
+
+    .lg\:w-1\/2 {
+        width: 100%;
+    }
+}

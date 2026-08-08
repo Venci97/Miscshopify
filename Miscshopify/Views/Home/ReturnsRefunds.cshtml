@@ -1,0 +1,354 @@
+﻿@{
+    ViewData["Title"] = "Returns & Refunds";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Returns & Refunds - Modern Store</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="~/css/returns-refunds.css" rel="stylesheet" />
+</head>
+<body class="returns-refunds-page">
+    <div class="container">
+        <!-- Header -->
+        <div class="page-header">
+            <div class="header-icon">
+                <i class="fas fa-undo-alt"></i>
+            </div>
+            <h1 class="header-title">Returns & Refunds</h1>
+            <p class="header-subtitle">Easy and hassle-free return process for your peace of mind</p>
+        </div>
+
+        <!-- Quick Summary -->
+        <div class="summary-cards">
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <h3>30 Days Return</h3>
+                <p>Return within 30 days of purchase</p>
+            </div>
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="fas fa-sync-alt"></i>
+                </div>
+                <h3>Easy Process</h3>
+                <p>Simple online return procedure</p>
+            </div>
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <h3>Full Refund</h3>
+                <p>Get your money back quickly</p>
+            </div>
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="fas fa-truck"></i>
+                </div>
+                <h3>Free Returns</h3>
+                <p>Free return shipping on all items</p>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content-grid">
+            <!-- Return Policy -->
+            <div class="policy-section">
+                <h2 class="section-title">
+                    <i class="fas fa-file-contract"></i>
+                    Return Policy
+                </h2>
+
+                <div class="policy-content">
+                    <div class="policy-item">
+                        <h3><i class="fas fa-check-circle"></i> Return Window</h3>
+                        <p>You have <strong>30 days</strong> from the date of delivery to return most items for a full refund.</p>
+                    </div>
+
+                    <div class="policy-item">
+                        <h3><i class="fas fa-check-circle"></i> Condition Requirements</h3>
+                        <p>Items must be in original condition: unused, unwashed, with tags attached, and in original packaging.</p>
+                    </div>
+
+                    <div class="policy-item">
+                        <h3><i class="fas fa-check-circle"></i> Exceptions</h3>
+                        <div class="exceptions-list">
+                            <div class="exception-item">
+                                <i class="fas fa-times-circle"></i>
+                                <span>Personal care items (non-returnable for hygiene reasons)</span>
+                            </div>
+                            <div class="exception-item">
+                                <i class="fas fa-times-circle"></i>
+                                <span>Customized or personalized products</span>
+                            </div>
+                            <div class="exception-item">
+                                <i class="fas fa-times-circle"></i>
+                                <span>Gift cards and downloadable software</span>
+                            </div>
+                            <div class="exception-item">
+                                <i class="fas fa-times-circle"></i>
+                                <span>Items marked as "final sale"</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How to Return -->
+            <div class="process-section">
+                <h2 class="section-title">
+                    <i class="fas fa-list-ol"></i>
+                    How to Return an Item
+                </h2>
+
+                <div class="process-steps">
+                    <div class="process-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Initiate Return Online</h3>
+                            <p>Log into your account and go to "Order History" to start the return process.</p>
+                        </div>
+                    </div>
+
+                    <div class="process-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Print Return Label</h3>
+                            <p>We'll provide a prepaid return shipping label for you to print.</p>
+                        </div>
+                    </div>
+
+                    <div class="process-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Package Your Item</h3>
+                            <p>Place the item in its original packaging and include all accessories.</p>
+                        </div>
+                    </div>
+
+                    <div class="process-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>Drop Off Package</h3>
+                            <p>Take your packaged item to any authorized shipping location.</p>
+                        </div>
+                    </div>
+
+                    <div class="process-step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h3>Receive Refund</h3>
+                            <p>Once we receive and inspect your return, we'll process your refund within 5-7 business days.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Refund Information -->
+        <div class="refund-section">
+            <h2 class="section-title">
+                <i class="fas fa-money-check-alt"></i>
+                Refund Information
+            </h2>
+
+            <div class="refund-grid">
+                <div class="refund-card">
+                    <div class="refund-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Processing Time</h3>
+                    <p>Refunds are processed within <strong>5-7 business days</strong> after we receive your return.</p>
+                </div>
+
+                <div class="refund-card">
+                    <div class="refund-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <h3>Payment Method</h3>
+                    <p>Refunds are issued to the original payment method used during purchase.</p>
+                </div>
+
+                <div class="refund-card">
+                    <div class="refund-icon">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <h3>Partial Refunds</h3>
+                    <p>Items not in original condition may be subject to a partial refund or restocking fee.</p>
+                </div>
+
+                <div class="refund-card">
+                    <div class="refund-icon">
+                        <i class="fas fa-shipping-fast"></i>
+                    </div>
+                    <h3>Shipping Costs</h3>
+                    <p>Original shipping costs are non-refundable unless the return is due to our error.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exchange Policy -->
+        <div class="exchange-section">
+            <h2 class="section-title">
+                <i class="fas fa-exchange-alt"></i>
+                Exchange Policy
+            </h2>
+
+            <div class="exchange-content">
+                <div class="exchange-info">
+                    <h3><i class="fas fa-sync"></i> Easy Exchanges</h3>
+                    <p>We make exchanges simple. If you need a different size, color, or style, follow these steps:</p>
+
+                    <ol class="exchange-steps">
+                        <li>Initiate a return for the original item</li>
+                        <li>Place a new order for the desired item</li>
+                        <li>Use your refund to pay for the new order</li>
+                    </ol>
+
+                    <div class="note-box">
+                        <i class="fas fa-lightbulb"></i>
+                        <p><strong>Pro Tip:</strong> For fastest service, place your new order immediately after initiating the return.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section">
+            <h2 class="section-title">
+                <i class="fas fa-question-circle"></i>
+                Frequently Asked Questions
+            </h2>
+
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3><i class="fas fa-question"></i> How long does it take to get my refund?</h3>
+                    <p>Once we receive your return, refunds are processed within 5-7 business days. It may take additional time for your bank to process the refund.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3><i class="fas fa-question"></i> What if I received a damaged item?</h3>
+                    <p>Contact us immediately at support@modernstore.com with photos of the damaged item and we'll send a replacement right away.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3><i class="fas fa-question"></i> Can I return a gift?</h3>
+                    <p>Yes! Gift returns are accepted within 30 days of purchase. You'll receive a gift card for the item's value.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3><i class="fas fa-question"></i> What if I lost my return label?</h3>
+                    <p>No problem! Log into your account and reprint your return label from the "Order History" section.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3><i class="fas fa-question"></i> Do I need to include the original packaging?</h3>
+                    <p>Yes, items must be returned in their original packaging with all tags and accessories to qualify for a full refund.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3><i class="fas fa-question"></i> What about international returns?</h3>
+                    <p>International returns are accepted but may be subject to different shipping costs. Contact us for international return instructions.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Support -->
+        <div class="support-section">
+            <div class="support-content">
+                <div class="support-icon">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <div class="support-text">
+                    <h2>Need Help With Your Return?</h2>
+                    <p>Our customer support team is here to help you with any questions about returns or refunds.</p>
+                    <div class="support-contacts">
+                        <a href="mailto:returns@modernstore.com" class="contact-link">
+                            <i class="fas fa-envelope"></i>
+                            returns@modernstore.com
+                        </a>
+                        <a href="tel:+15551234567" class="contact-link">
+                            <i class="fas fa-phone"></i>
+                            +1 (555) 123-4567
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="/Home/Contact" class="action-btn primary">
+                <i class="fas fa-headset"></i>
+                Contact Support
+            </a>
+            <a href="/" class="action-btn secondary">
+                <i class="fas fa-home"></i>
+                Back to Home
+            </a>
+            <a href="/Home/Terms" class="action-btn outline">
+                <i class="fas fa-file-contract"></i>
+                Terms of Service
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add interactive elements to process steps
+            const processSteps = document.querySelectorAll('.process-step');
+            processSteps.forEach(step => {
+                step.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                });
+                step.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Add click to expand FAQ items
+            const faqItems = document.querySelectorAll('.faq-item');
+            faqItems.forEach(item => {
+                const question = item.querySelector('h3');
+                const answer = item.querySelector('p');
+
+                // Initially hide answers
+                answer.style.display = 'none';
+
+                question.style.cursor = 'pointer';
+                question.addEventListener('click', function() {
+                    const isVisible = answer.style.display === 'block';
+                    answer.style.display = isVisible ? 'none' : 'block';
+
+                    // Rotate icon
+                    const icon = this.querySelector('i');
+                    icon.style.transform = isVisible ? 'rotate(0deg)' : 'rotate(45deg)';
+                    icon.style.transition = 'transform 0.3s ease';
+                });
+            });
+
+            // Add smooth scrolling for section links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

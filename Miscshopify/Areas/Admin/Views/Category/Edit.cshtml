@@ -1,49 +1,157 @@
 ﻿@using Miscshopify.Core.Models;
 @model CategoryViewModel
 @{
+    ViewData["Title"] = "Edit Category";
 }
 
-<div class="content-body">
-    <section class="users-edit">
-        <div class="card">
+<link href="~/css/admin/category-edit.css" rel="stylesheet" />
+
+<div class="category-edit-section">
+    <section class="category-edit-section">
+        <div class="category-edit-card">
             <div class="card-content">
                 <div class="card-body">
-                    <ul class="nav nav-tabs mb-2" role="tablist">
+                    <ul class="nav-tabs" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center active" id="account-tab" data-toggle="tab" href="#account" aria-controls="account" role="tab" aria-selected="true">
-                                <i class="ft-user mr-25"></i><span class="d-none d-sm-block">Category</span>
+                            <a class="nav-link active" id="account-tab" data-toggle="tab" href="#account" aria-controls="account" role="tab" aria-selected="true">
+                                <i class="fas fa-edit"></i>
+                                <span>Edit Category</span>
                             </a>
                         </li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
-                            <form id="edit" method="post">
+                            <form id="edit" method="post" enctype="multipart/form-data">
                                 <div class="row">
-                                    <div class="col-12 col-sm-6">
+                                    <div class="col-12 col-md-8 col-lg-6">
                                         <input type="hidden" name="Id" value="@Model.Id" />
                                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                        <div class="form-floating">
-                                            <label asp-for="Name" class="form-label"></label>
-                                            <input asp-for="Name" class="form-control" aria-required="true" />
+
+                                        <!-- Category Stats -->
+                                        <div class="category-stats">
+                                            <div class="stat-item">
+                                                <div class="stat-value">@Model.ProductsCount</div>
+                                                <div class="stat-label">Products</div>
+                                            </div>
+                                            <div class="stat-item">
+                                                <div class="stat-value">@(Model.ParentId == null ? "Main" : "Sub")</div>
+                                                <div class="stat-label">Type</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label asp-for="Name" class="form-label">Category Name *</label>
+                                            <input asp-for="Name" class="form-control" aria-required="true"
+                                                   placeholder="Enter category name" />
                                             <span asp-validation-for="Name" class="text-danger"></span>
                                         </div>
-                                        <div class="form-floating">
-                                            <label asp-for="Description" class="form-label"></label>
-                                            <input asp-for="Description" class="form-control" aria-required="true" />
+
+                                        <div class="form-group">
+                                            <label asp-for="Description" class="form-label">Description</label>
+                                            <textarea asp-for="Description" class="form-control"
+                                                      rows="4" placeholder="Enter category description"
+                                                      maxlength="500">@Model.Description</textarea>
+                                            <div class="char-counter" id="descriptionCounter">@(Model.Description?.Length ?? 0)/500 characters</div>
                                             <span asp-validation-for="Description" class="text-danger"></span>
                                         </div>
-                                        <hr>
-                                        <a asp-area="Admin" asp-action="RemoveCategoryWithProducts" asp-controller="Category" asp-route-id="@Model.Id" class="btn btn-danger glow mb-1 mb-sm-0 mr-0 mr-sm-1">
-                                            Delete
-                                            <i class="fa-solid fa-xmark"></i>
-                                        </a>
+
+                                        <!-- Parent Category Dropdown -->
+                                        <div class="form-group">
+                                            <label asp-for="ParentId" class="form-label">Parent Category (optional)</label>
+                                            <select asp-for="ParentId" class="form-control">
+                                                <option value="">-- Main Category (no parent) --</option>
+                                                @if (Model.AvailableParentCategories != null)
+                                                {
+                                                    foreach (var category in Model.AvailableParentCategories)
+                                                    {
+                                                        <option value="@category.Id">@category.Name</option>
+                                                    }
+                                                }
+                                            </select>
+                                            <span asp-validation-for="ParentId" class="text-danger"></span>
+                                            <small class="form-text text-muted">
+                                                Select a parent category if this is a subcategory. Leave empty for main category.
+                                            </small>
+                                        </div>
+
+                                        <!-- Current Image Display -->
+                                        @if (!string.IsNullOrEmpty(Model.ImagePath))
+                                        {
+                                            <div class="form-group">
+                                                <label class="form-label">Current Image</label>
+                                                <div class="current-image-container">
+                                                    <img src="~/@Model.ImagePath" class="current-image"
+                                                         alt="Current category image"
+                                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                                    <div class="category-image-placeholder" style="display: none;">
+                                                        <i class="fas fa-folder"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+
+                                        <!-- Image Upload for Replacement -->
+                                        <div class="form-group">
+                                            <div class="file-upload-container">
+                                                <label class="file-upload-label">Update Category Image</label>
+                                                <div class="file-upload-wrapper">
+                                                    <input type="file" name="file" id="fileInput" class="file-upload-input"
+                                                           accept="image/*" />
+                                                    <label for="fileInput" class="file-upload-button" id="fileUploadButton">
+                                                        <i class="fas fa-cloud-upload-alt"></i>
+                                                        <span>Choose New Image</span>
+                                                    </label>
+                                                </div>
+                                                <div class="file-name" id="fileName" style="display: none;">
+                                                    <i class="fas fa-check-circle"></i>
+                                                    <span></span>
+                                                </div>
+                                                <span asp-validation-for="ImagePath" class="text-danger"></span>
+                                            </div>
+
+                                            <!-- Image Preview -->
+                                            <div class="image-preview-container" id="imagePreviewContainer">
+                                                <img id="imagePreview" class="image-preview"
+                                                     alt="New category image preview" />
+                                            </div>
+                                        </div>
+
+                                        <!-- Divider -->
+                                        <hr class="divider">
+
+                                        <!-- Delete Section -->
+                                        <div class="delete-section">
+                                            <h5>
+                                                <i class="fas fa-exclamation-triangle"></i>
+                                                Danger Zone
+                                            </h5>
+                                            <p class="text-sm text-gray-600 mb-3">
+                                                Once you delete this category, it will be permanently removed from the system along with all its products and subcategories. This action cannot be undone.
+                                            </p>
+                                            <a asp-area="Admin" asp-action="RemoveCategoryWithProducts" asp-controller="Category"
+                                               asp-route-id="@Model.Id" class="btn btn-danger"
+                                               onclick="return confirmDelete('@Model.Name')">
+                                                <i class="fas fa-trash"></i>
+                                                Delete Category
+                                            </a>
+                                            <div class="delete-warning">
+                                                <i class="fas fa-radiation"></i>
+                                                This action is irreversible
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
-                                        <button type="submit" class="btn btn-primary glow mb-1 mb-sm-0 mr-0 mr-sm-1">
-                                            Save
-                                            changes
-                                        </button>
-                                        <a href="/Admin/Category/Index" class="btn btn-light">Cancel</a>
+
+                                    <div class="col-12">
+                                        <div class="form-actions">
+                                            <button type="submit" class="btn btn-primary" id="submitButton">
+                                                <i class="fas fa-save"></i>
+                                                Save Changes
+                                            </button>
+                                            <a href="/Admin/Category/Index" class="btn btn-light">
+                                                <i class="fas fa-times"></i>
+                                                Cancel
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
@@ -56,5 +164,143 @@
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptspartial" />
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Enhanced delete confirmation
+        function confirmDelete(categoryName) {
+            return confirm(`⚠️ WARNING: You are about to delete "${categoryName}" and all its products/subcategories. This action cannot be undone. Are you sure?`);
+        }
+
+        // File upload handling
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const fileNameElement = document.getElementById('fileName');
+            const fileUploadButton = document.getElementById('fileUploadButton');
+            const imagePreview = document.getElementById('imagePreview');
+            const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+
+            if (file) {
+                // Show file name
+                fileNameElement.style.display = 'flex';
+                fileNameElement.querySelector('span').textContent = file.name;
+
+                // Update button style
+                fileUploadButton.classList.add('has-file');
+                fileUploadButton.innerHTML = '<i class="fas fa-check"></i><span>Change Image</span>';
+
+                // Show image preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreviewContainer.classList.add('visible');
+                }
+                reader.readAsDataURL(file);
+            } else {
+                // Reset file upload
+                fileNameElement.style.display = 'none';
+                fileUploadButton.classList.remove('has-file');
+                fileUploadButton.innerHTML = '<i class="fas fa-cloud-upload-alt"></i><span>Choose New Image</span>';
+                imagePreviewContainer.classList.remove('visible');
+            }
+        });
+
+        // Description character counter
+        const descriptionTextarea = document.querySelector('textarea[name="Description"]');
+        const charCounter = document.getElementById('descriptionCounter');
+
+        if (descriptionTextarea && charCounter) {
+            descriptionTextarea.addEventListener('input', function() {
+                const length = this.value.length;
+                charCounter.textContent = `${length}/500 characters`;
+
+                if (length > 450) {
+                    charCounter.classList.add('warning');
+                    charCounter.classList.remove('error');
+                } else if (length > 490) {
+                    charCounter.classList.remove('warning');
+                    charCounter.classList.add('error');
+                } else {
+                    charCounter.classList.remove('warning', 'error');
+                }
+            });
+
+            // Initialize character counter on page load
+            const initialLength = descriptionTextarea.value.length;
+            charCounter.textContent = `${initialLength}/500 characters`;
+
+            if (initialLength > 450) {
+                charCounter.classList.add('warning');
+            }
+            if (initialLength > 490) {
+                charCounter.classList.add('error');
+            }
+        }
+
+        // Form submission enhancement
+        document.getElementById('edit').addEventListener('submit', function(e) {
+            const submitButton = document.getElementById('submitButton');
+            const originalText = submitButton.innerHTML;
+
+            // Show loading state
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving Changes...';
+            submitButton.disabled = true;
+
+            // Validate name
+            const nameInput = document.querySelector('input[name="Name"]');
+            if (!nameInput.value || nameInput.value.trim() === '') {
+                e.preventDefault();
+                alert('Please enter a valid category name.');
+                submitButton.innerHTML = originalText;
+                submitButton.disabled = false;
+                nameInput.focus();
+                return;
+            }
+
+            // Allow form to submit normally
+            console.log('Form submitted successfully');
+        });
+
+        // Add input validation styling
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.value.trim() !== '') {
+                    this.classList.add('filled');
+                } else {
+                    this.classList.remove('filled');
+                }
+            });
+
+            input.addEventListener('input', function() {
+                if (this.checkValidity()) {
+                    this.classList.remove('input-validation-error');
+                }
+            });
+        });
+
+        // Enhanced delete button with double confirmation
+        document.querySelector('.btn-danger').addEventListener('click', function(e) {
+            const categoryName = document.querySelector('input[name="Name"]').value || 'this category';
+            const confirmed = confirm(`🚨 FINAL WARNING!\n\nYou are about to permanently delete "${categoryName}".\n\nThis will remove:\n• The category itself\n• All associated products\n• All subcategories\n• Category images\n\nTHIS ACTION CANNOT BE UNDONE!\n\nType "DELETE" to confirm:`);
+
+            if (confirmed) {
+                const userInput = prompt('Please type "DELETE" to confirm permanent deletion:');
+                if (userInput !== 'DELETE') {
+                    e.preventDefault();
+                    alert('Deletion cancelled. Category was NOT deleted.');
+                }
+            } else {
+                e.preventDefault();
+            }
+        });
+
+        // Auto-select current parent category in dropdown
+        document.addEventListener('DOMContentLoaded', function() {
+            const parentId = '@Model.ParentId';
+            if (parentId) {
+                const parentSelect = document.querySelector('select[name="ParentId"]');
+                parentSelect.value = parentId;
+            }
+        });
+    </script>
 }

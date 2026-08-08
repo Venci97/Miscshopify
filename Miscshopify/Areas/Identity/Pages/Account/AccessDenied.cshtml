@@ -4,7 +4,214 @@
     ViewData["Title"] = "Access denied";
 }
 
-<header>
-    <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">You do not have access to this resource.</p>
-</header>
+<div class="access-denied-page">
+    <div class="error-container">
+        <div class="error-icon">
+            <i class="fas fa-ban"></i>
+        </div>
+        <div class="error-content">
+            <h1 class="error-title">Access Denied</h1>
+            <p class="error-description">You do not have permission to access this resource.</p>
+
+            <div class="error-details">
+                <div class="detail-item">
+                    <i class="fas fa-info-circle"></i>
+                    <span>This could be due to insufficient permissions or account restrictions.</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Please contact an administrator if you believe this is an error.</span>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a href="~/" class="action-btn primary">
+                    <i class="fas fa-home"></i>
+                    Go to Homepage
+                </a>
+                <a href="javascript:history.back()" class="action-btn secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    Go Back
+                </a>
+                <a asp-page="/Account/Login" class="action-btn outline">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Sign in with Different Account
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .access-denied-page {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        padding: 2rem;
+    }
+
+    .error-container {
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        padding: 3rem;
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+        border-left: 4px solid #dc2626;
+    }
+
+    .error-icon {
+        font-size: 4rem;
+        color: #dc2626;
+        margin-bottom: 1.5rem;
+    }
+
+    .error-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 1rem;
+    }
+
+    .error-description {
+        color: #6b7280;
+        font-size: 1.125rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+    }
+
+    .error-details {
+        background: #fef2f2;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        text-align: left;
+    }
+
+    .detail-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+        .detail-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-item i {
+            color: #dc2626;
+            margin-top: 0.125rem;
+            flex-shrink: 0;
+        }
+
+        .detail-item span {
+            color: #7f1d1d;
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+
+    .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .action-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        border: none;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+
+        .action-btn.primary {
+            background: #dc2626;
+            color: white;
+        }
+
+            .action-btn.primary:hover {
+                background: #b91c1c;
+                transform: translateY(-1px);
+            }
+
+        .action-btn.secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+            .action-btn.secondary:hover {
+                background: #e5e7eb;
+                transform: translateY(-1px);
+            }
+
+        .action-btn.outline {
+            background: transparent;
+            color: #dc2626;
+            border: 1px solid #dc2626;
+        }
+
+            .action-btn.outline:hover {
+                background: #fef2f2;
+                transform: translateY(-1px);
+            }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .access-denied-page {
+            padding: 1rem;
+        }
+
+        .error-container {
+            padding: 2rem;
+        }
+
+        .error-title {
+            font-size: 1.5rem;
+        }
+
+        .error-description {
+            font-size: 1rem;
+        }
+
+        .error-details {
+            padding: 1rem;
+        }
+
+        .detail-item {
+            flex-direction: column;
+            text-align: center;
+            gap: 0.5rem;
+        }
+
+        .action-buttons {
+            gap: 0.75rem;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .error-container {
+            padding: 1.5rem;
+        }
+
+        .error-icon {
+            font-size: 3rem;
+        }
+
+        .action-btn {
+            padding: 0.75rem 1rem;
+            font-size: 0.85rem;
+        }
+    }
+</style>

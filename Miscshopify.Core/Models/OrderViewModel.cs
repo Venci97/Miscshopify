@@ -40,7 +40,7 @@ namespace Miscshopify.Core.Models
                     case PaymentMethodEnum.CashOnDelivery:
                         return "Cash on Delivery";
                     default:
-                        return PaymentMethod.ToString(); // fallback to enum value
+                        return PaymentMethod.ToString();
                 }
             }
         }
@@ -59,9 +59,15 @@ namespace Miscshopify.Core.Models
                     case OrderStatusEnum.Completed:
                         return "Completed";
                     default:
-                        return Status.ToString(); // fallback to enum value
+                        return Status.ToString();
                 }
             }
         }
+
+        public string OrderCustomerAddress { get; set; }
+        public string OrderCustomerCity { get; set; }
+        public string OrderCustomerPostCode { get; set; }
+        public string OrderCustomerEmail { get; set; }
+        public string OrderCustomerPhoneNumber { get; set; }
     }
 }

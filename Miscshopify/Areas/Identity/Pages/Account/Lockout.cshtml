@@ -4,7 +4,300 @@
     ViewData["Title"] = "Locked out";
 }
 
-<header>
-    <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">This account has been locked out, please try again later.</p>
-</header>
+<div class="lockout-page">
+    <div class="lockout-container">
+        <div class="lockout-icon">
+            <i class="fas fa-lock"></i>
+        </div>
+
+        <div class="lockout-content">
+            <h1 class="lockout-title">Account Locked</h1>
+            <p class="lockout-message">
+                This account has been temporarily locked for security reasons. Please try again later.
+            </p>
+
+            <div class="lockout-details">
+                <div class="detail-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Account locked for security protection</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Lockout duration varies based on security settings</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-redo"></i>
+                    <span>You can try again after the lockout period expires</span>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a href="~/" class="action-btn primary">
+                    <i class="fas fa-home"></i>
+                    Go to Homepage
+                </a>
+                <a href="javascript:history.back()" class="action-btn secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    Go Back
+                </a>
+                <a asp-page="./ForgotPassword" class="action-btn outline">
+                    <i class="fas fa-key"></i>
+                    Reset Password
+                </a>
+            </div>
+
+            <div class="support-info">
+                <div class="support-icon">
+                    <i class="fas fa-life-ring"></i>
+                </div>
+                <div class="support-content">
+                    <h5>Need Immediate Help?</h5>
+                    <p>
+                        If you believe this is an error or need immediate assistance,
+                        please contact our support team.
+                    </p>
+                    @* TODO да променя с имейл на сайта *@
+                    <a href="mailto:support@yourdomain.com" class="support-link">
+                        <i class="fas fa-envelope"></i>
+                        Contact Support
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .lockout-page {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+        padding: 2rem;
+    }
+
+    .lockout-container {
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        padding: 3rem;
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+        border-left: 4px solid #dc2626;
+    }
+
+    .lockout-icon {
+        font-size: 4rem;
+        color: #dc2626;
+        margin-bottom: 1.5rem;
+    }
+
+    .lockout-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 1rem;
+    }
+
+    .lockout-message {
+        color: #6b7280;
+        font-size: 1.125rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+    }
+
+    .lockout-details {
+        background: #fef2f2;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        text-align: left;
+    }
+
+    .detail-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+        .detail-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-item i {
+            color: #dc2626;
+            margin-top: 0.125rem;
+            flex-shrink: 0;
+        }
+
+        .detail-item span {
+            color: #7f1d1d;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+    .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .action-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        border: none;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+
+        .action-btn.primary {
+            background: #dc2626;
+            color: white;
+        }
+
+            .action-btn.primary:hover {
+                background: #b91c1c;
+                transform: translateY(-1px);
+            }
+
+        .action-btn.secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+            .action-btn.secondary:hover {
+                background: #e5e7eb;
+                transform: translateY(-1px);
+            }
+
+        .action-btn.outline {
+            background: transparent;
+            color: #dc2626;
+            border: 1px solid #dc2626;
+        }
+
+            .action-btn.outline:hover {
+                background: #fef2f2;
+                transform: translateY(-1px);
+            }
+
+    .support-info {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+    }
+
+    .support-icon {
+        flex-shrink: 0;
+        color: #6b7280;
+        font-size: 1.5rem;
+        margin-top: 0.125rem;
+    }
+
+    .support-content {
+        flex: 1;
+        text-align: left;
+    }
+
+        .support-content h5 {
+            color: #374151;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .support-content p {
+            color: #6b7280;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+
+    .support-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #3b82f6;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.875rem;
+    }
+
+        .support-link:hover {
+            text-decoration: underline;
+            color: #2563eb;
+        }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .lockout-page {
+            padding: 1rem;
+        }
+
+        .lockout-container {
+            padding: 2rem;
+        }
+
+        .lockout-title {
+            font-size: 1.5rem;
+        }
+
+        .lockout-details {
+            padding: 1rem;
+        }
+
+        .detail-item {
+            flex-direction: column;
+            text-align: center;
+            gap: 0.5rem;
+        }
+
+        .action-buttons {
+            gap: 0.75rem;
+        }
+
+        .support-info {
+            flex-direction: column;
+            text-align: center;
+            gap: 0.75rem;
+        }
+
+        .support-content {
+            text-align: center;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .lockout-container {
+            padding: 1.5rem;
+        }
+
+        .lockout-icon {
+            font-size: 3rem;
+        }
+
+        .action-btn {
+            padding: 0.75rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        .support-info {
+            padding: 1rem;
+        }
+    }
+</style>

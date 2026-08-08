@@ -1,0 +1,786 @@
+﻿/* Admin Modern Layout Styles */
+.admin-modern-layout {
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Sidebar Styles */
+.admin-sidebar {
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    background: linear-gradient(135deg, rgba(55, 65, 81, 0.95) 0%, rgba(17, 24, 39, 0.95) 100%);
+}
+
+.sidebar-nav {
+    flex: 1;
+}
+
+/* Sidebar Navigation Items */
+.sidebar-nav-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    color: #d1d5db;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    margin-bottom: 0.25rem;
+}
+
+    .sidebar-nav-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        transform: translateX(4px);
+    }
+
+    .sidebar-nav-item.active {
+        background: rgba(59, 130, 246, 0.2);
+        color: white;
+        border-left: 3px solid #3b82f6;
+    }
+
+    .sidebar-nav-item i:first-child {
+        width: 1.5rem;
+        margin-right: 0.75rem;
+        font-size: 1.1rem;
+    }
+
+/* Sidebar Badges */
+.sidebar-badge {
+    background: rgba(239, 68, 68, 0.9);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: auto;
+}
+
+/* Sidebar Dropdown */
+.sidebar-dropdown {
+    position: relative;
+}
+
+.sidebar-dropdown-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    margin-left: 1rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+    .sidebar-dropdown-content.show {
+        max-height: 200px;
+    }
+
+.sidebar-dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 0.6rem 1rem;
+    color: #9ca3af;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-radius: 0.375rem;
+    margin: 0.125rem 0;
+}
+
+    .sidebar-dropdown-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+    }
+
+    .sidebar-dropdown-item i {
+        width: 1rem;
+        margin-right: 0.75rem;
+        font-size: 0.9rem;
+    }
+
+/* Header Styles */
+.admin-header {
+    backdrop-filter: blur(10px);
+    z-index: 40;
+}
+
+.admin-header-btn {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    color: #6b7280;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+    .admin-header-btn:hover {
+        background: #f3f4f6;
+        color: #374151;
+    }
+
+.admin-notification-badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: #ef4444;
+    color: white;
+    border-radius: 50%;
+    width: 1.25rem;
+    height: 1.25rem;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-user-btn {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+    .admin-user-btn:hover {
+        background: #f3f4f6;
+    }
+
+/* Search Input */
+.admin-search-input {
+    width: 300px;
+    transition: all 0.3s ease;
+}
+
+    .admin-search-input:focus {
+        width: 350px;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+    }
+
+/* Page Header */
+.page-header {
+    border-bottom: 1px solid #e5e7eb;
+    background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+}
+
+/* Content Cards */
+.admin-card {
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s ease;
+}
+
+    .admin-card:hover {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transform: translateY(-2px);
+    }
+
+/* Stats Cards */
+.stats-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+    .stats-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.1);
+        transform: rotate(45deg);
+    }
+
+/* Buttons */
+.admin-btn-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+    .admin-btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+.admin-btn-secondary {
+    background: white;
+    color: #374151;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 1px solid #d1d5db;
+    cursor: pointer;
+}
+
+    .admin-btn-secondary:hover {
+        border-color: #3b82f6;
+        color: #3b82f6;
+        transform: translateY(-1px);
+    }
+
+/* Tables */
+.admin-table {
+    width: 100%;
+    background: white;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+    .admin-table th {
+        background: #f8fafc;
+        padding: 1rem;
+        text-align: left;
+        font-weight: 600;
+        color: #374151;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .admin-table td {
+        padding: 1rem;
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+    .admin-table tr:hover {
+        background: #f9fafb;
+    }
+
+/* Status Badges */
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.status-pending {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.status-completed {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status-processing {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .admin-sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        transform: translateX(-100%);
+        z-index: 1000;
+    }
+
+        .admin-sidebar.mobile-open {
+            transform: translateX(0);
+        }
+
+    .admin-search-input {
+        width: 200px;
+    }
+
+        .admin-search-input:focus {
+            width: 250px;
+        }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .admin-modern-layout {
+        background: #111827;
+    }
+
+    .admin-header,
+    .page-header {
+        background: #1f2937;
+        border-color: #374151;
+        color: white;
+    }
+
+    .admin-card {
+        background: #1f2937;
+        border-color: #374151;
+        color: white;
+    }
+
+    .admin-table {
+        background: #1f2937;
+        color: white;
+    }
+
+        .admin-table th {
+            background: #111827;
+            color: white;
+            border-color: #374151;
+        }
+
+        .admin-table td {
+            border-color: #374151;
+        }
+
+        .admin-table tr:hover {
+            background: #374151;
+        }
+}
+/* User Dropdown Menu */
+.user-dropdown-menu {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+    .user-dropdown-menu.show {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: all;
+    }
+
+    .user-dropdown-menu a, .user-dropdown-menu button {
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+
+    .user-dropdown-menu i {
+        width: 1rem;
+        text-align: center;
+    }
+
+/* Rotate chevron when dropdown is open */
+.rotate-180 {
+    transform: rotate(180deg);
+}
+
+/* User Dropdown Menu - FIXED */
+.user-dropdown-menu {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+    .user-dropdown-menu.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        pointer-events: all;
+    }
+
+    .user-dropdown-menu a, .user-dropdown-menu button {
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+
+    .user-dropdown-menu i {
+        width: 1rem;
+        text-align: center;
+    }
+
+/* Sidebar Collapse Functionality */
+.admin-sidebar.collapsed {
+    width: 64px;
+}
+
+    .admin-sidebar.collapsed .brand-text,
+    .admin-sidebar.collapsed .nav-text,
+    .admin-sidebar.collapsed .sidebar-badge,
+    .admin-sidebar.collapsed .sidebar-footer .footer-text,
+    .admin-sidebar.collapsed .sidebar-dropdown-content {
+        display: none;
+    }
+
+    .admin-sidebar.collapsed .sidebar-nav-item {
+        justify-content: center;
+        padding: 0.75rem;
+    }
+
+        .admin-sidebar.collapsed .sidebar-nav-item i:first-child {
+            margin-right: 0;
+        }
+
+    .admin-sidebar.collapsed .sidebar-dropdown .sidebar-nav-item i.dropdown-arrow {
+        display: none;
+    }
+
+    .admin-sidebar.collapsed .sidebar-collapse-btn i {
+        transform: rotate(180deg);
+    }
+
+.admin-sidebar:not(.collapsed) .sidebar-collapse-btn i {
+    transform: rotate(0deg);
+}
+
+/* Sidebar Collapse Button */
+.sidebar-collapse-btn {
+    transition: all 0.3s ease;
+    z-index: 60;
+}
+
+    .sidebar-collapse-btn:hover {
+        transform: translateX(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+/* Smooth transitions for sidebar */
+.admin-sidebar,
+.brand-text,
+.nav-text,
+.sidebar-badge,
+.sidebar-dropdown-content {
+    transition: all 0.3s ease;
+}
+
+/* Rotate chevron when dropdown is open */
+.rotate-180 {
+    transform: rotate(180deg);
+}
+
+/* Ensure dropdown arrows transition smoothly */
+.dropdown-arrow {
+    transition: transform 0.2s ease;
+}
+
+/* Hover effects for collapsed sidebar */
+.admin-sidebar.collapsed .sidebar-nav-item:hover .nav-text {
+    display: block;
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    white-space: nowrap;
+    margin-left: 0.5rem;
+    z-index: 100;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+    .admin-sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        transform: translateX(-100%);
+        z-index: 1000;
+    }
+
+        .admin-sidebar.mobile-open {
+            transform: translateX(0);
+        }
+
+        .admin-sidebar.collapsed {
+            transform: translateX(-100%);
+        }
+
+            .admin-sidebar.collapsed.mobile-open {
+                transform: translateX(0);
+                width: 64px;
+            }
+}
+.sidebar-dropdown-content.show {
+    display: block;
+}
+
+.rotate-180 {
+    transform: rotate(180deg);
+}
+
+/* Settings Page Styles */
+.settings-section {
+    @apply bg-white rounded-lg shadow-sm border border-gray-200 p-6;
+}
+
+.section-title {
+    @apply text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200;
+}
+
+.form-group {
+    @apply mb-4;
+}
+
+.form-label {
+    @apply block text-sm font-medium text-gray-700 mb-2;
+}
+
+.form-input {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200;
+}
+
+.form-input-file {
+    @apply block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100;
+}
+
+.form-textarea {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 resize-none;
+}
+
+.form-checkbox {
+    @apply w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2;
+}
+
+.form-error {
+    @apply text-red-600 text-xs mt-1;
+}
+
+.alert-success {
+    @apply bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg;
+}
+
+.btn-danger {
+    @apply bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors duration-200;
+}
+
+/* Settings Page Specific Styles */
+.settings-section {
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.section-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.5rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+}
+
+    .form-input:focus {
+        outline: none;
+        ring: 2px;
+        ring-color: #3b82f6;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+.form-textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    resize: vertical;
+    min-height: 80px;
+    transition: all 0.2s;
+}
+
+    .form-textarea:focus {
+        outline: none;
+        ring: 2px;
+        ring-color: #3b82f6;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+.form-input-file {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.form-checkbox {
+    width: 1rem;
+    height: 1rem;
+    color: #3b82f6;
+    background-color: white;
+    border: 1px solid #d1d5db;
+    border-radius: 0.25rem;
+}
+
+.form-error {
+    color: #ef4444;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+/* Button Styles */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+}
+
+    .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+.btn-secondary {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+}
+
+    .btn-secondary:hover {
+        background: #e5e7eb;
+        color: #111827;
+    }
+
+.btn-danger {
+    background: #ef4444;
+    color: white;
+}
+
+    .btn-danger:hover {
+        background: #dc2626;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+/* Alert Styles */
+.alert-success {
+    background: #d1fae5;
+    border: 1px solid #a7f3d0;
+    color: #065f46;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+    .alert-success i {
+        margin-right: 0.5rem;
+    }
+
+/* Checkbox container */
+.flex.items-center.justify-between {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+/* Grid improvements */
+.grid {
+    display: grid;
+}
+
+.grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.lg\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.gap-4 {
+    gap: 1rem;
+}
+
+.gap-6 {
+    gap: 1.5rem;
+}
+
+/* Container */
+.admin-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .lg\:grid-cols-3 {
+        grid-template-columns: 1fr;
+    }
+
+    .settings-section {
+        padding: 1rem;
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

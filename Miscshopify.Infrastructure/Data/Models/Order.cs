@@ -1,5 +1,4 @@
 ﻿using Miscshopify.Infrastructure.Data.Models.Enums;
-using Stripe;
 using System.ComponentModel.DataAnnotations;
 
 namespace Miscshopify.Infrastructure.Data.Models
@@ -7,7 +6,7 @@ namespace Miscshopify.Infrastructure.Data.Models
     public class Order
     {
         [Key]
-        public Guid Id { get; set; } = new Guid();
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         [Required]
         public string UserId { get; set; }
@@ -23,5 +22,30 @@ namespace Miscshopify.Infrastructure.Data.Models
         public virtual List<OrderItem> Items { get; set; } = new List<OrderItem>();
 
         public PaymentMethodEnum PaymentMethod { get; set; }
+
+        public bool IsPaid { get; set; } = false;
+
+        public DateTime? PaymentDate { get; set; }
+
+        [Required]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Total amount must be greater than 0")]
+        public decimal TotalAmount { get; set; }
+
+        public DateTime OrderDate { get; set; } = DateTime.UtcNow;
+
+        [StringLength(200)]
+        public string OrderCustomerAddress { get; set; }
+
+        [StringLength(100)]
+        public string OrderCustomerCity { get; set; }
+
+        [StringLength(20)]
+        public string OrderCustomerPostCode { get; set; }
+
+        [StringLength(100)]
+        public string OrderCustomerEmail { get; set; }
+
+        [StringLength(20)]
+        public string OrderCustomerPhoneNumber { get; set; }
     }
 }

@@ -1,50 +1,296 @@
 ﻿@using Miscshopify.Core.Models;
+@using Miscshopify.Infrastructure.Data.Models.Enums;
 @model IEnumerable<OrderViewModel>
 @{
+    ViewData["Title"] = "Orders On The Way";
+    var onTheWayOrders = Model.Count();
+    var todayDeliveries = Model.Count(); // You can add logic for today's deliveries
+    var urgentDeliveries = Model.Count(o => true); // Add logic for urgent deliveries if needed
 }
-<head>
-	<link rel="stylesheet" href="~/plugins/fontawesome-free-6.2.0-web/css/all.min.css">
-</head>
-<div class="row">
-	<div class="col-12">
-		<section class="ftco-section">
-			<div class="container">
-				<div class="row justify-content-center">
-					<div class="col-md-6 text-center mb-5">
-						<h2 class="heading-section">Orders on the way</h2>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-12">
-						<div class="table-wrap">
-							<table class="table table-responsive-xl">
-								<thead>
-									<tr>
-										<th>Customer Name</th>
-										<th>Status</th>
-										<th>Action</th>
-										<th>&nbsp;</th>
-									</tr>
-								</thead>
-								<tbody>
-									@foreach (var order in Model)
-									{
-										<tr>
-											<td>@order.CustomerName</td>
-											<td>@order.Status</td>
-											<td>
-												<a asp-area="Admin" asp-action="OrderDetails" asp-controller="Order" asp-route-id="@order.Id" class="btn btn-block btn-outline-info btn-xs">
-													Details
-												</a>
-											</td>
-										</tr>
-									}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-	</div>
+
+<link href="~/css/admin/orders-ontheway.css" rel="stylesheet" />
+
+<div class="orders-ontheway-section">
+    <div class="orders-ontheway-header">
+        <h1 class="orders-ontheway-title">
+            <i class="fas fa-truck"></i>
+            Orders On The Way
+            @if (onTheWayOrders > 0)
+            {
+                <span class="badge bg-primary ms-2 active-delivery">@onTheWayOrders</span>
+            }
+        </h1>
+        <div class="orders-stats">
+            <div class="stat-card highlight">
+                <div class="stat-number">@onTheWayOrders</div>
+                <div class="stat-label">In Transit</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">@todayDeliveries</div>
+                <div class="stat-label">Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">@urgentDeliveries</div>
+                <div class="stat-label">Urgent</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+        <div class="filter-grid">
+            <div class="filter-group">
+                <label class="filter-label">Delivery Status</label>
+                <select class="filter-select" id="deliveryFilter">
+                    <option value="">All Deliveries</option>
+                    <option value="soon">Arriving Soon</option>
+                    <option value="today">Today</option>
+                    <option value="tomorrow">Tomorrow</option>
+                    <option value="delayed">Delayed</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Sort By</label>
+                <select class="filter-select" id="sortFilter">
+                    <option value="soonest">Soonest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="customer">Customer Name</option>
+                    <option value="address">Delivery Address</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <button class="btn btn-primary" onclick="applyFilters()" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+                    <i class="fas fa-filter"></i>
+                    Apply Filters
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="orders-card">
+        <div class="card-content">
+            <div class="table-container">
+                @if (Model.Any())
+                {
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Delivery Address</th>
+                                <th>Status</th>
+                                <th>Estimated Delivery</th>
+                                <th style="width: 200px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model)
+                            {
+                                var isUrgent = true; // Add logic for urgent deliveries
+                                var progress = 75; // Add logic for delivery progress
+                                var progressClass = progress > 80 ? "soon" : progress < 50 ? "delayed" : "";
+
+                                <tr class="@(isUrgent ? "active-delivery" : "")">
+                                    <td>
+                                        <span class="order-id">#@order.Id</span>
+                                    </td>
+                                    <td>
+                                        <div class="customer-info">
+                                            <div class="customer-name">@order.CustomerName</div>
+                                            @if (!string.IsNullOrEmpty(order.CustomerEmail))
+                                            {
+                                                <div class="customer-email">@order.CustomerEmail</div>
+                                            }
+                                            <div class="customer-phone">@order.CustomerPhoneNumber</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="customer-address" title="@order.CustomerAddress, @order.CustomerCity, @order.CustomerPostCode">
+                                            @order.CustomerAddress, @order.CustomerCity
+                                        </div>
+                                        <a href="https://maps.google.com/?q=@order.CustomerAddress,@order.CustomerCity"
+                                           target="_blank" class="map-link">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            View on Map
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <span class="status-badge status-ontheway">
+                                            <i class="fas fa-shipping-fast"></i>
+                                            On The Way
+                                        </span>
+                                        @if (isUrgent)
+                                        {
+                                            <div class="delivery-progress">
+                                                <div class="progress-bar @progressClass" style="width: @progress%"></div>
+                                            </div>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="delivery-info">
+                                            <div class="delivery-time">
+                                                <i class="far fa-clock"></i>
+                                                Today, 14:00-16:00
+                                            </div>
+                                            <div class="delivery-estimate">
+                                                <i class="fas fa-hourglass-half"></i>
+                                                @progress% delivered
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <a asp-area="Admin" asp-action="OrderDetails" asp-controller="Order"
+                                               asp-route-id="@order.Id" class="btn btn-outline-info btn-sm">
+                                                <i class="fas fa-eye"></i>
+                                                Details
+                                            </a>
+                                            <a asp-area="Admin" asp-action="UpdateStatus" asp-controller="Order"
+                                               asp-route-id="@order.Id" class="btn btn-success btn-sm"
+                                               onclick="return confirm('Mark order #@order.Id as delivered?')">
+                                                <i class="fas fa-check"></i>
+                                                Delivered
+                                            </a>
+                                            @if (isUrgent)
+                                            {
+                                                <a href="tel:@order.CustomerPhoneNumber" class="btn btn-warning btn-sm">
+                                                    <i class="fas fa-phone"></i>
+                                                    Call
+                                                </a>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="empty-state">
+                        <i class="fas fa-truck-loading"></i>
+                        <h3>No Active Deliveries</h3>
+                        <p>All orders have been delivered or are being processed.</p>
+                        <div class="mt-3">
+                            <a href="/Admin/Order/Index" class="btn btn-primary me-2">
+                                <i class="fas fa-list"></i>
+                                View All Orders
+                            </a>
+                            <a href="/Admin/Order/NewOrders" class="btn btn-outline-info">
+                                <i class="fas fa-bell"></i>
+                                Check New Orders
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Filter functionality
+        function applyFilters() {
+            const deliveryFilter = document.getElementById('deliveryFilter').value;
+            const sortFilter = document.getElementById('sortFilter').value;
+
+            if (deliveryFilter) {
+                console.log(`Filtering by delivery status: ${deliveryFilter}`);
+            }
+
+            console.log('Delivery filters applied:', { delivery: deliveryFilter, sort: sortFilter });
+        }
+
+        // Add interactive features
+        document.addEventListener('DOMContentLoaded', function() {
+            const rows = document.querySelectorAll('.orders-table tbody tr');
+
+            rows.forEach((row, index) => {
+                // Add staggered animation
+                row.style.animationDelay = `${(index + 1) * 0.1}s`;
+
+                // Add click effect for the entire row
+                row.addEventListener('click', function(e) {
+                    if (!e.target.closest('a') && !e.target.closest('button')) {
+                        const detailsLink = this.querySelector('a[asp-action="OrderDetails"]');
+                        if (detailsLink) {
+                            detailsLink.click();
+                        }
+                    }
+                });
+            });
+
+            // Auto-refresh for delivery updates (every 60 seconds)
+            setInterval(() => {
+                console.log('Checking for delivery updates...');
+                // Uncomment to enable auto-refresh
+                // window.location.reload();
+            }, 60000);
+
+            // Delivery filter change handler
+            document.getElementById('deliveryFilter').addEventListener('change', function() {
+                const selectedFilter = this.value;
+                const rows = document.querySelectorAll('.orders-table tbody tr');
+
+                rows.forEach(row => {
+                    if (!selectedFilter) {
+                        row.style.display = '';
+                    } else {
+                        // Add logic to filter based on delivery status
+                        // For now, we'll just show all
+                        row.style.display = '';
+                    }
+                });
+            });
+
+            // Quick delivery update
+            function markAsDelivered(orderId) {
+                if (confirm(`Mark order #${orderId} as delivered? This will complete the order.`)) {
+                    // Show loading state
+                    const button = event.target;
+                    const originalText = button.innerHTML;
+                    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+                    button.disabled = true;
+
+                    // Simulate API call
+                    setTimeout(() => {
+                        button.innerHTML = '<i class="fas fa-check"></i> Delivered!';
+                        button.classList.remove('btn-success');
+                        button.classList.add('btn-light');
+                        setTimeout(() => {
+                            row.remove();
+                            // In real app, you would reload or update the table
+                        }, 1000);
+                    }, 1500);
+                }
+            }
+
+            // Add click handlers for delivered buttons
+            document.querySelectorAll('.btn-success').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const orderId = this.closest('tr').querySelector('.order-id').textContent.replace('#', '');
+                    markAsDelivered(orderId);
+                });
+            });
+        });
+
+        // Real-time delivery tracking simulation
+        function simulateDeliveryProgress() {
+            const progressBars = document.querySelectorAll('.progress-bar');
+            progressBars.forEach(bar => {
+                const currentWidth = parseInt(bar.style.width) || 75;
+                const newWidth = Math.min(currentWidth + 5, 100);
+                bar.style.width = newWidth + '%';
+
+                if (newWidth >= 90) {
+                    bar.classList.add('soon');
+                }
+            });
+        }
+
+        // Simulate progress every 30 seconds
+        setInterval(simulateDeliveryProgress, 30000);
+    </script>
+}

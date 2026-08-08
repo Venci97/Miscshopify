@@ -54,17 +54,17 @@ namespace Miscshopify.Core.Services
                     ImagePath = product.ImagePath,
                     ProductID = product.Id,
                     Quantity = 1,
-                    UnitPrice = product.Price, // Set initial unit price when adding new item
+                    UnitPrice = product.Price,
                     ProductName = product.Name
                 });
             }
             else
             {
                 existingItem.Quantity += 1;
-                existingItem.UnitPrice = product.Price * existingItem.Quantity; // Update unit price for existing item
+                existingItem.UnitPrice = product.Price * existingItem.Quantity;
             }
 
-            await repo.SaveChangesAsync(); // Save changes asynchronously
+            await repo.SaveChangesAsync();
         }
 
 

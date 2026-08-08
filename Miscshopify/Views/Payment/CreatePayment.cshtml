@@ -1,154 +1,246 @@
-﻿@{
-    ViewData["Title"] = "Create Payment";
+@{
+    ViewData["Title"] = "Плащане";
     var totalPrice = ViewBag.TotalPrice;
+    var paymentMethod = ViewBag.PaymentMethod;
 }
 
-<div class="container p-0">
-    <div class="card px-4">
-        <p class="h8 py-3">Payment Details</p>
-        <form id="payment-form" method="post">
-            <div class="row gx-3">
-                <div class="col-12">
-                    <div class="d-flex flex-column">
-                        <p class="text mb-1">Person Name</p>
-                        <input class="form-control mb-3" type="text" placeholder="Name" value="Barry Allen">
-                    </div>
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Плащане - @ViewData["Title"]</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Stripe.js v3 -->
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 py-8">
+    <div class="container mx-auto px-4">
+        <div class="max-w-md mx-auto bg-white rounded-2xl shadow-lg overflow-hidden">
+
+            <!-- Header -->
+            <div class="bg-blue-600 text-white p-6 text-center">
+                <i class="fas fa-credit-card text-3xl mb-4"></i>
+                <h1 class="text-2xl font-bold">Детайли за плащане</h1>
+                <p class="opacity-90">@paymentMethod</p>
+            </div>
+
+            <!-- Error съобщение (показва се само при грешка) -->
+            @if (TempData["Error"] != null)
+            {
+                <div class="mx-6 mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                    <i class="fas fa-exclamation-circle mr-2"></i>@TempData["Error"]
                 </div>
-                <div class="col-12">
-                    <div class="d-flex flex-column">
-                        <p class="text mb-1">Card Number</p>
-                        <div id="card-number-element" class="form-control mb-3">
-                            <!-- A Stripe Element will be inserted here. -->
+            }
+
+            <!-- Payment Form -->
+            <div class="p-6">
+                <div class="text-center mb-6">
+                    <p class="text-gray-600">Сума за плащане</p>
+                    <p class="text-3xl font-bold text-gray-800">@totalPrice BGN</p>
+                </div>
+
+                <div id="payment-form">
+                    <!-- Stripe Payment Element ще се зареди тук -->
+                    <div id="payment-element" class="mb-6">
+                        <div class="flex items-center justify-center py-8 text-gray-400">
+                            <i class="fas fa-spinner fa-spin mr-2"></i> Зареждане...
                         </div>
                     </div>
-                </div>
-                <div class="col-6">
-                    <div class="d-flex flex-column">
-                        <p class="text mb-1">Expiry</p>
-                        <div id="card-expiry-element" class="form-control mb-3">
-                            <!-- A Stripe Element will be inserted here. -->
-                        </div>
+
+                    <!-- Грешки от Stripe -->
+                    <div id="payment-errors" class="text-red-500 text-sm mb-4 hidden" role="alert">
+                        <i class="fas fa-exclamation-circle mr-1"></i>
+                        <span id="payment-error-message"></span>
                     </div>
-                </div>
-                <div class="col-6">
-                    <div class="d-flex flex-column">
-                        <p class="text mb-1">CVV/CVC</p>
-                        <div id="card-cvc-element" class="form-control mb-3">
-                            <!-- A Stripe Element will be inserted here. -->
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <button class="btn btn-primary mb-3" type="submit" id="submit-button">
-                        <span class="ps-3">Pay @totalPrice BGN</span>
-                        <span class="fas fa-arrow-right"></span>
+
+                    <!-- Бутон за плащане -->
+                    <button id="submit-button"
+                            class="w-full bg-blue-600 text-white py-4 px-6 rounded-lg font-bold text-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled>
+                        <i class="fas fa-lock"></i>
+                        Плати @totalPrice BGN
                     </button>
                 </div>
+
+                <p class="text-center text-gray-500 text-sm mt-4">
+                    <i class="fas fa-shield-alt mr-1"></i>
+                    Плащането е защитено и криптирано
+                </p>
             </div>
-            <div id="card-errors" role="alert" class="text-danger"></div>
-            <input type="hidden" name="amount" value="@totalPrice" />
-            @Html.AntiForgeryToken()
-        </form>
+        </div>
     </div>
-</div>
 
-<script src="https://js.stripe.com/v3/"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var stripe = Stripe('pk_test_51PPTzbLe5Gl3FGyNaOdu28XMvglgiH2Xp4fglMDSTcKIrYmILIdyyPrwHaI2N9bNMZjq6UhmCJOKGbFrfPGn841R00DjM7akSp');
-        var elements = stripe.elements();
+    <script>
+        // ============================================================
+        // КОНФИГУРАЦИЯ
+        // ============================================================
+        const PUBLISHABLE_KEY = '@ViewBag.PublishableKey';
+        const TOTAL_PRICE = @totalPrice;
+        const PAYMENT_METHOD = '@paymentMethod';
+        // CSRF токен за fetch заявките
+        const CSRF_TOKEN = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('XSRF-TOKEN='))
+            ?.split('=')[1];
 
-        var style = {
-            base: {
-                fontSize: '16px',
-                color: '#32325d',
-                '::placeholder': {
-                    color: '#aab7c4'
+        // Взимаме antiforgery token от meta tag (по-надеждно)
+        const antiForgeryToken = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+
+        // ============================================================
+        // СТЪПКА 1: Инициализираме Stripe и искаме clientSecret от сървъра
+        // ============================================================
+        const stripe = Stripe(PUBLISHABLE_KEY);
+        let elements;
+        let paymentElement;
+
+        async function initialize() {
+            try {
+                // Вземаме antiforgery token от скрита форма
+                const tokenResponse = await fetch('/Payment/GetAntiForgeryToken', { method: 'GET' });
+
+                // Изпращаме заявка до сървъра да създаде PaymentIntent
+                const response = await fetch('/Payment/CreatePaymentIntent', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': getAntiForgeryToken()
+                    },
+                    body: JSON.stringify({
+                        amount: TOTAL_PRICE,
+                        paymentMethod: PAYMENT_METHOD
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    showError(data.error);
+                    return;
                 }
-            },
-            invalid: {
-                color: '#fa755a',
-                iconColor: '#fa755a'
-            }
-        };
 
-        var cardNumber = elements.create('cardNumber', { style: style });
-        var cardExpiry = elements.create('cardExpiry', { style: style });
-        var cardCvc = elements.create('cardCvc', { style: style });
+                // Инициализираме Stripe Elements с clientSecret
+                elements = stripe.elements({ clientSecret: data.clientSecret });
 
-        cardNumber.mount('#card-number-element');
-        cardExpiry.mount('#card-expiry-element');
-        cardCvc.mount('#card-cvc-element');
+                // Монтираме Payment Element (поддържа карти, Google Pay и др.)
+                paymentElement = elements.create('payment', {
+                    layout: 'tabs'
+                });
+                paymentElement.mount('#payment-element');
 
-        cardNumber.on('change', function (event) {
-            var displayError = document.getElementById('card-errors');
-            if (event.error) {
-                displayError.textContent = event.error.message;
-            } else {
-                displayError.textContent = '';
-            }
-        });
+                // Активираме бутона след зареждане
+                paymentElement.on('ready', () => {
+                    document.getElementById('submit-button').disabled = false;
+                });
 
-        cardExpiry.on('change', function (event) {
-            var displayError = document.getElementById('card-errors');
-            if (event.error) {
-                displayError.textContent = event.error.message;
-            } else {
-                displayError.textContent = '';
-            }
-        });
-
-        cardCvc.on('change', function (event) {
-            var displayError = document.getElementById('card-errors');
-            if (event.error) {
-                displayError.textContent = event.error.message;
-            } else {
-                displayError.textContent = '';
-            }
-        });
-
-        var form = document.getElementById('payment-form');
-        form.addEventListener('submit', function (event) {
-            event.preventDefault();
-
-            stripe.createToken(cardNumber).then(function (result) {
-                if (result.error) {
-                    var errorElement = document.getElementById('card-errors');
-                    errorElement.textContent = result.error.message;
-                } else {
-                    stripeTokenHandler(result.token);
-                }
-            });
-        });
-
-        function stripeTokenHandler(token) {
-            var form = document.getElementById('payment-form');
-            var hiddenInput = document.createElement('input');
-            hiddenInput.setAttribute('type', 'hidden');
-            hiddenInput.setAttribute('name', 'stripeToken');
-            hiddenInput.setAttribute('value', token.id);
-            form.appendChild(hiddenInput);
-
-            var formData = $(form).serialize();
-
-            $.ajax({
-                type: "POST",
-                url: form.action,
-                data: formData,
-                success: function (response) {
-                    if (response.success) {
-                        window.location.href = response.redirectUrl;
+                // Показваме грешки в реално време
+                paymentElement.on('change', (event) => {
+                    if (event.error) {
+                        showError(event.error.message);
                     } else {
-                        var errorElement = document.getElementById('card-errors');
-                        errorElement.textContent = response.message;
+                        hideError();
                     }
-                },
-                error: function (xhr, status, error) {
-                    var errorElement = document.getElementById('card-errors');
-                    errorElement.textContent = 'An error occurred: ' + error;
-                }
-            });
+                });
+
+            } catch (err) {
+                console.error('Грешка при инициализация:', err);
+                showError('Грешка при зареждане на платежната форма. Опреснете страницата.');
+            }
         }
-    });
-</script>
+
+        // ============================================================
+        // СТЪПКА 2: При натискане на "Плати" — потвърждаваме с Stripe
+        // ============================================================
+        document.getElementById('submit-button').addEventListener('click', async () => {
+            const submitButton = document.getElementById('submit-button');
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Обработва се...';
+            hideError();
+
+            try {
+                // Потвърждаваме плащането client-side
+                const { paymentIntent, error } = await stripe.confirmPayment({
+                    elements,
+                    redirect: 'if_required' // Само ако трябва 3D Secure redirect
+                });
+
+                if (error) {
+                    // Плащането се провали (грешна карта, недостатъчно средства и т.н.)
+                    showError(error.message);
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = '<i class="fas fa-lock"></i> Плати @totalPrice BGN';
+                    return;
+                }
+
+                if (paymentIntent.status === 'succeeded') {
+                    // ============================================================
+                    // СТЪПКА 3: Плащането е успешно — уведомяваме сървъра да запише поръчката
+                    // ============================================================
+                    const confirmResponse = await fetch('/Payment/ConfirmOrder', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'RequestVerificationToken': getAntiForgeryToken()
+                        },
+                        body: JSON.stringify({
+                            paymentIntentId: paymentIntent.id,
+                            amount: TOTAL_PRICE,
+                            paymentMethod: PAYMENT_METHOD
+                        })
+                    });
+
+                    const confirmData = await confirmResponse.json();
+
+                    if (confirmData.success) {
+                        // Пренасочваме към страницата за успех
+                        window.location.href = confirmData.redirectUrl;
+                    } else {
+                        showError(confirmData.error ?? 'Грешка при записване на поръчката.');
+                        submitButton.disabled = false;
+                        submitButton.innerHTML = '<i class="fas fa-lock"></i> Плати @totalPrice BGN';
+                    }
+                } else {
+                    showError(`Неочакван статус на плащането: ${paymentIntent.status}`);
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = '<i class="fas fa-lock"></i> Плати @totalPrice BGN';
+                }
+
+            } catch (err) {
+                console.error('Грешка при плащане:', err);
+                showError('Възникна неочаквана грешка. Опитайте отново.');
+                submitButton.disabled = false;
+                submitButton.innerHTML = '<i class="fas fa-lock"></i> Плати @totalPrice BGN';
+            }
+        });
+
+        // ============================================================
+        // ПОМОЩНИ ФУНКЦИИ
+        // ============================================================
+        function showError(message) {
+            const errorDiv = document.getElementById('payment-errors');
+            document.getElementById('payment-error-message').textContent = message;
+            errorDiv.classList.remove('hidden');
+        }
+
+        function hideError() {
+            document.getElementById('payment-errors').classList.add('hidden');
+        }
+
+        function getAntiForgeryToken() {
+            // Взимаме токена от скрита input в страницата
+            const input = document.querySelector('input[name="__RequestVerificationToken"]');
+            return input ? input.value : '';
+        }
+
+        // Стартираме инициализацията
+        initialize();
+    </script>
+
+    @* Скрита форма само за antiforgery token *@
+    <form id="csrf-form" style="display:none">
+        @Html.AntiForgeryToken()
+    </form>
+</body>
+</html>

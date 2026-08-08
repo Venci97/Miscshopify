@@ -1,0 +1,746 @@
+﻿/* Shipping Info Page Styles */
+.shipping-info-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    font-family: 'Inter', sans-serif;
+    padding: 2rem 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Header Styles */
+.page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: white;
+}
+
+.header-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+    .header-icon i {
+        font-size: 2.5rem;
+        color: white;
+    }
+
+.header-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.header-subtitle {
+    font-size: 1.25rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Shipping Summary */
+.shipping-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.summary-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+    .summary-card.featured {
+        transform: scale(1.05);
+        border: 2px solid #fbbf24;
+        box-shadow: 0 20px 40px rgba(251, 191, 36, 0.3);
+    }
+
+        .summary-card.featured::before {
+            content: 'Most Popular';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fbbf24;
+            color: #1f2937;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+.summary-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+}
+
+.summary-card.featured .summary-icon {
+    background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+}
+
+.summary-icon i {
+    color: white;
+    font-size: 1.75rem;
+}
+
+.summary-card h3 {
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+}
+
+.summary-card .price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #4f46e5;
+    margin-bottom: 0.5rem;
+}
+
+.summary-card.featured .price {
+    color: #f59e0b;
+}
+
+.summary-card .delivery-time {
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.25rem;
+}
+
+.summary-card .minimum {
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+/* Content Grid */
+.content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+/* Section Styles */
+.shipping-methods,
+.delivery-info,
+.international-shipping,
+.tracking-support,
+.faq-section {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.section-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+    .section-title i {
+        color: #4f46e5;
+    }
+
+/* Shipping Methods */
+.methods-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.method-item {
+    background: #f8fafc;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+    .method-item:hover,
+    .method-item.active {
+        border-color: #4f46e5;
+        background: #f0f4ff;
+        transform: translateY(-2px);
+    }
+
+.method-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.method-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .method-icon i {
+        color: white;
+        font-size: 1.25rem;
+    }
+
+.method-info {
+    flex: 1;
+}
+
+    .method-info h3 {
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 0.25rem;
+    }
+
+.method-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 2rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+    .method-badge.free {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .method-badge.express {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .method-badge.overnight {
+        background: #e0e7ff;
+        color: #3730a3;
+    }
+
+.method-details p {
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+.method-details strong {
+    color: #1f2937;
+}
+
+/* Delivery Info */
+.info-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.info-card {
+    background: #f8fafc;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+    .info-card:hover {
+        transform: translateY(-3px);
+        background: #f0f4ff;
+    }
+
+.info-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+}
+
+    .info-icon i {
+        color: white;
+        font-size: 1.25rem;
+    }
+
+.info-card h3 {
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+.info-card p {
+    color: #6b7280;
+    line-height: 1.5;
+    font-size: 0.875rem;
+}
+
+/* International Shipping */
+.international-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.international-info h3 {
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+    .international-info h3 i {
+        color: #4f46e5;
+    }
+
+.international-info p {
+    color: #6b7280;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.shipping-zones {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.zone-card {
+    background: #f8fafc;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    border-left: 4px solid #4f46e5;
+}
+
+    .zone-card h4 {
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+        .zone-card h4 i {
+            color: #4f46e5;
+        }
+
+    .zone-card p {
+        color: #6b7280;
+        margin-bottom: 0.25rem;
+        font-size: 0.875rem;
+    }
+
+.customs-notice {
+    background: #fef3c7;
+    border: 1px solid #f59e0b;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+    .customs-notice i {
+        color: #f59e0b;
+        font-size: 1.5rem;
+        margin-top: 0.25rem;
+        flex-shrink: 0;
+    }
+
+    .customs-notice h4 {
+        font-weight: 600;
+        color: #92400e;
+        margin-bottom: 0.5rem;
+    }
+
+    .customs-notice p {
+        color: #92400e;
+        line-height: 1.5;
+        margin: 0;
+    }
+
+/* Tracking & Support */
+.tracking-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.tracking-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.tracking-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+}
+
+    .tracking-step:hover {
+        background: #f0f4ff;
+        transform: translateX(5px);
+    }
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.step-content h3 {
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+.step-content p {
+    color: #6b7280;
+    line-height: 1.5;
+}
+
+.support-options h3 {
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 1rem;
+}
+
+.support-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.support-card {
+    background: #f8fafc;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+    .support-card:hover {
+        background: #f0f4ff;
+        transform: translateY(-2px);
+    }
+
+    .support-card i {
+        color: #4f46e5;
+        font-size: 1.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .support-card h4 {
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+    }
+
+    .support-card p {
+        color: #6b7280;
+        margin-bottom: 1rem;
+        line-height: 1.5;
+        font-size: 0.875rem;
+    }
+
+.support-link {
+    color: #4f46e5;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+    .support-link:hover {
+        color: #3730a3;
+        transform: translateX(3px);
+    }
+
+/* FAQ Section */
+.faq-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+.faq-item {
+    background: #f8fafc;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+    .faq-item:hover {
+        background: #f0f4ff;
+    }
+
+    .faq-item h3 {
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+        .faq-item h3 i {
+            color: #4f46e5;
+        }
+
+    .faq-item p {
+        color: #6b7280;
+        line-height: 1.6;
+    }
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+.action-btn {
+    padding: 1rem 2rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 2px solid transparent;
+}
+
+    .action-btn.primary {
+        background: white;
+        color: #4f46e5;
+    }
+
+        .action-btn.primary:hover {
+            background: #4f46e5;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+    .action-btn.secondary {
+        background: transparent;
+        color: white;
+        border-color: white;
+    }
+
+        .action-btn.secondary:hover {
+            background: white;
+            color: #4f46e5;
+            transform: translateY(-2px);
+        }
+
+    .action-btn.outline {
+        background: transparent;
+        color: white;
+        border-color: white;
+    }
+
+        .action-btn.outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .content-grid,
+    .tracking-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .header-title {
+        font-size: 2.5rem;
+    }
+
+    .info-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .faq-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .shipping-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .summary-card.featured {
+        transform: scale(1);
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .action-btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .shipping-info-page {
+        padding: 1rem 0;
+    }
+
+    .header-title {
+        font-size: 2rem;
+    }
+
+    .header-subtitle {
+        font-size: 1.125rem;
+    }
+
+    .shipping-methods,
+    .delivery-info,
+    .international-shipping,
+    .tracking-support,
+    .faq-section {
+        padding: 1.5rem;
+    }
+
+    .shipping-zones {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.page-header,
+.shipping-summary,
+.content-grid,
+.international-shipping,
+.tracking-support,
+.faq-section,
+.action-buttons {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.shipping-summary {
+    animation-delay: 0.1s;
+}
+
+.content-grid {
+    animation-delay: 0.2s;
+}
+
+.international-shipping {
+    animation-delay: 0.3s;
+}
+
+.tracking-support {
+    animation-delay: 0.4s;
+}
+
+.faq-section {
+    animation-delay: 0.5s;
+}
+
+.action-buttons {
+    animation-delay: 0.6s;
+}
+
+/* Print Styles */
+@media print {
+    .shipping-info-page {
+        background: white !important;
+    }
+
+    .shipping-methods,
+    .delivery-info,
+    .international-shipping,
+    .tracking-support,
+    .faq-section {
+        background: white !important;
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+    }
+
+    .action-buttons {
+        display: none;
+    }
+
+    .summary-card,
+    .method-item,
+    .info-card,
+    .zone-card,
+    .support-card,
+    .faq-item {
+        break-inside: avoid;
+    }
+}

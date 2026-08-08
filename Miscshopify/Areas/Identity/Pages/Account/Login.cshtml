@@ -2,165 +2,157 @@
 @model LoginModel
 
 @{
-	ViewData["Title"] = "Log in";
-	Layout = null;
+    ViewData["Title"] = "Log in";
+    Layout = null;
 }
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Login</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-<!--===============================================================================================-->	
-	<link rel="icon" type="image/png" href="~/img/favicon-16x16.png" />
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="~/vendor/bootstrap/css/bootstrap.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="~/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="~/fonts/iconic/css/material-design-iconic-font.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="~/vendor/animate/animate.css">
-<!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="~/vendor/css-hamburgers/hamburgers.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="~/vendor/animsition/css/animsition.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="~/vendor/select2/select2.min.css">
-<!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="~/vendor/daterangepicker/daterangepicker.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="~/css/util.css">
-	<link rel="stylesheet" type="text/css" href="~/css/main.css">
-<!--===============================================================================================-->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Modern Store</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
-	
-	<div class="limiter">
-		<div class="container-login100" style="background: url('../../../../img/bg-01.jpg') fixed; background-size: cover;">
-			<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
-				@*<form class="login100-form validate-form">*@
-				<form id="account" method="post">
-					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-					<span class="login100-form-title p-b-49">
-						Login
-					</span>
+<body class="login-page flex items-center justify-center p-4">
+    <div class="login-container w-full max-w-md p-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="w-16 h-16 bg-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-lock text-indigo-600 text-2xl"></i>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
+            <p class="text-gray-600">Sign in to your account</p>
+        </div>
 
-					<div class="wrap-input100 validate-input m-b-23" data-validate = "Username is required">
-						<label asp-for="Input.Email" class="form-label"></label>
-						<input asp-for="Input.Email" class="input100" autocomplete="username" aria-required="true" placeholder="Type your Email" />
-						<span asp-validation-for="Input.Email" class="focus-input100" data-symbol="&#xf206;"></span>
-					</div>
+        <!-- Validation Summary -->
+        <div asp-validation-summary="ModelOnly" class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700"></div>
 
-					<div class="wrap-input100 validate-input" data-validate="Password is required">
-						<label asp-for="Input.Password" class="form-label"></label>
-						<input asp-for="Input.Password" class="input100" autocomplete="current-password" aria-required="true" placeholder="Type your password" />
-						<span asp-validation-for="Input.Password" class="focus-input100" data-symbol="&#xf190;"></span>
-					</div>
+        <form id="account" method="post" class="space-y-6">
+            <!-- Email Field -->
+            <div class="space-y-2">
+                <label asp-for="Input.Email" class="block text-sm font-medium text-gray-700">
+                    <i class="fas fa-envelope mr-2 text-indigo-500"></i>Email Address
+                </label>
+                <input asp-for="Input.Email"
+                       autocomplete="username"
+                       aria-required="true"
+                       class="w-full px-4 py-3 form-input rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                       placeholder="Enter your email" />
+                <span asp-validation-for="Input.Email" class="text-red-600 text-sm"></span>
+            </div>
 
-					<div class="text-right p-t-8 p-b-31">
-						<div class="checkbox">
-							<label asp-for="Input.RememberMe" class="form-label">
-								<input class="form-check-input" asp-for="Input.RememberMe" />
-								@Html.DisplayNameFor(m => m.Input.RememberMe)
-							</label>
-						</div>
-						<p>
-							<a id="forgot-password" asp-page="./ForgotPassword">Forgot password?</a>
-						</p>
-						<p>
-							<a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-						</p>
-						@*<p>
-							<a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
-						</p>*@
-					</div>
-					
-					<div class="container-login100-form-btn">
-						<div class="wrap-login100-form-btn">
-							<div class="login100-form-bgbtn"></div>
-							@*<button class="login100-form-btn"></button>*@
-							<button id="login-submit" type="submit" class="login100-form-btn">Log in</button>
-						</div>
-					</div>
+            <!-- Password Field -->
+            <div class="space-y-2">
+                <label asp-for="Input.Password" class="block text-sm font-medium text-gray-700">
+                    <i class="fas fa-lock mr-2 text-indigo-500"></i>Password
+                </label>
+                <input asp-for="Input.Password"
+                       autocomplete="current-password"
+                       aria-required="true"
+                       class="w-full px-4 py-3 form-input rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                       placeholder="Enter your password" />
+                <span asp-validation-for="Input.Password" class="text-red-600 text-sm"></span>
+            </div>
 
-					@*<div class="txt1 text-center p-t-54 p-b-20">
-						<span>
-							Or Sign Up Using
-						</span>
-					</div>*@
+            <!-- Remember Me & Forgot Password -->
+            <div class="flex items-center justify-between">
+                <label class="flex items-center space-x-2 cursor-pointer">
+                    <input class="form-check-input h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                           asp-for="Input.RememberMe" />
+                    <span class="text-sm text-gray-700">Remember me</span>
+                </label>
+                <a id="forgot-password" asp-page="./ForgotPassword"
+                   class="text-sm text-indigo-600 hover:text-indigo-500 transition-colors">
+                    Forgot password?
+                </a>
+            </div>
 
-					@*<div class="flex-c-m">
-						<a href="#" class="login100-social-item bg1">
-							<i class="fa fa-facebook"></i>
-						</a>
+            <!-- Login Button -->
+            <button id="login-submit" type="submit"
+                    class="w-full login-btn text-white py-3 px-4 rounded-lg font-semibold text-lg">
+                <i class="fas fa-sign-in-alt mr-2"></i>Sign In
+            </button>
 
-						<a href="#" class="login100-social-item bg2">
-							<i class="fa fa-twitter"></i>
-						</a>
+            <!-- Divider -->
+            <div class="relative my-6">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-gray-300"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                    <span class="px-2 bg-white text-gray-500">New to our platform?</span>
+                </div>
+            </div>
 
-						<a href="#" class="login100-social-item bg3">
-							<i class="fa fa-google"></i>
-						</a>
-					</div>*@
-				</form>
-			</div>
-		</div>
-	</div>
-	
+            <!-- Register Link -->
+            <div class="text-center">
+                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl"
+                   class="social-login-btn w-full bg-white text-gray-700 py-3 px-4 rounded-lg font-semibold inline-flex items-center justify-center gap-2 hover:bg-gray-50">
+                    <i class="fas fa-user-plus text-indigo-500"></i>
+                    Create New Account
+                </a>
+            </div>
+        </form>
 
-	<div id="dropDownSelect1"></div>
-	
-<!--===============================================================================================-->
-	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
-<!--===============================================================================================-->
-	<script src="vendor/animsition/js/animsition.min.js"></script>
-<!--===============================================================================================-->
-	<script src="vendor/bootstrap/js/popper.js"></script>
-	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-<!--===============================================================================================-->
-	<script src="vendor/select2/select2.min.js"></script>
-<!--===============================================================================================-->
-	<script src="vendor/daterangepicker/moment.min.js"></script>
-	<script src="vendor/daterangepicker/daterangepicker.js"></script>
-<!--===============================================================================================-->
-	<script src="vendor/countdowntime/countdowntime.js"></script>
-<!--===============================================================================================-->
-	<script src="js/main.js"></script>
-	<partial name="_ValidationScriptsPartial" />
+        <!-- Support Info -->
+        <div class="mt-8 text-center">
+            <p class="text-xs text-gray-500">
+                Having trouble?
+                <a href="#" class="text-indigo-600 hover:text-indigo-500">Contact support</a>
+            </p>
+        </div>
+    </div>
 
+    <partial name="_ValidationScriptsPartial" />
+
+    <style>
+        .login-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .form-input {
+            transition: all 0.3s ease;
+            border: 2px solid #e5e7eb;
+        }
+
+            .form-input:focus {
+                border-color: #4f46e5;
+                box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+                transform: translateY(-2px);
+            }
+
+        .login-btn {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            transition: all 0.3s ease;
+        }
+
+            .login-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+            }
+
+        .social-login-btn {
+            transition: all 0.3s ease;
+            border: 2px solid #e5e7eb;
+        }
+
+            .social-login-btn:hover {
+                transform: translateY(-2px);
+                border-color: #4f46e5;
+            }
+    </style>
 </body>
 </html>
-
-
-   @* <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to log in.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
-    </div>*@

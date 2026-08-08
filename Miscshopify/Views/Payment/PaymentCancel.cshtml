@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Payment Cancelled";
+    var orderId = ViewBag.OrderId;
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-sm-10">
+            <div class="card text-center shadow-sm p-4">
+                <div class="mb-3">
+                    <span class="fs-1 text-danger">&#10006;</span>
+                </div>
+                <h3 class="mb-3">Payment Cancelled</h3>
+                <p class="mb-3">Your payment could not be processed.</p>
+                <p class="mb-4">Order ID: <strong>@orderId</strong></p>
+                <a href="@Url.Action("CreatePayment", "Payment", new { orderId })" class="btn btn-warning">Try Again</a>
+            </div>
+        </div>
+    </div>
+</div>

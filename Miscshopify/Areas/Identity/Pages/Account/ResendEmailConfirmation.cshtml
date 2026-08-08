@@ -2,25 +2,156 @@
 @model ResendEmailConfirmationModel
 @{
     ViewData["Title"] = "Resend email confirmation";
+    Layout = null;
 }
 
-<h1>@ViewData["Title"]</h1>
-<h2>Enter your email.</h2>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-floating">
-                <input asp-for="Input.Email" class="form-control" aria-required="true" />
-                <label asp-for="Input.Email" class="form-label"></label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resend Email Confirmation - Modern Store</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 flex items-center justify-center p-4" style="font-family: 'Inter', sans-serif;">
+    <div class="max-w-md w-full">
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-paper-plane text-purple-600 text-2xl"></i>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">Resend Confirmation</h1>
+                <p class="text-gray-600">Need another verification email?</p>
             </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Resend</button>
-        </form>
-    </div>
-</div>
 
-@section Scripts {
+            <!-- Validation Summary -->
+            <div asp-validation-summary="All" class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700"></div>
+
+            <form method="post" class="space-y-6">
+                <!-- Email Field -->
+                <div class="space-y-2">
+                    <label asp-for="Input.Email" class="block text-sm font-medium text-gray-700">
+                        <i class="fas fa-envelope mr-2 text-purple-500"></i>Email Address
+                    </label>
+                    <input asp-for="Input.Email"
+                           aria-required="true"
+                           class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-300"
+                           placeholder="Enter your email address" />
+                    <span asp-validation-for="Input.Email" class="text-red-600 text-sm"></span>
+                </div>
+
+                <!-- Resend Button -->
+                <button type="submit"
+                        class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-4 rounded-lg font-semibold text-lg hover:from-purple-700 hover:to-pink-700 transform hover:-translate-y-0.5 transition-all duration-300 shadow-lg hover:shadow-xl">
+                    <i class="fas fa-paper-plane mr-2"></i>Resend Confirmation
+                </button>
+            </form>
+
+            <!-- Help Information -->
+            <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <div class="flex items-start space-x-3">
+                    <i class="fas fa-info-circle text-blue-500 mt-0.5"></i>
+                    <div class="text-sm text-blue-800">
+                        <p class="font-medium mb-1">Didn't receive the email?</p>
+                        <p>Check your spam folder or make sure you entered the correct email address associated with your account.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+                <a asp-page="./Login"
+                   class="flex-1 border-2 border-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:border-purple-500 hover:text-purple-600 hover:bg-purple-50 transition-all duration-300 inline-flex items-center justify-center gap-2 text-center">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Login
+                </a>
+                <a href="/"
+                   class="flex-1 border-2 border-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:border-purple-500 hover:text-purple-600 hover:bg-purple-50 transition-all duration-300 inline-flex items-center justify-center gap-2 text-center">
+                    <i class="fas fa-home"></i>
+                    Home
+                </a>
+            </div>
+
+            <!-- Security Note -->
+            <div class="mt-6 pt-6 border-t border-gray-200 text-center">
+                <div class="flex items-center justify-center gap-2 text-xs text-gray-500">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>We protect your account security</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <partial name="_ValidationScriptsPartial" />
-}
+
+    <style>
+        .form-input {
+            transition: all 0.3s ease;
+        }
+
+            .form-input:focus {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(147, 51, 234, 0.1);
+            }
+
+        /* Animation for the paper plane icon */
+        @@keyframes fly {
+            0% {
+                transform: translateX(0) translateY(0) rotate(0deg);
+            }
+
+            25% {
+                transform: translateX(2px) translateY(-2px) rotate(5deg);
+            }
+
+            75% {
+                transform: translateX(-2px) translateY(2px) rotate(-5deg);
+            }
+
+            100% {
+                transform: translateX(0) translateY(0) rotate(0deg);
+            }
+        }
+
+        .fa-paper-plane {
+            animation: fly 3s ease-in-out infinite;
+        }
+
+        /* Success message animation */
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-success {
+            animation: fadeInUp 0.5s ease-out;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Form submission feedback
+            const form = document.querySelector('form');
+            const submitButton = form.querySelector('button[type="submit"]');
+
+            if (form && submitButton) {
+                form.addEventListener('submit', function() {
+                    submitButton.disabled = true;
+                    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Sending...';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

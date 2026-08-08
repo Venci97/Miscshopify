@@ -1,16 +1,120 @@
-﻿@using Miscshopify.Infrastructure.Data.Models;
+﻿@using Microsoft.AspNetCore.Identity
+@using Miscshopify.Infrastructure.Data.Models
 @inject SignInManager<ApplicationUser> SignInManager
+
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
-<ul class="nav nav-pills flex-column">
-    <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Profile</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-page="./Email">Email</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Password</a></li>
+
+<nav class="manage-nav">
+    <div class="nav-section">
+        <h4 class="nav-section-title">Profile</h4>
+        <a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">
+            <i class="fas fa-user-circle nav-icon"></i>
+            <span>Personal Info</span>
+        </a>
+        <a class="nav-link @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-page="./Email">
+            <i class="fas fa-envelope nav-icon"></i>
+            <span>Email</span>
+        </a>
+        <a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">
+            <i class="fas fa-lock nav-icon"></i>
+            <span>Password</span>
+        </a>
+    </div>
+
     @if (hasExternalLogins)
     {
-        <li id="external-logins" class="nav-item"><a id="external-login" class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" asp-page="./ExternalLogins">External logins</a></li>
+        <div class="nav-section">
+            <h4 class="nav-section-title">External Logins</h4>
+            <a class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" id="external-login" asp-page="./ExternalLogins">
+                <i class="fas fa-external-link-alt nav-icon"></i>
+                <span>External Logins</span>
+            </a>
+        </div>
     }
-    <li class="nav-item"><a class="nav-link @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" id="two-factor" asp-page="./TwoFactorAuthentication">Two-factor authentication</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">Personal data</a></li>
-</ul>
+
+    <div class="nav-section">
+        <h4 class="nav-section-title">Advanced</h4>
+        <a class="nav-link @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" id="two-factor" asp-page="./TwoFactorAuthentication">
+            <i class="fas fa-mobile-alt nav-icon"></i>
+            <span>2FA</span>
+        </a>
+        <a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">
+            <i class="fas fa-database nav-icon"></i>
+            <span>Personal Data</span>
+        </a>
+    </div>
+</nav>
+
+<style>
+    .manage-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .nav-section {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .nav-section-title {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.5rem;
+        padding: 0 0.5rem;
+    }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 0.1rem;
+        padding: 0.75rem 1rem;
+        text-decoration: none;
+        border-radius: 0.75rem;
+        transition: all 0.2s ease;
+        font-weight: 500;
+    }
+
+        .nav-link:hover {
+            background: #f8fafc;
+            color: #4f46e5;
+        }
+
+        .nav-link.active {
+            background: #4f46e5;
+            color: white;
+        }
+
+            .nav-link.active .nav-icon {
+                color: white;
+            }
+
+    .nav-icon {
+        width: 20px;
+        text-align: center;
+        color: #9ca3af;
+        font-size: 1rem;
+    }
+
+    .nav-link:hover .nav-icon {
+        color: #4f46e5;
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .nav-link {
+            padding: 1rem;
+            font-size: 1rem;
+        }
+
+        .nav-icon {
+            font-size: 1.125rem;
+        }
+    }
+</style>

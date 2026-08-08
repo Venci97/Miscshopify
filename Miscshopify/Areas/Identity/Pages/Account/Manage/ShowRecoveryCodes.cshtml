@@ -5,21 +5,519 @@
     ViewData["ActivePage"] = "TwoFactorAuthentication";
 }
 
-<partial name="_StatusMessage" for="StatusMessage" />
-<h3>@ViewData["Title"]</h3>
-<div class="alert alert-warning" role="alert">
-    <p>
-        <strong>Put these codes in a safe place.</strong>
-    </p>
-    <p>
-        If you lose your device and don't have the recovery codes you will lose access to your account.
-    </p>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        @for (var row = 0; row < Model.RecoveryCodes.Length; row += 2)
-        {
-            <code class="recovery-code">@Model.RecoveryCodes[row]</code><text>&nbsp;</text><code class="recovery-code">@Model.RecoveryCodes[row + 1]</code><br />
-        }
+<div class="recovery-codes">
+    <h3 class="section-title">@ViewData["Title"]</h3>
+    <partial name="_StatusMessage" for="StatusMessage" />
+
+    <div class="manage-form">
+        <!-- Critical Warning Message -->
+        <div class="critical-warning">
+            <div class="warning-header">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h4 class="warning-title">Save Your Recovery Codes</h4>
+            </div>
+            <div class="warning-content">
+                <p class="warning-text">
+                    <strong>Put these codes in a safe place.</strong>
+                </p>
+                <p class="warning-description">
+                    If you lose your device and don't have the recovery codes, you will lose access to your account.
+                </p>
+                <div class="warning-tips">
+                    <p><strong>Recommended ways to save:</strong></p>
+                    <ul class="tips-list">
+                        <li><i class="fas fa-print"></i> Print them and store in a secure location</li>
+                        <li><i class="fas fa-file-download"></i> Download and save in an encrypted file</li>
+                        <li><i class="fas fa-lock"></i> Store in a password manager</li>
+                        <li><i class="fas fa-envelope"></i> Email them to yourself (less secure)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recovery Codes Display -->
+        <div class="recovery-codes-section">
+            <div class="codes-header">
+                <h5 class="codes-title">Your Recovery Codes</h5>
+                <p class="codes-description">
+                    Each code can be used only once. These are the only copies of your recovery codes.
+                </p>
+            </div>
+
+            <div class="codes-container">
+                @for (var row = 0; row < Model.RecoveryCodes.Length; row += 2)
+                {
+                    <div class="code-row">
+                        <code class="recovery-code">@Model.RecoveryCodes[row]</code>
+                        <code class="recovery-code">@Model.RecoveryCodes[row + 1]</code>
+                    </div>
+                }
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="codes-actions">
+                <button type="button" class="action-btn secondary" onclick="printRecoveryCodes()">
+                    <i class="fas fa-print"></i>
+                    Print Codes
+                </button>
+                <button type="button" class="action-btn secondary" onclick="downloadRecoveryCodes()">
+                    <i class="fas fa-download"></i>
+                    Download as Text
+                </button>
+                <button type="button" class="action-btn primary" onclick="copyRecoveryCodes()">
+                    <i class="fas fa-copy"></i>
+                    Copy to Clipboard
+                </button>
+            </div>
+        </div>
+
+        <!-- Important Notes -->
+        <div class="important-notes">
+            <div class="notes-icon">
+                <i class="fas fa-info-circle"></i>
+            </div>
+            <div class="notes-content">
+                <h5>Important Information</h5>
+                <ul class="notes-list">
+                    <li>Store these codes in a safe, accessible place</li>
+                    <li>You can generate new codes at any time, which will invalidate these codes</li>
+                    <li>Each recovery code can be used only once</li>
+                    <li>If you run out of recovery codes, you can generate a new set</li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        function copyRecoveryCodes() {
+            const codes = @Html.Raw(Json.Serialize(Model.RecoveryCodes));
+            const text = codes.join('\n');
+
+            navigator.clipboard.writeText(text).then(function() {
+                // Show success feedback
+                const button = event.target.closest('button');
+                const originalHtml = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                button.style.background = '#10b981';
+
+                setTimeout(() => {
+                    button.innerHTML = originalHtml;
+                    button.style.background = '';
+                }, 2000);
+            }).catch(function(err) {
+                console.error('Failed to copy: ', err);
+                alert('Failed to copy codes to clipboard');
+            });
+        }
+
+        function downloadRecoveryCodes() {
+            const codes = @Html.Raw(Json.Serialize(Model.RecoveryCodes));
+            const text = codes.join('\n');
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+
+            a.href = url;
+            a.download = 'recovery-codes.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function printRecoveryCodes() {
+            const codes = @Html.Raw(Json.Serialize(Model.RecoveryCodes));
+            const printWindow = window.open('', '_blank');
+            const printContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Recovery Codes</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 2cm; }
+                        h1 { color: #333; border-bottom: 2px solid #333; padding-bottom: 10px; }
+                        .code { font-family: 'Courier New', monospace; font-size: 14px; margin: 5px 0; }
+                        .warning { background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; margin: 20px 0; border-radius: 5px; }
+                        .timestamp { color: #666; font-size: 12px; margin-top: 30px; }
+                    </style>
+                </head>
+                <body>
+                    <h1>Recovery Codes</h1>
+                    <div class="warning">
+                        <strong>Important:</strong> Store this document in a secure location.
+                        These codes are required to access your account if you lose your authenticator device.
+                    </div>
+                    <div class="codes">
+                        ${codes.map(code => `<div class="code">${code}</div>`).join('')}
+                    </div>
+                    <div class="timestamp">
+                        Generated on: ${new Date().toLocaleString()}
+                    </div>
+                </body>
+                </html>
+            `;
+
+            printWindow.document.write(printContent);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        // Add click to copy functionality for individual codes
+        document.addEventListener('DOMContentLoaded', function() {
+            const codeElements = document.querySelectorAll('.recovery-code');
+            codeElements.forEach(code => {
+                code.addEventListener('click', function() {
+                    const text = this.textContent;
+                    navigator.clipboard.writeText(text).then(() => {
+                        const originalText = this.textContent;
+                        this.textContent = 'Copied!';
+                        this.style.background = '#10b981';
+
+                        setTimeout(() => {
+                            this.textContent = originalText;
+                            this.style.background = '';
+                        }, 1000);
+                    });
+                });
+            });
+        });
+    </script>
+}
+
+<style>
+    .recovery-codes {
+        max-width: 800px;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 1.5rem;
+    }
+
+    .manage-form {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .critical-warning {
+        background: #fffbeb;
+        border: 2px solid #fcd34d;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+
+    .warning-header {
+        background: #d97706;
+        color: white;
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+        .warning-header i {
+            font-size: 1.5rem;
+        }
+
+    .warning-title {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .warning-content {
+        padding: 1.5rem;
+    }
+
+    .warning-text {
+        color: #92400e;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+
+    .warning-description {
+        color: #92400e;
+        line-height: 1.5;
+        margin-bottom: 1.5rem;
+    }
+
+    .warning-tips {
+        background: #fef3c7;
+        padding: 1rem;
+        border-radius: 6px;
+        border-left: 4px solid #d97706;
+    }
+
+        .warning-tips p {
+            margin-bottom: 0.75rem;
+            color: #92400e;
+            font-weight: 600;
+        }
+
+    .tips-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+        .tips-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.25rem 0;
+            color: #92400e;
+        }
+
+        .tips-list i {
+            color: #d97706;
+            width: 1rem;
+            text-align: center;
+        }
+
+    .recovery-codes-section {
+        margin-bottom: 2rem;
+    }
+
+    .codes-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .codes-title {
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    .codes-description {
+        color: #6b7280;
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    .codes-container {
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .code-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.75rem;
+    }
+
+        .code-row:last-child {
+            margin-bottom: 0;
+        }
+
+    .recovery-code {
+        background: white;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        padding: 0.75rem 1rem;
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #1f2937;
+        flex: 1;
+        margin: 0 0.5rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        user-select: all;
+    }
+
+        .recovery-code:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+
+        .recovery-code:first-child {
+            margin-left: 0;
+        }
+
+        .recovery-code:last-child {
+            margin-right: 0;
+        }
+
+    .codes-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .action-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: none;
+        font-size: 0.9rem;
+    }
+
+        .action-btn.primary {
+            background: #4f46e5;
+            color: white;
+        }
+
+            .action-btn.primary:hover {
+                background: #4338ca;
+                transform: translateY(-1px);
+            }
+
+        .action-btn.secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+            .action-btn.secondary:hover {
+                background: #e5e7eb;
+                transform: translateY(-1px);
+            }
+
+    .important-notes {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        background: #f0f9ff;
+        border: 1px solid #bae6fd;
+        border-radius: 8px;
+        padding: 1.5rem;
+    }
+
+    .notes-icon {
+        flex-shrink: 0;
+        color: #0369a1;
+        font-size: 1.5rem;
+        margin-top: 0.125rem;
+    }
+
+    .notes-content h5 {
+        color: #0369a1;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+    }
+
+    .notes-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        color: #0369a1;
+    }
+
+        .notes-list li {
+            position: relative;
+            padding-left: 1rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+            .notes-list li:before {
+                content: "•";
+                position: absolute;
+                left: 0;
+                color: #0369a1;
+                font-weight: bold;
+            }
+
+            .notes-list li:last-child {
+                margin-bottom: 0;
+            }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .manage-form {
+            padding: 1.5rem;
+        }
+
+        .warning-header {
+            flex-direction: column;
+            text-align: center;
+            gap: 0.5rem;
+            padding: 1rem;
+        }
+
+        .code-row {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .recovery-code {
+            margin: 0;
+        }
+
+        .codes-actions {
+            flex-direction: column;
+        }
+
+        .action-btn {
+            justify-content: center;
+        }
+
+        .important-notes {
+            flex-direction: column;
+            text-align: center;
+            gap: 0.75rem;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .manage-form {
+            padding: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+        }
+
+        .warning-title {
+            font-size: 1.1rem;
+        }
+
+        .warning-content {
+            padding: 1rem;
+        }
+
+        .codes-container {
+            padding: 1rem;
+        }
+
+        .recovery-code {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.8rem;
+        }
+    }
+
+    @@media print {
+        .manage-form {
+            box-shadow: none;
+            border: 1px solid #000;
+        }
+
+        .codes-actions,
+        .important-notes {
+            display: none;
+        }
+    }
+</style>

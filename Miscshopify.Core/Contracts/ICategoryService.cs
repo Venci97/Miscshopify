@@ -9,5 +9,10 @@ namespace Miscshopify.Core.Contracts
         Task<CategoryViewModel> Edit(Guid id);
         Task<bool> UpdateCategoryDetails(CategoryViewModel model);
         void RemoveCategoryWithProducts(Guid categoryId);
+        Task<IEnumerable<CategoryViewModel>> GetMainCategories();
+        Task<IEnumerable<CategoryViewModel>> GetSubcategories(Guid parentId);
+        Task<bool> HasSubcategories(Guid categoryId);
+        Task<IEnumerable<CategoryViewModel>> GetAllCategoriesForDropdown();
+        Task<CategoryViewModel> GetCategoryById(Guid id);
     }
 }

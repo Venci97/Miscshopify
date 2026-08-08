@@ -1,0 +1,214 @@
+﻿@{
+    ViewData["Title"] = "Contact Us";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Us - Modern Store</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="~/css/contact.css" rel="stylesheet" />
+</head>
+<body class="contact-page">
+    <div class="container">
+        <!-- Header -->
+        <div class="contact-header">
+            <div class="header-icon">
+                <i class="fas fa-headset"></i>
+            </div>
+            <h1 class="header-title">Get In Touch</h1>
+            <p class="header-subtitle">We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+        </div>
+
+        <div class="contact-content">
+            <!-- Contact Information -->
+            <div class="contact-info">
+                <h2 class="info-title">Contact Information</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>Our Address</h3>
+                            <p>123 Commerce Street<br>Sofia, Bulgaria 1000</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>Phone Number</h3>
+                            <p>+1 (555) 123-4567<br>Mon-Fri, 9:00 AM - 6:00 PM</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>Email Address</h3>
+                            <p>support@modernstore.com<br>sales@modernstore.com</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>Working Hours</h3>
+                            <p>Monday - Friday: 9:00 - 18:00<br>Saturday: 10:00 - 16:00</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social Media -->
+                <div class="social-section">
+                    <h3>Follow Us</h3>
+                    <div class="social-links">
+                        <a href="#" class="social-link facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-link twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link linkedin">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="contact-form-container">
+                <h2 class="form-title">Send us a Message</h2>
+                <form class="contact-form" method="post" action="/Home/Contact">
+                    <div class="form-group">
+                        <label for="name" class="form-label">
+                            <i class="fas fa-user"></i> Full Name
+                        </label>
+                        <input type="text" id="name" name="name" class="form-input" placeholder="Enter your full name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="form-label">
+                            <i class="fas fa-envelope"></i> Email Address
+                        </label>
+                        <input type="email" id="email" name="email" class="form-input" placeholder="Enter your email address" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject" class="form-label">
+                            <i class="fas fa-tag"></i> Subject
+                        </label>
+                        <input type="text" id="subject" name="subject" class="form-input" placeholder="What is this regarding?" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message" class="form-label">
+                            <i class="fas fa-comment"></i> Message
+                        </label>
+                        <textarea id="message" name="message" class="form-textarea" placeholder="Tell us how we can help you..." rows="5" required></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i>
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Map Section -->
+        <div class="map-section">
+            <h2 class="map-title">Find Us Here</h2>
+            <div class="map-placeholder">
+                <i class="fas fa-map-marked-alt"></i>
+                <p>Interactive Map Location</p>
+                <span>123 Commerce Street, Sofia, Bulgaria</span>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section">
+            <h2 class="faq-title">Frequently Asked Questions</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3><i class="fas fa-shipping-fast"></i> What are your shipping options?</h3>
+                    <p>We offer standard (3-5 days), express (1-2 days), and overnight shipping options.</p>
+                </div>
+                <div class="faq-item">
+                    <h3><i class="fas fa-undo-alt"></i> What is your return policy?</h3>
+                    <p>You can return items within 30 days of receipt for a full refund or exchange.</p>
+                </div>
+                <div class="faq-item">
+                    <h3><i class="fas fa-credit-card"></i> What payment methods do you accept?</h3>
+                    <p>We accept all major credit cards, PayPal, and bank transfers.</p>
+                </div>
+                <div class="faq-item">
+                    <h3><i class="fas fa-headset"></i> How can I track my order?</h3>
+                    <p>You'll receive a tracking number via email once your order ships.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="/" class="action-btn primary">
+                <i class="fas fa-home"></i>
+                Back to Home
+            </a>
+            <a href="/Home/Privacy" class="action-btn secondary">
+                <i class="fas fa-shield-alt"></i>
+                Privacy Policy
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Form submission handling
+            const contactForm = document.querySelector('.contact-form');
+            const submitBtn = contactForm?.querySelector('.submit-btn');
+
+            if (contactForm && submitBtn) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    // Simulate form submission
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+                    setTimeout(() => {
+                        alert('Thank you for your message! We will get back to you soon.');
+                        contactForm.reset();
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+                    }, 2000);
+                });
+            }
+
+            // Add animation to social links
+            const socialLinks = document.querySelectorAll('.social-link');
+            socialLinks.forEach(link => {
+                link.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px) scale(1.1)';
+                });
+                link.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

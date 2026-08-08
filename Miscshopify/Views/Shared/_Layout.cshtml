@@ -1,182 +1,345 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Miscshopify</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Miscshopify</title>
+
+    <!-- Favicon -->
     <link rel="icon" href="~/img/Miscshopify_Logo" type="image/x-icon">
-    <link rel="apple-touch-icon" sizes="57x57" href="~/img/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="~/img/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="~/img/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="~/img/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="~/img/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="~/img/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="~/img/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="~/img/apple-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="~/img/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="~/img/android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="~/img/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="~/img/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="~/img/favicon-16x16.png">
-    <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <link rel="stylesheet" href="~/plugins/fontawesome-free-6.2.0-web/css/all.min.css">
-    <link rel="stylesheet" href="~/css/adminlte.min.css">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom CSS -->
+    <link href="~/css/layout.css" rel="stylesheet" />
+
+    @await RenderSectionAsync("Head", required: false)
 </head>
-<body class="hold-transition layout-top-nav" style="background-image: url(/img/vecteezy_abstract-white-and-gray-light-gradient-lines-background_6469230.jpg); background-size: 100% 100%">
-    <div class="wrapper">
-        <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-dark">
-            <!-- Left navbar links -->
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a href="/Home" class="nav-link">
-                        <img src="~/img/Miscshopify_Logo_No_Traansperant.png" alt="Miscshopify Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-                    </a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="/Category/Index" class="nav-link">Categories</a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="#" class="nav-link">Contact</a>
-                </li>
+<body class="layout-body">
+    <!-- Header -->
+    <header class="main-header">
+        <nav class="nav-container">
+            <!-- Logo and Brand -->
+            <div class="nav-brand">
+                <a href="/Home" class="brand-link">
+                    <img src="~/img/Miscshopify_Logo_No_Traansperant.png" alt="Miscshopify" class="brand-logo">
+                    <span class="brand-text">Miscshopify</span>
+                </a>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <div class="desktop-nav">
+                <a href="/Category/Index" class="nav-link">
+                    <i class="fas fa-th-large mr-2"></i>
+                    Categories
+                </a>
+                <a href="/Home/Contact" class="nav-link">
+                    <i class="fas fa-envelope mr-2"></i>
+                    Contact
+                </a>
+
                 @if (User.IsInRole("Administrator"))
                 {
-                    <li class="nav-item d-none d-sm-inline-block">
-                        <a href="/Admin" class="nav-link">Admin Panel</a>
-                    </li>
-                }
-            </ul>
-            <!-- Right navbar links -->
-            <ul class="navbar-nav ml-auto">
-                <!-- Navbar Search -->
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-                        <i class="fa-solid fa-search"></i>
+                    <a href="/Admin" class="nav-link admin-link">
+                        <i class="fas fa-cog mr-2"></i>
+                        Admin Panel
                     </a>
-                </li>
-            </ul>
-            <partial name="_LoginPartial" />
+                }
+            </div>
+
+            <!-- Right Section - Search and User -->
+            <div class="nav-right">
+                <!-- Search Button -->
+                <button class="search-btn" id="searchToggle">
+                    <i class="fas fa-search"></i>
+                </button>
+
+                <!-- User Auth Partial -->
+                <div class="auth-section">
+                    <partial name="_LoginPartial" />
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" id="mobileMenuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
         </nav>
-    </div>
-    <div class="content-wrapper" style="background-color: transparent">
-        <!-- Content Header (Page header) -->
-        <div class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1 class="m-0">@ViewData["Title"]</h1>
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
+
+        <!-- Search Bar -->
+        <div class="search-container hidden" id="searchContainer">
+            <div class="search-box">
+                <form action="@Url.Action("Results", "Search")" method="get" class="search-form">
+                    <div class="search-input-group">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" name="searchTerm" placeholder="Search products, categories..." class="search-input">
+                        <button type="submit" class="search-submit">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+                <button class="search-close" id="searchClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
         </div>
-        <div class="content">
-            <div class="container-fluid">
+
+        <!-- Mobile Navigation -->
+        <div class="mobile-nav hidden" id="mobileNav">
+            <div class="mobile-nav-content">
+                <a href="/Home" class="mobile-nav-link">
+                    <i class="fas fa-home mr-3"></i>
+                    Home
+                </a>
+                <a href="/Category/Index" class="mobile-nav-link">
+                    <i class="fas fa-th-large mr-3"></i>
+                    Categories
+                </a>
+                <a href="/Cart/Index" class="mobile-nav-link">
+                    <i class="fas fa-shopping-cart mr-3"></i>
+                    Cart
+                </a>
+                <a href="/Home/Contact" class="mobile-nav-link">
+                    <i class="fas fa-envelope mr-3"></i>
+                    Contact
+                </a>
+
+                @if (User.IsInRole("Administrator"))
+                {
+                    <a href="/Admin" class="mobile-nav-link">
+                        <i class="fas fa-cog mr-3"></i>
+                        Admin Panel
+                    </a>
+                }
+
+                <!-- Mobile Auth Section -->
+                <div class="mobile-auth-section">
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header -->
+        @if (!string.IsNullOrEmpty(ViewData["Title"]?.ToString()))
+        {
+            <div class="page-header">
+                <div class="container">
+                    <h1 class="page-title">@ViewData["Title"]</h1>
+                </div>
+            </div>
+        }
+
+        <!-- Content -->
+        <div class="content-area">
+            <div class="container">
                 @RenderBody()
             </div>
         </div>
-    </div>
-    <!-- Search Modal -->
-    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="searchModalLabel">Search</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Company Info -->
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <img src="~/img/Miscshopify_Logo_No_Traansperant.png" alt="Miscshopify" class="footer-logo">
+                        <span class="footer-brand-text">Miscshopify</span>
+                    </div>
+                    <p class="footer-description">
+                        Your one-stop destination for all your shopping needs. Quality products, amazing prices.
+                    </p>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>123 Street, Sofia, Bulgaria</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>info@miscshopify.com</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone-alt"></i>
+                            <span>+359 123 456 789</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <form id="searchForm" action="@Url.Action("Results", "Search")" method="post">
-                        <div class="input-group">
-                            <input type="text" class="form-control" name="searchTerm" placeholder="Search" aria-label="Search">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="submit">Search</button>
-                            </div>
+
+                <!-- Quick Links -->
+                <div class="footer-section">
+                    <h3 class="footer-title">Quick Links</h3>
+                    <div class="footer-links">
+                        <a href="/Home" class="footer-link">
+                            <i class="fas fa-chevron-right"></i>
+                            Home
+                        </a>
+                        <a href="/Category/Index" class="footer-link">
+                            <i class="fas fa-chevron-right"></i>
+                            Categories
+                        </a>
+                        <a href="/Cart/Index" class="footer-link">
+                            <i class="fas fa-chevron-right"></i>
+                            Shopping Cart
+                        </a>
+                        <a href="/Home/Contact" class="footer-link">
+                            <i class="fas fa-chevron-right"></i>
+                            Contact Us
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Customer Service -->
+                <div class="footer-section">
+                    <h3 class="footer-title">Customer Service</h3>
+                    <div class="footer-links">
+                        <a href="/Home/ShippingInfo" class="footer-link">
+                            <i class="fas fa-chevron-right"></i>
+                            Shipping Info
+                        </a>
+                        <a href="/Home/ReturnsRefunds" class="footer-link">
+                            <i class="fas fa-chevron-right"></i>
+                            Returns & Refunds
+                        </a>
+                        <a href="/Home/Privacy" class="footer-link">
+                            <i class="fas fa-chevron-right"></i>
+                            Privacy Policy
+                        </a>
+                        <a href="/Home/Terms" class="footer-link">
+                            <i class="fas fa-chevron-right"></i>
+                            Terms & Conditions
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="footer-section">
+                    <h3 class="footer-title">Newsletter</h3>
+                    <p class="newsletter-text">Subscribe to get updates on new products and special offers.</p>
+                    <form class="newsletter-form">
+                        <div class="newsletter-input-group">
+                            <input type="email" placeholder="Your email address" class="newsletter-input">
+                            <button type="submit" class="newsletter-btn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
                         </div>
                     </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /.content-wrapper -->
-    <!-- Footer Start -->
-    <div class="container-fluid bg-dark text-secondary mt-5 pt-5">
-        <div class="row px-xl-5 pt-5">
-            <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
-                <h5 class="text-secondary text-uppercase mb-4">Get In Touch</h5>
-                <p class="mb-4">You can visit our store on...</p>
-                <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA</p>
-                <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p>
-                <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+012 345 67890</p>
-            </div>
-            <div class="col-lg-8 col-md-12">
-                <div class="row">
-                    <div class="col-md-4 mb-5">
-                        <h5 class="text-secondary text-uppercase mb-4">Quick Menu</h5>
-                        <div class="d-flex flex-column justify-content-start">
-                            <a class="text-secondary mb-2" href="/Home"><i class="fa fa-angle-right mr-2"></i>Home</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-5">
-                        <h5 class="text-secondary text-uppercase mb-4"></h5>
-                        <div class="d-flex flex-column justify-content-start">
-                            <a class="text-secondary mb-2" href="/Cart/Index"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
-                            <a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-5">
-                        <h5 class="text-secondary text-uppercase mb-4">Newsletter</h5>
-                        <p>Duo stet tempor ipsum sit amet magna ipsum tempor est</p>
-                        <form action="">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Your Email Address">
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary">Sign Up</button>
-                                </div>
-                            </div>
-                        </form>
-                        <h6 class="text-secondary text-uppercase mt-4 mb-3">Follow Us</h6>
-                        <div class="d-flex">
-                            <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-twitter"></i></a>
-                            <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
-                            <a class="btn btn-primary btn-square" href="#"><i class="fab fa-instagram"></i></a>
-                        </div>
+                    <div class="social-links">
+                        <a href="#" class="social-link">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row border-top mx-xl-5 py-4" style="border-color: rgba(256, 256, 256, .1) !important;">
-            <div class="col-md-6 px-xl-0">
-                <p class="mb-md-0 text-center text-md-left text-secondary">
-                    &copy; <a class="text-primary" href="#">Domain</a>. All Rights Reserved. Designed
-                    by
-                    <a class="text-primary" href="https://htmlcodex.com">HTML Codex</a>
-                </p>
-            </div>
-            <div class="col-md-6 px-xl-0 text-center text-md-right">
-                <img class="img-fluid" src="img/payments.png" alt="">
-            </div>
-        </div>
-    </div>
-    <!-- Footer End -->
 
-    <!-- REQUIRED SCRIPTS -->
-    <!-- jQuery -->
-    <script src="~/plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="~/js/adminlte.min.js"></script>
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p class="copyright">
+                        &copy; 2024 Miscshopify. All rights reserved.
+                    </p>
+                    <div class="payment-methods">
+                        <span class="payment-text">We accept:</span>
+                        <div class="payment-icons">
+                            <i class="fab fa-cc-visa payment-icon"></i>
+                            <i class="fab fa-cc-mastercard payment-icon"></i>
+                            <i class="fab fa-cc-paypal payment-icon"></i>
+                            <i class="fab fa-cc-apple-pay payment-icon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
     <script>
-        // Show search modal when search icon is clicked
-        $(document).on('click', '[data-widget="navbar-search"]', function (e) {
-            e.preventDefault();
-            $('#searchModal').modal('show');
-            $('#searchForm input[name="searchTerm"]').focus();
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mobileNav = document.getElementById('mobileNav');
+            const searchToggle = document.getElementById('searchToggle');
+            const searchContainer = document.getElementById('searchContainer');
+            const searchClose = document.getElementById('searchClose');
+
+            // Mobile menu toggle
+            if (mobileMenuToggle) {
+                mobileMenuToggle.addEventListener('click', function() {
+                    mobileNav.classList.toggle('hidden');
+                    document.body.classList.toggle('no-scroll');
+                });
+            }
+
+            // Search toggle
+            if (searchToggle) {
+                searchToggle.addEventListener('click', function() {
+                    searchContainer.classList.toggle('hidden');
+                    if (!searchContainer.classList.contains('hidden')) {
+                        document.querySelector('.search-input').focus();
+                    }
+                });
+            }
+
+            // Search close
+            if (searchClose) {
+                searchClose.addEventListener('click', function() {
+                    searchContainer.classList.add('hidden');
+                });
+            }
+
+            // Close mobile menu when clicking on a link
+            document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                link.addEventListener('click', function() {
+                    mobileNav.classList.add('hidden');
+                    document.body.classList.remove('no-scroll');
+                });
+            });
+
+            // Close search and mobile menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.nav-right') && !e.target.closest('.mobile-nav')) {
+                    mobileNav.classList.add('hidden');
+                    document.body.classList.remove('no-scroll');
+                }
+                if (!e.target.closest('.search-container') && !e.target.closest('.search-btn')) {
+                    searchContainer.classList.add('hidden');
+                }
+            });
+        });
+
+        // Add scroll effect to header
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.main-header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
         });
     </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -35,6 +35,12 @@ namespace Miscshopify.Areas.Admin.Controllers
             return View(orders);
         }
 
+        public async Task<IActionResult> Completed()
+        {
+            var completedOrders = await _orderService.GetCompletedOrders();
+            return View(completedOrders);
+        }
+
         public async Task<IActionResult> OrderDetails(Guid id)
         {
             var orderDetails = await _orderService.GetOrderDetails(id);

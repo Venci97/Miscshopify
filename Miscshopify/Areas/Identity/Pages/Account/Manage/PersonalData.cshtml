@@ -5,23 +5,361 @@
     ViewData["ActivePage"] = ManageNavPages.PersonalData;
 }
 
-<h3>@ViewData["Title"]</h3>
+<div class="personal-data-management">
+    <h3 class="section-title">@ViewData["Title"]</h3>
 
-<div class="row">
-    <div class="col-md-6">
-        <p>Your account contains personal data that you have given us. This page allows you to download or delete that data.</p>
-        <p>
-            <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
-        </p>
-        <form id="download-data" asp-page="DownloadPersonalData" method="post">
-            <button class="btn btn-primary" type="submit">Download</button>
-        </form>
-        <p>
-            <a id="delete" asp-page="DeletePersonalData" class="btn btn-danger">Delete</a>
-        </p>
+    <div class="manage-form">
+        <!-- Information Section -->
+        <div class="info-section">
+            <div class="info-icon">
+                <i class="fas fa-database"></i>
+            </div>
+            <div class="info-content">
+                <h4 class="info-title">Manage Your Personal Data</h4>
+                <p class="info-description">
+                    Your account contains personal data that you have given us. This page allows you to download
+                    or delete that data.
+                </p>
+
+                <div class="data-actions">
+                    <!-- Download Data Card -->
+                    <div class="action-card download-card">
+                        <div class="card-icon">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <div class="card-content">
+                            <h5 class="card-title">Download Your Data</h5>
+                            <p class="card-description">
+                                Download a copy of all your personal data stored in your account in JSON format.
+                            </p>
+                            <form id="download-data" asp-page="DownloadPersonalData" method="post" class="card-form">
+                                <button class="action-btn primary" type="submit">
+                                    <i class="fas fa-file-download"></i>
+                                    Download Data
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Delete Data Card -->
+                    <div class="action-card delete-card">
+                        <div class="card-icon">
+                            <i class="fas fa-trash-alt"></i>
+                        </div>
+                        <div class="card-content">
+                            <h5 class="card-title">Delete Your Data</h5>
+                            <p class="card-description">
+                                Permanently delete all your personal data and close your account.
+                            </p>
+                            <div class="warning-notice">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span>This action cannot be undone</span>
+                            </div>
+                            <a id="delete" asp-page="DeletePersonalData" class="action-btn danger">
+                                <i class="fas fa-trash"></i>
+                                Delete Data & Account
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Information -->
+                <div class="additional-info">
+                    <div class="info-item">
+                        <i class="fas fa-info-circle"></i>
+                        <div>
+                            <strong>What's included in your data:</strong>
+                            <span>Profile information, email, phone number, account activity, and authentication data.</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <div>
+                            <strong>Your privacy matters:</strong>
+                            <span>We respect your right to control your personal data.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+
+<style>
+    .personal-data-management {
+        max-width: 900px;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 1.5rem;
+    }
+
+    .manage-form {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .info-section {
+        display: flex;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+
+    .info-icon {
+        flex-shrink: 0;
+        width: 3rem;
+        height: 3rem;
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+    }
+
+    .info-content {
+        flex: 1;
+    }
+
+    .info-title {
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 0.75rem;
+        font-size: 1.25rem;
+    }
+
+    .info-description {
+        color: #6b7280;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+    }
+
+    .data-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .action-card {
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .action-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+    .download-card {
+        border-left: 4px solid #10b981;
+    }
+
+    .delete-card {
+        border-left: 4px solid #dc2626;
+    }
+
+    .card-icon {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+        font-size: 1.25rem;
+    }
+
+    .download-card .card-icon {
+        background: #d1fae5;
+        color: #10b981;
+    }
+
+    .delete-card .card-icon {
+        background: #fef2f2;
+        color: #dc2626;
+    }
+
+    .card-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card-title {
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .card-description {
+        color: #6b7280;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+        flex: 1;
+    }
+
+    .warning-notice {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: #fef2f2;
+        color: #dc2626;
+        padding: 0.5rem 0.75rem;
+        border-radius: 6px;
+        margin-bottom: 1rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+        .warning-notice i {
+            font-size: 0.875rem;
+        }
+
+    .card-form {
+        margin: 0;
+    }
+
+    .action-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: none;
+        font-size: 0.9rem;
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+
+        .action-btn.primary {
+            background: #10b981;
+            color: white;
+        }
+
+            .action-btn.primary:hover {
+                background: #059669;
+                transform: translateY(-1px);
+            }
+
+        .action-btn.danger {
+            background: #dc2626;
+            color: white;
+        }
+
+            .action-btn.danger:hover {
+                background: #b91c1c;
+                transform: translateY(-1px);
+            }
+
+    .additional-info {
+        background: #f0f9ff;
+        border: 1px solid #bae6fd;
+        border-radius: 8px;
+        padding: 1.5rem;
+    }
+
+    .info-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-item i {
+            color: #0369a1;
+            margin-top: 0.125rem;
+            flex-shrink: 0;
+        }
+
+        .info-item div {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .info-item strong {
+            color: #0369a1;
+            font-size: 0.9rem;
+        }
+
+        .info-item span {
+            color: #0369a1;
+            font-size: 0.875rem;
+            line-height: 1.4;
+        }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .manage-form {
+            padding: 1.5rem;
+        }
+
+        .info-section {
+            flex-direction: column;
+            text-align: center;
+            gap: 1rem;
+        }
+
+        .info-icon {
+            align-self: center;
+        }
+
+        .data-actions {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .action-card {
+            padding: 1.25rem;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .manage-form {
+            padding: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+        }
+
+        .info-title {
+            font-size: 1.1rem;
+        }
+
+        .action-btn {
+            padding: 0.75rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        .additional-info {
+            padding: 1rem;
+        }
+    }
+</style>

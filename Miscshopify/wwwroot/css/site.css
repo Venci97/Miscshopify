@@ -1,20 +1,20 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
 }
 
 .center {
@@ -29,18 +29,11 @@ body {
 }
 
 .card {
-    flex: 1 0 25%;
     margin-bottom: 1.5rem;
     display: flex;
     flex-direction: column;
 }
 
-.card1 {
-    flex: 1 0 25%;
-    margin-bottom: 1.5rem;
-    display: flex;
-    flex-direction: column;
-}
 .card-img-top {
     height: 200px;
     object-fit: contain;
@@ -50,11 +43,13 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
 
 .card-title {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     margin-bottom: 0.5rem;
+    text-align: center;
 }
 
 .card-text {
@@ -66,4 +61,25 @@ body {
 
 .button-wrapper {
     margin-top: auto;
+}
+
+@media (min-width: 576px) {
+    .col-sm-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+@media (min-width: 768px) {
+    .col-md-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+@media (min-width: 992px) {
+    .col-lg-4 {
+        flex: 0 0 33.3333%;
+        max-width: 33.3333%;
+    }
 }

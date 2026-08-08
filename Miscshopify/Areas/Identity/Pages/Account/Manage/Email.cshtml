@@ -5,40 +5,238 @@
     ViewData["ActivePage"] = ManageNavPages.Email;
 }
 
-<h3>@ViewData["Title"]</h3>
-<partial name="_StatusMessage" for="StatusMessage" />
-<div class="row">
-    <div class="col-md-6">
-        <form id="email-form" method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            @if (Model.IsEmailConfirmed)
-            {
-                <div class="form-floating input-group">
-                    <input asp-for="Email" class="form-control" disabled />
-                        <div class="input-group-append">
-                            <span class="h-100 input-group-text text-success font-weight-bold">✓</span>
-                        </div>
-                    <label asp-for="Email" class="form-label"></label>
-                </div>
-            }
-            else
-            {
-                <div class="form-floating">
-                    <input asp-for="Email" class="form-control" disabled />
-                    <label asp-for="Email" class="form-label"></label>
-                    <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">Send verification email</button>
-                </div>
-            }
-            <div class="form-floating">
-                <input asp-for="Input.NewEmail" class="form-control" autocomplete="email" aria-required="true" />
-                <label asp-for="Input.NewEmail" class="form-label"></label>
-                <span asp-validation-for="Input.NewEmail" class="text-danger"></span>
+<div class="email-management">
+    <h3 class="section-title">@ViewData["Title"]</h3>
+    <partial name="_StatusMessage" for="StatusMessage" />
+
+    <form id="email-form" method="post" class="manage-form">
+        <div asp-validation-summary="ModelOnly" class="validation-summary" style="@(ViewData.ModelState.IsValid ? "display:none;" : "")"></div>
+
+        <div class="form-grid">
+            <!-- Current Email -->
+            <div class="form-group">
+                @if (Model.IsEmailConfirmed)
+                {
+                    <label asp-for="Email" class="form-label">Current Email</label>
+                    <div class="input-with-badge">
+                        <input asp-for="Email" class="form-input" disabled />
+                        <span class="verified-badge">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
+                            </svg>
+                            Verified
+                        </span>
+                    </div>
+                }
+                else
+                {
+                    <label asp-for="Email" class="form-label">Current Email</label>
+                    <div class="input-with-button">
+                        <input asp-for="Email" class="form-input" disabled />
+                        <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail"
+                                class="verification-button">
+                            Send verification email
+                        </button>
+                    </div>
+                }
             </div>
-            <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail" class="w-100 btn btn-lg btn-primary">Change email</button>
-        </form>
-    </div>
+
+            <!-- New Email -->
+            <div class="form-group">
+                <label asp-for="Input.NewEmail" class="form-label">New Email Address</label>
+                <input asp-for="Input.NewEmail" class="form-input" autocomplete="email" aria-required="true"
+                       placeholder="New Email Address Here" id="new-email-input" />
+                <span asp-validation-for="Input.NewEmail" class="validation-error"></span>
+            </div>
+        </div>
+
+        <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail"
+                class="submit-btn">
+            <i class="fas fa-envelope"></i>
+            Change Email
+        </button>
+    </form>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const newEmailInput = document.getElementById('new-email-input');
+
+            // Clear the input value on page load to remove pre-filled email
+            if (newEmailInput) {
+                newEmailInput.value = '';
+
+                // Add focus and blur event listeners for placeholder behavior
+                newEmailInput.addEventListener('focus', function() {
+                    if (this.value === '') {
+                        this.removeAttribute('placeholder');
+                    }
+                });
+
+                newEmailInput.addEventListener('blur', function() {
+                    if (this.value === '') {
+                        this.setAttribute('placeholder', 'New Email Address Here');
+                    }
+                });
+            }
+        });
+    </script>
 }
+
+<style>
+    .email-management {
+        max-width: 600px;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 1.5rem;
+    }
+
+    .manage-form {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .form-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-input {
+        padding: 0.75rem 1rem;
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+    }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .form-input:disabled {
+            background-color: #f9fafb;
+            color: #6b7280;
+        }
+
+        /* Placeholder styling */
+        .form-input::placeholder {
+            color: #9ca3af;
+            font-style: italic;
+        }
+
+    .input-with-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .input-with-button {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .verified-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        background-color: #ecfdf5;
+        color: #059669;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .verification-button {
+        background: #f8fafc;
+        color: #374151;
+        border: 1px solid #d1d5db;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        white-space: nowrap;
+    }
+
+        .verification-button:hover {
+            background: #f1f5f9;
+            border-color: #9ca3af;
+        }
+
+    .submit-btn {
+        background: #4f46e5;
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1rem;
+    }
+
+        .submit-btn:hover {
+            background: #4338ca;
+        }
+
+    .validation-summary {
+        color: #dc2626;
+        background: #fef2f2;
+        padding: 1rem;
+        border-radius: 8px;
+        border: 1px solid #fecaca;
+        margin-bottom: 1.5rem;
+    }
+
+    .validation-error {
+        color: #dc2626;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    /* Responsive */
+    @@media (max-width: 640px) {
+        .manage-form {
+            padding: 1.5rem;
+        }
+
+        .input-with-button {
+            flex-direction: column;
+        }
+
+        .verification-button {
+            width: 100%;
+        }
+    }
+</style>

@@ -1,50 +1,222 @@
 ﻿@using Miscshopify.Core.Models;
+@using Miscshopify.Infrastructure.Data.Models.Enums;
 @model IEnumerable<OrderViewModel>
 @{
+    ViewData["Title"] = "Orders Management";
+    var totalOrders = Model.Count();
+
+    // Use the actual enum values from your OrderStatusEnum
+    var pendingOrders = Model.Count(o => o.Status == OrderStatusEnum.Pending);
+    var onTheWayOrders = Model.Count(o => o.Status == OrderStatusEnum.OnTheWay);
+    var completedOrders = Model.Count(o => o.Status == OrderStatusEnum.Completed);
 }
-<head>
-	<link rel="stylesheet" href="~/plugins/fontawesome-free-6.2.0-web/css/all.min.css">
-</head>
-<div class="row">
-	<div class="col-12">
-		<section class="ftco-section">
-			<div class="container">
-				<div class="row justify-content-center">
-					<div class="col-md-6 text-center mb-5">
-						<h2 class="heading-section">All Orders</h2>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-12">
-						<div class="table-wrap">
-							<table class="table table-responsive-xl">
-								<thead>
-									<tr>
-										<th>Customer Name</th>
-										<th>Status</th>
-										<th>Action</th>
-										<th>&nbsp;</th>
-									</tr>
-								</thead>
-								<tbody>
-									@foreach (var order in Model)
-									{
-										<tr>
-											<td>@order.CustomerName</td>
-											<td>@order.Status</td>
-											<td>
-												<a asp-area="Admin" asp-action="OrderDetails" asp-controller="Order" asp-route-id="@order.Id" class="btn btn-block btn-outline-info btn-xs">
-													Details
-												</a>
-											</td>
-										</tr>
-									}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-	</div>
+
+<link href="~/css/admin/order-index.css" rel="stylesheet" />
+
+<div class="order-index-section">
+    <div class="order-header">
+        <h1 class="order-title">
+            <i class="fas fa-shopping-bag"></i>
+            Orders Management
+        </h1>
+        <div class="order-stats">
+            <div class="stat-card">
+                <div class="stat-number">@totalOrders</div>
+                <div class="stat-label">Total</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">@pendingOrders</div>
+                <div class="stat-label">Pending</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">@onTheWayOrders</div>
+                <div class="stat-label">On The Way</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">@completedOrders</div>
+                <div class="stat-label">Completed</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+        <div class="filter-grid">
+            <div class="filter-group">
+                <label class="filter-label">Status</label>
+                <select class="filter-select" id="statusFilter">
+                    <option value="">All Statuses</option>
+                    <option value="pending">Pending</option>
+                    <option value="ontheway">On the way</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Sort By</label>
+                <select class="filter-select" id="sortFilter">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="customer">Customer Name</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <button class="btn btn-primary" onclick="applyFilters()">
+                    <i class="fas fa-filter"></i>
+                    Apply Filters
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="order-card">
+        <div class="card-content">
+            <div class="table-container">
+                @if (Model.Any())
+                {
+                    <table class="order-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Status</th>
+                                <th style="width: 150px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <span class="order-id">#@order.Id</span>
+                                    </td>
+                                    <td>
+                                        <div class="customer-info">
+                                            <div class="customer-name">@order.CustomerName</div>
+                                            @if (!string.IsNullOrEmpty(order.CustomerEmail))
+                                            {
+                                                <div class="customer-email">@order.CustomerEmail</div>
+                                            }
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @{
+                                            var statusClass = "status-pending";
+                                            var statusText = order.Status.ToString();
+                                            var displayText = statusText;
+
+                                            switch (order.Status)
+                                            {
+                                                case OrderStatusEnum.Pending:
+                                                    statusClass = "status-pending";
+                                                    displayText = "Pending";
+                                                    break;
+                                                case OrderStatusEnum.OnTheWay:
+                                                    statusClass = "status-shipped"; // Using shipped style for "On the way"
+                                                    displayText = "On the way";
+                                                    break;
+                                                case OrderStatusEnum.Completed:
+                                                    statusClass = "status-completed";
+                                                    displayText = "Completed";
+                                                    break;
+                                                default:
+                                                    statusClass = "status-pending";
+                                                    displayText = "Pending";
+                                                    break;
+                                            }
+                                        }
+                                        <span class="status-badge @statusClass">
+                                            <i class="fas fa-circle"></i>
+                                            @displayText
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <a asp-area="Admin" asp-action="OrderDetails" asp-controller="Order"
+                                               asp-route-id="@order.Id" class="btn btn-outline-info btn-sm">
+                                                <i class="fas fa-eye"></i>
+                                                Details
+                                            </a>
+                                            @if (order.Status != OrderStatusEnum.Completed)
+                                            {
+                                                <a asp-area="Admin" asp-action="UpdateStatus" asp-controller="Order"
+                                                   asp-route-id="@order.Id" class="btn btn-outline-info btn-sm">
+                                                    <i class="fas fa-edit"></i>
+                                                    Update
+                                                </a>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="empty-state">
+                        <i class="fas fa-shopping-bag"></i>
+                        <h3>No Orders Found</h3>
+                        <p>There are no orders in the system yet.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Filter functionality
+        function applyFilters() {
+            const statusFilter = document.getElementById('statusFilter').value;
+            const sortFilter = document.getElementById('sortFilter').value;
+
+            // In a real application, this would make an API call or form submission
+            // For now, we'll just show a notification
+            if (statusFilter) {
+                alert(`Filtering by status: ${statusFilter}`);
+            }
+
+            console.log('Filters applied:', { status: statusFilter, sort: sortFilter });
+        }
+
+        // Add row click effects and animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const rows = document.querySelectorAll('.order-table tbody tr');
+
+            rows.forEach((row, index) => {
+                // Add staggered animation
+                row.style.animationDelay = `${(index + 1) * 0.1}s`;
+
+                // Add click effect for the entire row (excluding buttons)
+                row.addEventListener('click', function(e) {
+                    if (!e.target.closest('a') && !e.target.closest('button')) {
+                        const detailsLink = this.querySelector('a[asp-action="OrderDetails"]');
+                        if (detailsLink) {
+                            detailsLink.click();
+                        }
+                    }
+                });
+            });
+
+            // Status filter change handler
+            document.getElementById('statusFilter').addEventListener('change', function() {
+                const selectedStatus = this.value;
+                const rows = document.querySelectorAll('.order-table tbody tr');
+
+                rows.forEach(row => {
+                    const statusBadge = row.querySelector('.status-badge');
+                    if (statusBadge) {
+                        const rowStatus = statusBadge.textContent.trim().toLowerCase();
+                        const searchStatus = selectedStatus === 'ontheway' ? 'on the way' : selectedStatus;
+                        if (!selectedStatus || rowStatus.includes(searchStatus)) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

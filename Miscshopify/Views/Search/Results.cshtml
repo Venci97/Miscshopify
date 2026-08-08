@@ -1,74 +1,200 @@
 ﻿@using Miscshopify.Core.Models
-
 @model SearchViewModel
-<h2>Search</h2>
+@{
+    ViewData["Title"] = "Search Results";
+    Layout = null;
+}
 
-<form method="post" action="@Url.Action("Results", "Search")">
-    <div class="form-group">
-        <input type="text" name="searchTerm" class="form-control" placeholder="Enter your search term">
-    </div>
-    <button type="submit" class="btn btn-primary">Search</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search Results - Modern Store</title>
 
-<h1>Search Results</h1>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="~/css/search-results.css" rel="stylesheet" />
+</head>
+<body class="search-results-page min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100" style="font-family: 'Inter', sans-serif;">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-search text-blue-600 text-2xl"></i>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Search Results</h1>
 
-@if (Model.Categories != null && Model.Categories.Any() || Model.Products != null && Model.Products.Any())
-{
-    <div class="card-x">
-        <div class="card-body-x">
-            <div class="row my-2">
-                @foreach (var category in Model.Categories)
-                {
-                    <div class="col-sm-6 col-md-4 col-xl-3 mb-5" style="background: rgba(255, 255, 255, 1);">
-                        <div class="item rounded-xl overflow-hidden shadow border">
-                            <div class="px-3 pt-6">
-                                <a asp-action="GetProductsByCategory" asp-controller="Product" asp-route-id="@category.Id" class="btn info">
-                                    @category.Name
-                                    <div class="form-floating">
-                                        <img src="~/@category.ImagePath" class="img-thumnail" width="300" height="250">
+            <!-- Search Form -->
+            <div class="max-w-md mx-auto mt-6">
+                <!-- ПРОМЯНА ТУК: method="get" вместо method="post" -->
+                <form method="get" action="@Url.Action("Results", "Search")" class="relative">
+                    <div class="relative">
+                        <input type="text"
+                               name="searchTerm"
+                               class="w-full pl-4 pr-12 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300"
+                               placeholder="Search again..."
+                               value="@ViewContext.HttpContext.Request.Query["searchTerm"]"
+                               autocomplete="off">
+                        <button type="submit" class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        @if (Model.Categories != null && Model.Categories.Any() || Model.Products != null && Model.Products.Any())
+        {
+            <!-- Results Count -->
+            <div class="mb-6 text-center">
+                <p class="text-gray-600">
+                    Found
+                    <span class="font-semibold text-blue-600">@(Model.Categories?.Count ?? 0) categories</span>
+                    and
+                    <span class="font-semibold text-blue-600">@(Model.Products?.Count ?? 0) products</span>
+                </p>
+            </div>
+
+            <!-- Categories Results -->
+            @if (Model.Categories != null && Model.Categories.Any())
+            {
+                <div class="mb-12">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                        <i class="fas fa-folder text-blue-500"></i>
+                        Categories (@Model.Categories.Count)
+                    </h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        @foreach (var category in Model.Categories)
+                        {
+                            <div class="category-card bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                                <a asp-action="GetProductsByCategory" asp-controller="Product" asp-route-id="@category.Id" class="block">
+                                    <div class="category-image-container relative overflow-hidden">
+                                        <img src="~/@category.ImagePath"
+                                             alt="@category.Name"
+                                             class="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
+                                             onerror="this.src='https://images.unsplash.com/photo-1560769629-975ec94e6a86?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'">
+                                        <div class="category-overlay absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-10 transition-all duration-300"></div>
                                     </div>
-                                    <div class="mt-6">
-                                        <p class="text-break-line-2" style="width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
-                                            @category.Description
-                                        </p>
+
+                                    <div class="p-4">
+                                        <h3 class="font-bold text-gray-800 text-lg mb-2 truncate">@category.Name</h3>
+                                        <p class="text-gray-600 text-sm line-clamp-2 leading-relaxed">@category.Description</p>
+                                        <div class="mt-4 flex items-center justify-between">
+                                            <span class="text-blue-600 font-semibold text-sm">View Products</span>
+                                            <i class="fas fa-arrow-right text-blue-500 transform group-hover:translate-x-1 transition-transform"></i>
+                                        </div>
                                     </div>
                                 </a>
                             </div>
-                        </div>
+                        }
                     </div>
-                }
-            </div>
-        </div>
-    </div>
-    <div class="card-x">
-        <div class="card-body-x">
-            <div class="row my-2">
-                @foreach (var product in Model.Products)
-                {
-                    <div class="col-sm-6 col-md-4 col-xl-3 mb-5" style="background: rgba(255, 255, 255, 1);">
-                        <div class="item rounded-xl overflow-hidden shadow border">
-                            <div class="px-3 pt-6">
-                                <a asp-action="ProductDetails" asp-controller="Product" asp-route-id="@product.Id" class="btn info">
-                                    @product.Name
-                                    <div class="form-floating">
-                                        <img src="~/@product.ImagePath" class="img-thumnail" width="300" height="250">
+                </div>
+            }
+
+            <!-- Products Results -->
+            @if (Model.Products != null && Model.Products.Any())
+            {
+                <div class="mb-12">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                        <i class="fas fa-cube text-green-500"></i>
+                        Products (@Model.Products.Count)
+                    </h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        @foreach (var product in Model.Products)
+                        {
+                            <div class="product-card bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                                <a asp-action="ProductDetails" asp-controller="Product" asp-route-id="@product.Id" class="block">
+                                    <div class="product-image-container relative overflow-hidden">
+                                        <img src="~/@product.ImagePath"
+                                             alt="@product.Name"
+                                             class="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
+                                             onerror="this.src='https://images.unsplash.com/photo-1560769629-975ec94e6a86?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'">
+                                        <div class="product-overlay absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-10 transition-all duration-300"></div>
                                     </div>
-                                    <div class="mt-6">
-                                        <p class="text-break-line-2" style="width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
-                                            @product.Description
-                                        </p>
-                                        <h4 class="text-primary mr-1">BGN @product.Price</h4>
+
+                                    <div class="p-4">
+                                        <h3 class="font-bold text-gray-800 text-lg mb-2 truncate">@product.Name</h3>
+                                        <p class="text-gray-600 text-sm line-clamp-2 leading-relaxed mb-3">@product.Description</p>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-green-600 font-bold text-xl">BGN @product.Price</span>
+                                            <div class="flex items-center gap-1 text-yellow-400">
+                                                <i class="fas fa-star"></i>
+                                                <span class="text-gray-600 text-sm">4.5</span>
+                                            </div>
+                                        </div>
+                                        <button class="w-full mt-3 bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+                                            <i class="fas fa-eye"></i>
+                                            View Details
+                                        </button>
                                     </div>
                                 </a>
                             </div>
-                        </div>
+                        }
                     </div>
-                }
+                </div>
+            }
+        }
+        else
+        {
+            <!-- No Results -->
+            <div class="text-center py-12">
+                <div class="w-24 h-24 bg-gray-200 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-search text-gray-400 text-3xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-3">No Results Found</h3>
+                <p class="text-gray-600 mb-6 max-w-md mx-auto">
+                    We couldn't find any categories or products matching your search. Try different keywords or browse our categories.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="@Url.Action("Index", "Search")"
+                       class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all duration-300 inline-flex items-center justify-center gap-2">
+                        <i class="fas fa-search"></i>
+                        New Search
+                    </a>
+                    <a href="/"
+                       class="border-2 border-gray-300 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 inline-flex items-center justify-center gap-2">
+                        <i class="fas fa-home"></i>
+                        Back to Home
+                    </a>
+                </div>
             </div>
+        }
+
+        <!-- Navigation -->
+        <div class="text-center mt-8">
+            <a href="/"
+               class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold transition-colors">
+                <i class="fas fa-arrow-left"></i>
+                Back to Homepage
+            </a>
         </div>
     </div>
-}
-else
-{
-    <p>No results found.</p>
-}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Image error handling
+            document.querySelectorAll('img').forEach(img => {
+                img.addEventListener('error', function() {
+                    this.src = 'https://images.unsplash.com/photo-1560769629-975ec94e6a86?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80';
+                });
+            });
+
+            // Add loading states
+            const links = document.querySelectorAll('a[href*="ProductDetails"], a[href*="GetProductsByCategory"]');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const card = this.closest('.category-card, .product-card');
+                    if (card) {
+                        card.style.opacity = '0.7';
+                        card.style.transform = 'scale(0.98)';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

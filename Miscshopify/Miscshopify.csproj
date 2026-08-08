@@ -1,36 +1,40 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+	  <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+	  <NoWarn>$(NoWarn);NU1510;NU1903;NU1902;NU1901</NoWarn>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>91f1d0b5-11c6-48ca-bfed-134238ba5ce4</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
-    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.2">
+    <PackageReference Include="AutoMapper" Version="16.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.3.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="10.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.3.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.10">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.1" />
-    <PackageReference Include="NUnit.Analyzers" Version="4.0.1">
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="10.0.2" />
+    <PackageReference Include="NuGet.Packaging" Version="7.6.0" />
+    <PackageReference Include="NuGet.Protocol" Version="7.6.0" />
+    <PackageReference Include="NUnit.Analyzers" Version="4.14.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Stripe.net" Version="44.11.0" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="3.53.3" />
+    <PackageReference Include="Stripe.net" Version="52.2.0" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.10" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Miscshopify.Api\Miscshopify.Api.csproj" />
     <ProjectReference Include="..\Miscshopify.Core\Miscshopify.Core.csproj" />
   </ItemGroup>
   <ProjectExtensions>
-    <VisualStudio>
-      <UserProperties wwwroot_4css_4alt_4adminlte_1components_1css_1map__JsonSchema="" />
-    </VisualStudio>
+    <VisualStudio><UserProperties /></VisualStudio>
   </ProjectExtensions>
 </Project>

@@ -1,17 +1,22 @@
 ﻿@using Miscshopify.Core.Models;
 @model CategoryViewModel
 @{
+    ViewData["Title"] = "Add Category";
 }
 
-<div class="content-body">
-    <section class="users-edit">
-        <div class="card">
+<!-- Добави линк към CSS файла -->
+<link href="~/css/admin/category-add.css" rel="stylesheet" />
+
+<div class="category-add-section">
+    <section class="category-add-section">
+        <div class="category-add-card">
             <div class="card-content">
                 <div class="card-body">
-                    <ul class="nav nav-tabs mb-2" role="tablist">
+                    <ul class="nav-tabs" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center active" id="account-tab" data-toggle="tab" href="#account" aria-controls="account" role="tab" aria-selected="true">
-                                <i class="ft-user mr-25"></i><span class="d-none d-sm-block">Add Category</span>
+                            <a class="nav-link active" id="account-tab" data-toggle="tab" href="#account" aria-controls="account" role="tab" aria-selected="true">
+                                <i class="fas fa-folder-plus"></i>
+                                <span>Add Category</span>
                             </a>
                         </li>
                     </ul>
@@ -19,31 +24,65 @@
                         <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
                             <form id="add" method="post" enctype="multipart/form-data">
                                 <div class="row">
-                                    <div class="col-12 col-sm-6">
+                                    <div class="col-12 col-sm-8 col-md-6">
                                         <input type="hidden" name="Id" value="@Model.Id" />
                                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                        <div class="form-floating">
-                                            <label asp-for="Name" class="form-label"></label>
-                                            <input asp-for="Name" class="form-control" aria-required="true" />
+
+                                        <div class="form-group">
+                                            <label asp-for="Name" class="form-label">Category Name</label>
+                                            <input asp-for="Name" class="form-control" aria-required="true" placeholder="Enter category name" />
                                             <span asp-validation-for="Name" class="text-danger"></span>
                                         </div>
-                                        <div class="form-floating">
-                                            <label asp-for="Description" class="form-label"></label>
-                                            <input asp-for="Description" class="form-control" aria-required="true" />
+
+                                        <div class="form-group">
+                                            <label asp-for="Description" class="form-label">Description</label>
+                                            <input asp-for="Description" class="form-control" aria-required="true" placeholder="Enter category description" />
                                             <span asp-validation-for="Description" class="text-danger"></span>
                                         </div>
-                                        <div class="custom-file">
-                                            <label asp-for="ImagePath"></label>
-                                            <input type="file" name="file" />
-                                            <span asp-validation-for="ImagePath" class="focus-input100"></span>
+
+                                        <!-- ДОБАВЕНО ПОЛЕ ЗА PARENT CATEGORY -->
+                                        <div class="form-group">
+                                            <label asp-for="ParentId" class="form-label">Parent Category (optional)</label>
+                                            <select asp-for="ParentId" class="form-control">
+                                                <option value="">-- Main Category (no parent) --</option>
+                                                @if (Model.AvailableParentCategories != null)
+                                                {
+                                                    foreach (var category in Model.AvailableParentCategories)
+                                                    {
+                                                        <option value="@category.Id">@category.Name</option>
+                                                    }
+                                                }
+                                            </select>
+                                            <span asp-validation-for="ParentId" class="text-danger"></span>
+                                            <small class="form-text text-muted">
+                                                Select a parent category if this is a subcategory. Leave empty for main category.
+                                            </small>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label asp-for="ImagePath" class="form-label">Category Image</label>
+                                            <div class="file-upload-container">
+                                                <input type="file" name="file" class="file-upload-input" id="fileInput" />
+                                                <label for="fileInput" class="file-upload-label">
+                                                    <i class="fas fa-cloud-upload-alt"></i>
+                                                    Click to upload category image
+                                                </label>
+                                            </div>
+                                            <span asp-validation-for="ImagePath" class="text-danger"></span>
                                         </div>
                                     </div>
-                                    <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
-                                        <button type="submit" class="btn btn-primary glow mb-1 mb-sm-0 mr-0 mr-sm-1">
-                                            Save
-                                            changes
-                                        </button>
-                                        <button type="reset" class="btn btn-light">Cancel</button>
+
+                                    <div class="col-12">
+                                        <div class="form-actions">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-save mr-2"></i>
+                                                Create Category
+                                            </button>
+                                            <button type="reset" class="btn btn-light">
+                                                <i class="fas fa-times mr-2"></i>
+                                                Cancel
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
@@ -56,5 +95,30 @@
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptspartial" />
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // File upload styling
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const label = this.nextElementSibling;
+            if (this.files.length > 0) {
+                label.innerHTML = `<i class="fas fa-check mr-2"></i> ${this.files[0].name}`;
+                label.parentElement.classList.add('file-upload-success');
+            } else {
+                label.innerHTML = `<i class="fas fa-cloud-upload-alt mr-2"></i> Click to upload category image`;
+                label.parentElement.classList.remove('file-upload-success');
+            }
+        });
+
+        // Form validation enhancement
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.value.trim() !== '') {
+                    this.classList.add('filled');
+                } else {
+                    this.classList.remove('filled');
+                }
+            });
+        });
+    </script>
 }
