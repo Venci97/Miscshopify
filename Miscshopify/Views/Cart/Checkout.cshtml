@@ -2,10 +2,14 @@
 @using Miscshopify.Core.Models
 @using System.Security.Claims
 @using Miscshopify.Infrastructure.Data.Models
+@using System.Globalization
 @model CheckoutViewModel
 
 @{
     ViewData["Title"] = "Checkout";
+
+    // Format the total price to use a dot (.) instead of a comma (,) for JavaScript compatibility
+    var priceForJs = Model.TotalPrice.ToString(CultureInfo.InvariantCulture);
 }
 
 <!DOCTYPE html>
@@ -21,6 +25,12 @@
     <link href="~/css/checkout.css" rel="stylesheet" />
 </head>
 <body class="checkout-page min-h-screen py-8">
+
+    <!-- AntiForgery Token Form -->
+    <form id="csrf-form" style="display:none">
+        @Html.AntiForgeryToken()
+    </form>
+
     <div class="container mx-auto px-4">
         <div class="checkout-container p-6">
             <!-- Header -->
@@ -50,7 +60,7 @@
                                         <p class="text-gray-600">Quantity: @item.Quantity</p>
                                     </div>
                                     <div class="text-right">
-                                        <p class="font-bold">@(item.Price* item.Quantity) BGN</p>
+                                        <p class="font-bold">@(item.Price * item.Quantity) BGN</p>
                                     </div>
                                 </div>
                             }
@@ -100,14 +110,14 @@
                         <h2 class="text-2xl font-bold mb-4">Payment Method</h2>
                         <div class="bg-white p-6 rounded-lg shadow-sm">
                             <div class="mb-4">
-                                <label class="flex items-center">
+                                <label class="flex items-center cursor-pointer">
                                     <input type="radio" name="paymentMethod" value="cashOnDelivery" checked class="mr-2">
                                     <i class="fa-solid fa-money-bill-1 mr-2"></i>
                                     <span>Cash on Delivery</span>
                                 </label>
                             </div>
                             <div class="mb-4">
-                                <label class="flex items-center">
+                                <label class="flex items-center cursor-pointer">
                                     <input type="radio" name="paymentMethod" value="Card" class="mr-2">
                                     <i class="fa-solid fa-credit-card mr-2"></i>
                                     <span>Credit/Debit Card</span>
@@ -115,7 +125,7 @@
                             </div>
                         </div>
 
-                        <button id="confirmButton" class="w-full bg-green-600 text-white py-4 px-6 rounded-lg font-bold text-lg mt-6 hover:bg-green-700 transition-colors">
+                        <button id="confirmButton" type="button" class="w-full bg-green-600 text-white py-4 px-6 rounded-lg font-bold text-lg mt-6 hover:bg-green-700 transition-colors">
                             Confirm Order
                         </button>
                     </div>
@@ -126,21 +136,40 @@
 
     <script>
         document.getElementById('confirmButton').addEventListener('click', function () {
-            var selectedPayment = document.querySelector('input[name="paymentMethod"]:checked');
+        var selectedPayment = document.querySelector('input[name="paymentMethod"]:checked');
 
-            if (!selectedPayment) {
-                alert('Please select a payment method');
-                return;
-            }
+        if (!selectedPayment) {
+        alert('Please select a payment method');
+        return;
+        }
 
-            var paymentMethod = selectedPayment.value;
-            var totalPrice = '@Model.TotalPrice';
+        var paymentMethod = selectedPayment.value;
+        var totalPrice = '@priceForJs';
 
-            if (paymentMethod === 'cashOnDelivery') {
-                window.location.href = '@Url.Action("CompleteOrder", "Order")' + '?paymentMethod=' + paymentMethod;
-            } else if (paymentMethod === 'Card') {
-                window.location.href = '@Url.Action("CreatePayment", "Payment")' + '?totalPrice=' + totalPrice + '&paymentMethod=' + paymentMethod;
-            }
+        if (paymentMethod === 'cashOnDelivery') {
+        // Create a dynamic POST form to avoid HTTP 405 error
+        var form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '@Url.Action("CompleteOrder", "Order")';
+
+        var paymentInput = document.createElement('input');
+        paymentInput.type = 'hidden';
+        paymentInput.name = 'paymentMethod';
+        paymentInput.value = paymentMethod;
+        form.appendChild(paymentInput);
+
+        var tokenInput = document.createElement('input');
+        tokenInput.type = 'hidden';
+        tokenInput.name = '__RequestVerificationToken';
+        tokenInput.value = document.querySelector('input[name="__RequestVerificationToken"]')?.value || '';
+        form.appendChild(tokenInput);
+
+        document.body.appendChild(form);
+        form.submit();
+        } else if (paymentMethod === 'Card') {
+        var paymentUrl = '@Url.Action("CreatePayment", "Payment")' + '?totalPrice=' + encodeURIComponent(totalPrice) + '&paymentMethod=' + encodeURIComponent(paymentMethod);
+        window.location.href = paymentUrl;
+        }
         });
     </script>
 </body>

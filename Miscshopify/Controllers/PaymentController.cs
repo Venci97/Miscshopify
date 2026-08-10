@@ -4,6 +4,7 @@ using Miscshopify.Core.Contracts;
 using Miscshopify.Infrastructure.Data.Models.Enums;
 using Stripe;
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -32,14 +33,20 @@ namespace Miscshopify.Controllers
         public IActionResult CreatePayment(decimal totalPrice, string paymentMethod)
         {
             ViewBag.TotalPrice = totalPrice;
-            ViewBag.PaymentMethod = paymentMethod;
+            ViewBag.PaymentMethod = paymentMethod ?? "Card";
             ViewBag.PublishableKey = _configuration["Stripe:PublishableKey"];
 
             return View();
         }
 
+        [HttpGet]
+        public IActionResult CreatePaymentIntent(decimal totalPrice, string paymentMethod)
+        {
+            return RedirectToAction(nameof(CreatePayment), new { totalPrice, paymentMethod });
+        }
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> CreatePaymentIntent([FromBody] CreatePaymentIntentRequest request)
         {
             try
@@ -48,18 +55,18 @@ namespace Miscshopify.Controllers
 
                 if (string.IsNullOrEmpty(userId))
                 {
-                    return Json(new { error = "Потребителят не е намерен. Моля влезте отново." });
+                    return BadRequest(new { error = "Потребителят не е намерен. Моля влезте отново." });
                 }
 
-                if (request.Amount <= 0)
+                if (request == null || request.Amount <= 0)
                 {
-                    return Json(new { error = "Невалидна сума." });
+                    return BadRequest(new { error = "Невалидна сума за плащане." });
                 }
 
                 var options = new PaymentIntentCreateOptions
                 {
-                    Amount = (long)(request.Amount * 100),
-                    Currency = "bgn",
+                    Amount = (long)Math.Round(request.Amount * 100),
+                    Currency = "eur",
                     AutomaticPaymentMethods = new PaymentIntentAutomaticPaymentMethodsOptions
                     {
                         Enabled = true,
@@ -75,24 +82,24 @@ namespace Miscshopify.Controllers
                 var service = new PaymentIntentService();
                 var intent = await service.CreateAsync(options);
 
-                _logger.LogInformation("PaymentIntent създаден: {IntentId} за потребител {UserId}", intent.Id, userId);
+                _logger.LogInformation("PaymentIntent successfully created: {IntentId} for user {UserId}", intent.Id, userId);
 
-                return Json(new { clientSecret = intent.ClientSecret });
+                return Ok(new { clientSecret = intent.ClientSecret });
             }
             catch (StripeException ex)
             {
-                _logger.LogError(ex, "Stripe грешка при създаване на PaymentIntent");
-                return Json(new { error = ex.StripeError?.Message ?? "Грешка при инициализация на плащането." });
+                _logger.LogError(ex, "Stripe error during PaymentIntent creation: {Message}", ex.Message);
+                return BadRequest(new { error = ex.StripeError?.Message ?? "Грешка от Stripe при инициализация." });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Обща грешка при създаване на PaymentIntent");
-                return Json(new { error = "Възникна грешка. Моля опитайте отново." });
+                _logger.LogError(ex, "General error during PaymentIntent creation");
+                return StatusCode(500, new { error = "Възникна сървърна грешка. Моля опитайте отново." });
             }
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> ConfirmOrder([FromBody] ConfirmOrderRequest request)
         {
             try
@@ -104,12 +111,17 @@ namespace Miscshopify.Controllers
                     return Json(new { success = false, error = "Потребителят не е намерен." });
                 }
 
+                if (request == null || string.IsNullOrEmpty(request.PaymentIntentId))
+                {
+                    return Json(new { success = false, error = "Невалидни данни за плащане." });
+                }
+
                 var service = new PaymentIntentService();
                 var intent = await service.GetAsync(request.PaymentIntentId);
 
                 if (intent.Status != "succeeded")
                 {
-                    _logger.LogWarning("PaymentIntent {IntentId} не е succeeded. Статус: {Status}", intent.Id, intent.Status);
+                    _logger.LogWarning("PaymentIntent {IntentId} is not succeeded. Status: {Status}", intent.Id, intent.Status);
                     return Json(new { success = false, error = $"Плащането не е потвърдено. Статус: {intent.Status}" });
                 }
 
@@ -119,7 +131,7 @@ namespace Miscshopify.Controllers
 
                 await _orderService.CompleteOrder(userId, paymentMethodEnum);
 
-                _logger.LogInformation("Поръчка създадена за потребител {UserId}, PaymentIntent {IntentId}", userId, intent.Id);
+                _logger.LogInformation("Order completed for user {UserId}, PaymentIntent {IntentId}", userId, intent.Id);
 
                 return Json(new
                 {
@@ -134,12 +146,12 @@ namespace Miscshopify.Controllers
             }
             catch (StripeException ex)
             {
-                _logger.LogError(ex, "Stripe грешка при потвърждение на поръчка");
+                _logger.LogError(ex, "Stripe error during order confirmation");
                 return Json(new { success = false, error = ex.StripeError?.Message ?? "Грешка при потвърждение." });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Обща грешка при потвърждение на поръчка");
+                _logger.LogError(ex, "General error during order confirmation");
                 return Json(new { success = false, error = "Възникна грешка при записване на поръчката." });
             }
         }
